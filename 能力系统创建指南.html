@@ -1,0 +1,1832 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>能力系统创建指南</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;700&family=Noto+Sans+SC:wght@300;400;500;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+        :root {
+            --bg: #0d1117;
+            --bg2: #161b22;
+            --bg3: #21262d;
+            --bg4: #2d333b;
+            --border: rgba(255,255,255,0.08);
+            --border-active: rgba(255,255,255,0.18);
+            --text: #e6edf3;
+            --text-2: #8b949e;
+            --text-3: #6e7681;
+            /* 能力系颜色 */
+            --magic-primary: #a78bfa;
+            --magic-bg: rgba(167,139,250,0.08);
+            --magic-border: rgba(167,139,250,0.25);
+            --magic-glow: rgba(167,139,250,0.12);
+            --sword-primary: #60a5fa;
+            --sword-bg: rgba(96,165,250,0.08);
+            --sword-border: rgba(96,165,250,0.25);
+            --sword-glow: rgba(96,165,250,0.12);
+            --xian-primary: #34d399;
+            --xian-bg: rgba(52,211,153,0.08);
+            --xian-border: rgba(52,211,153,0.25);
+            --xian-glow: rgba(52,211,153,0.12);
+            /* 八原素颜色 */
+            --tu: #92744a;
+            --jin: #c0c0c0;
+            --shui: #5ba3c9;
+            --mu: #5a9e5a;
+            --huo: #d45f3c;
+            --qi: #a0c8e0;
+            --guang: #e8d080;
+            --an: #7a5fa0;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Noto Sans SC', sans-serif;
+            font-size: 14px;
+            line-height: 1.7;
+            min-height: 100vh;
+            padding: 32px 24px 60px;
+        }
+
+        .page {
+            max-width: 860px;
+            margin: 0 auto;
+        }
+
+        /* ── 顶部标题区 ── */
+        .header {
+            margin-bottom: 40px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .header-eyebrow {
+            font-size: 11px;
+            letter-spacing: 0.25em;
+            color: var(--text-3);
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .header-title {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 8px;
+            letter-spacing: 0.04em;
+        }
+
+        .header-desc {
+            font-size: 13px;
+            color: var(--text-2);
+            line-height: 1.75;
+            max-width: 600px;
+        }
+
+        /* ── 能力导航 tabs ── */
+        .tab-nav {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 28px;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 0;
+        }
+
+        .tab-btn {
+            padding: 10px 20px;
+            background: none;
+            border: none;
+            border-bottom: 2px solid transparent;
+            margin-bottom: -1px;
+            cursor: pointer;
+            font-family: 'Noto Sans SC', sans-serif;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-2);
+            transition: all 0.2s;
+            white-space: nowrap;
+            border-radius: 4px 4px 0 0;
+            letter-spacing: 0.03em;
+            display: flex;
+            align-items: center;
+            gap: 7px;
+        }
+
+            .tab-btn:hover {
+                color: var(--text);
+                background: var(--bg2);
+            }
+
+            .tab-btn.active-magic {
+                color: var(--magic-primary);
+                border-bottom-color: var(--magic-primary);
+                background: var(--magic-bg);
+            }
+
+            .tab-btn.active-sword {
+                color: var(--sword-primary);
+                border-bottom-color: var(--sword-primary);
+                background: var(--sword-bg);
+            }
+
+            .tab-btn.active-xian {
+                color: var(--xian-primary);
+                border-bottom-color: var(--xian-primary);
+                background: var(--xian-bg);
+            }
+
+        .tab-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .dot-magic {
+            background: var(--magic-primary);
+        }
+
+        .dot-sword {
+            background: var(--sword-primary);
+        }
+
+        .dot-xian {
+            background: var(--xian-primary);
+        }
+
+        /* ── 内容面板 ── */
+        .panel {
+            display: none;
+        }
+
+            .panel.active {
+                display: block;
+            }
+
+        /* ── 区块布局 ── */
+        .section-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+            .section-grid.full {
+                grid-template-columns: 1fr;
+            }
+
+            .section-grid.thirds {
+                grid-template-columns: 1fr 1fr 1fr;
+            }
+
+        .card {
+            background: var(--bg2);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+            transition: border-color 0.2s;
+        }
+
+            .card:hover {
+                border-color: var(--border-active);
+            }
+
+        .card-header {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card-header-icon {
+            width: 22px;
+            height: 22px;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            flex-shrink: 0;
+        }
+
+        .card-title {
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--text-2);
+        }
+
+        .card-body {
+            padding: 14px 16px;
+        }
+
+        /* ── 规则条目 ── */
+        .rule-list {
+            list-style: none;
+        }
+
+        .rule-item {
+            padding: 9px 0;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+
+            .rule-item:last-child {
+                border-bottom: none;
+                padding-bottom: 0;
+            }
+
+        .rule-label {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--text-3);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .rule-value {
+            font-size: 13px;
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+            .rule-value.warn {
+                color: #fbbf24;
+            }
+
+            .rule-value.danger {
+                color: #f87171;
+            }
+
+            .rule-value.ok {
+                color: #34d399;
+            }
+
+        /* ── 对比表格 ── */
+        .compare-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+
+            .compare-table th {
+                padding: 8px 12px;
+                text-align: left;
+                font-size: 11px;
+                font-weight: 700;
+                letter-spacing: 0.1em;
+                color: var(--text-3);
+                text-transform: uppercase;
+                border-bottom: 1px solid var(--border);
+                font-family: 'JetBrains Mono', monospace;
+            }
+
+            .compare-table td {
+                padding: 10px 12px;
+                border-bottom: 1px solid var(--border);
+                color: var(--text);
+                vertical-align: top;
+                line-height: 1.6;
+            }
+
+            .compare-table tr:last-child td {
+                border-bottom: none;
+            }
+
+            .compare-table .row-label {
+                font-weight: 600;
+                color: var(--text-2);
+                white-space: nowrap;
+                font-size: 12px;
+            }
+
+        /* ── 警告横幅 ── */
+        .alert {
+            padding: 12px 16px;
+            border-radius: 6px;
+            border-left: 3px solid;
+            margin-bottom: 16px;
+            font-size: 13px;
+            line-height: 1.65;
+        }
+
+        .alert-warn {
+            background: rgba(251,191,36,0.07);
+            border-color: #fbbf24;
+            color: #fde68a;
+        }
+
+        .alert-danger {
+            background: rgba(248,113,113,0.07);
+            border-color: #f87171;
+            color: #fca5a5;
+        }
+
+        .alert-info {
+            background: rgba(96,165,250,0.07);
+            border-color: #60a5fa;
+            color: #93c5fd;
+        }
+
+        .alert-ok {
+            background: rgba(52,211,153,0.07);
+            border-color: #34d399;
+            color: #6ee7b7;
+        }
+
+        .alert-title {
+            font-weight: 700;
+            font-size: 11px;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+            font-family: 'JetBrains Mono', monospace;
+            opacity: 0.7;
+        }
+
+        /* ── 标签徽章 ── */
+        .badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 3px;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.06em;
+            vertical-align: middle;
+        }
+
+        .badge-magic {
+            background: var(--magic-bg);
+            color: var(--magic-primary);
+            border: 1px solid var(--magic-border);
+        }
+
+        .badge-sword {
+            background: var(--sword-bg);
+            color: var(--sword-primary);
+            border: 1px solid var(--sword-border);
+        }
+
+        .badge-xian {
+            background: var(--xian-bg);
+            color: var(--xian-primary);
+            border: 1px solid var(--xian-border);
+        }
+
+        .badge-gray {
+            background: rgba(255,255,255,0.05);
+            color: var(--text-2);
+            border: 1px solid var(--border);
+        }
+
+        .badge-warn {
+            background: rgba(251,191,36,0.1);
+            color: #fbbf24;
+            border: 1px solid rgba(251,191,36,0.25);
+        }
+
+        .badge-danger {
+            background: rgba(248,113,113,0.1);
+            color: #f87171;
+            border: 1px solid rgba(248,113,113,0.25);
+        }
+
+        .badge-ok {
+            background: rgba(52,211,153,0.1);
+            color: #34d399;
+            border: 1px solid rgba(52,211,153,0.25);
+        }
+
+        /* ── 原素选择器 ── */
+        .element-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin: 4px 0;
+        }
+
+        .element-chip {
+            padding: 8px 6px;
+            border-radius: 5px;
+            border: 1px solid;
+            text-align: center;
+            cursor: default;
+        }
+
+        .el-tu {
+            background: rgba(146,116,74,0.1);
+            border-color: rgba(146,116,74,0.3);
+        }
+
+        .el-jin {
+            background: rgba(192,192,192,0.08);
+            border-color: rgba(192,192,192,0.25);
+        }
+
+        .el-shui {
+            background: rgba(91,163,201,0.1);
+            border-color: rgba(91,163,201,0.3);
+        }
+
+        .el-mu {
+            background: rgba(90,158,90,0.1);
+            border-color: rgba(90,158,90,0.3);
+        }
+
+        .el-huo {
+            background: rgba(212,95,60,0.1);
+            border-color: rgba(212,95,60,0.3);
+        }
+
+        .el-qi {
+            background: rgba(160,200,224,0.1);
+            border-color: rgba(160,200,224,0.25);
+        }
+
+        .el-guang {
+            background: rgba(232,208,128,0.1);
+            border-color: rgba(232,208,128,0.25);
+        }
+
+        .el-an {
+            background: rgba(122,95,160,0.12);
+            border-color: rgba(122,95,160,0.3);
+        }
+
+        .element-name {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 16px;
+            font-weight: 700;
+            display: block;
+            line-height: 1.2;
+        }
+
+        .el-tu .element-name {
+            color: var(--tu);
+        }
+
+        .el-jin .element-name {
+            color: var(--jin);
+        }
+
+        .el-shui .element-name {
+            color: var(--shui);
+        }
+
+        .el-mu .element-name {
+            color: var(--mu);
+        }
+
+        .el-huo .element-name {
+            color: var(--huo);
+        }
+
+        .el-qi .element-name {
+            color: var(--qi);
+        }
+
+        .el-guang .element-name {
+            color: var(--guang);
+        }
+
+        .el-an .element-name {
+            color: var(--an);
+        }
+
+        .element-tag {
+            font-size: 10px;
+            color: var(--text-3);
+            letter-spacing: 0.08em;
+            margin-top: 2px;
+            display: block;
+        }
+
+        /* ── 级别阶梯 ── */
+        .tier-list {
+            list-style: none;
+        }
+
+        .tier-item {
+            display: flex;
+            gap: 12px;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border);
+            align-items: flex-start;
+        }
+
+            .tier-item:last-child {
+                border-bottom: none;
+            }
+
+        .tier-badge {
+            flex-shrink: 0;
+            width: 56px;
+            padding: 3px 0;
+            text-align: center;
+            border-radius: 4px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.06em;
+        }
+
+        .tier-1 {
+            background: rgba(110,231,183,0.1);
+            color: #6ee7b7;
+            border: 1px solid rgba(110,231,183,0.2);
+        }
+
+        .tier-2 {
+            background: rgba(147,197,253,0.1);
+            color: #93c5fd;
+            border: 1px solid rgba(147,197,253,0.2);
+        }
+
+        .tier-3 {
+            background: rgba(196,181,253,0.1);
+            color: #c4b5fd;
+            border: 1px solid rgba(196,181,253,0.2);
+        }
+
+        .tier-4 {
+            background: rgba(252,211,77,0.1);
+            color: #fcd34d;
+            border: 1px solid rgba(252,211,77,0.2);
+        }
+
+        .tier-5 {
+            background: rgba(251,113,133,0.1);
+            color: #fb7185;
+            border: 1px solid rgba(251,113,133,0.2);
+        }
+
+        .tier-legend {
+            background: rgba(251,113,133,0.05);
+            color: #fda4af;
+            border: 1px dashed rgba(251,113,133,0.3);
+        }
+
+        .tier-content {
+            flex: 1;
+        }
+
+        .tier-title {
+            font-weight: 600;
+            color: var(--text);
+            font-size: 13px;
+            margin-bottom: 2px;
+        }
+
+        .tier-desc {
+            font-size: 12.5px;
+            color: var(--text-2);
+            line-height: 1.6;
+        }
+
+        /* ── 派系列表（魔法学派） ── */
+        .school-list {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        .school-item {
+            padding: 10px 12px;
+            border-radius: 5px;
+            border: 1px solid var(--border);
+            background: var(--bg3);
+        }
+
+        .school-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 5px;
+        }
+
+        .school-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .school-name {
+            font-weight: 600;
+            font-size: 13px;
+            color: var(--text);
+        }
+
+        .school-el {
+            font-size: 10px;
+            color: var(--text-3);
+            font-family: 'JetBrains Mono', monospace;
+            letter-spacing: 0.08em;
+            margin-left: auto;
+        }
+
+        .school-desc {
+            font-size: 12px;
+            color: var(--text-2);
+            line-height: 1.6;
+        }
+
+        /* ── 禁区表 ── */
+        .forbidden-row {
+            display: flex;
+            gap: 10px;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border);
+            align-items: flex-start;
+        }
+
+            .forbidden-row:last-child {
+                border-bottom: none;
+            }
+
+        .forbidden-level {
+            flex-shrink: 0;
+            width: 44px;
+            padding: 2px 0;
+            text-align: center;
+            border-radius: 3px;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .fl-yellow {
+            background: rgba(251,191,36,0.12);
+            color: #fbbf24;
+            border: 1px solid rgba(251,191,36,0.25);
+        }
+
+        .fl-red {
+            background: rgba(248,113,113,0.12);
+            color: #f87171;
+            border: 1px solid rgba(248,113,113,0.25);
+        }
+
+        .fl-black {
+            background: rgba(255,255,255,0.04);
+            color: var(--text-2);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .forbidden-content {
+            flex: 1;
+        }
+
+        .forbidden-title {
+            font-size: 12.5px;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 2px;
+        }
+
+        .forbidden-desc {
+            font-size: 12px;
+            color: var(--text-2);
+            line-height: 1.55;
+        }
+
+        /* ── 剑法阶段 ── */
+        .sword-stage {
+            padding: 12px 14px;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+            background: var(--bg3);
+            margin-bottom: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+
+            .sword-stage::before {
+                content: '';
+                position: absolute;
+                left: 0;
+                top: 0;
+                bottom: 0;
+                width: 3px;
+            }
+
+        .stage-1::before {
+            background: var(--xian-primary);
+        }
+
+        .stage-2::before {
+            background: #60a5fa;
+        }
+
+        .stage-3::before {
+            background: #a78bfa;
+        }
+
+        .stage-4::before {
+            background: #fbbf24;
+        }
+
+        .stage-5::before {
+            background: #fb7185;
+        }
+
+        .sword-stage-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 6px;
+        }
+
+        .sword-stage-num {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--text-3);
+        }
+
+        .sword-stage-name {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .sword-stage-body {
+            font-size: 12.5px;
+            color: var(--text-2);
+            line-height: 1.65;
+        }
+
+        /* ── 属性行 ── */
+        .attr-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border);
+            font-size: 13px;
+        }
+
+            .attr-row:last-child {
+                border-bottom: none;
+            }
+
+        .attr-key {
+            flex-shrink: 0;
+            width: 80px;
+            color: var(--text-3);
+            font-size: 11.5px;
+            font-family: 'JetBrains Mono', monospace;
+            padding-top: 1px;
+        }
+
+        .attr-val {
+            flex: 1;
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        /* ── 模板代码块 ── */
+        .code-block {
+            background: var(--bg3);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 14px 16px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            line-height: 1.8;
+            color: var(--text-2);
+            overflow-x: auto;
+            margin: 8px 0;
+        }
+
+        .code-comment {
+            color: var(--text-3);
+        }
+
+        .code-key {
+            color: var(--magic-primary);
+        }
+
+        .code-key-s {
+            color: var(--sword-primary);
+        }
+
+        .code-key-x {
+            color: var(--xian-primary);
+        }
+
+        .code-val {
+            color: #fde68a;
+        }
+
+        .code-opt {
+            color: var(--text-3);
+            font-style: italic;
+        }
+
+        /* ── 通用段落 ── */
+        .prose {
+            font-size: 13px;
+            color: var(--text-2);
+            line-height: 1.75;
+            margin-bottom: 10px;
+        }
+
+            .prose:last-child {
+                margin-bottom: 0;
+            }
+
+            .prose strong {
+                color: var(--text);
+                font-weight: 600;
+            }
+
+        /* ── 行内注释 ── */
+        .footnote {
+            font-size: 12px;
+            color: var(--text-3);
+            font-family: 'JetBrains Mono', monospace;
+            padding: 8px 12px;
+            background: var(--bg3);
+            border-radius: 4px;
+            border-left: 2px solid var(--border-active);
+            margin-top: 10px;
+        }
+
+        /* ── 核心区分概览 ── */
+        .overview-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 14px;
+            margin-bottom: 24px;
+        }
+
+        .overview-card {
+            border-radius: 8px;
+            border: 1px solid;
+            overflow: hidden;
+        }
+
+        .ov-magic {
+            background: var(--magic-bg);
+            border-color: var(--magic-border);
+        }
+
+        .ov-sword {
+            background: var(--sword-bg);
+            border-color: var(--sword-border);
+        }
+
+        .ov-xian {
+            background: var(--xian-bg);
+            border-color: var(--xian-border);
+        }
+
+        .ov-title {
+            padding: 12px 16px 10px;
+            font-family: 'Noto Serif SC', serif;
+            font-size: 16px;
+            font-weight: 700;
+            border-bottom: 1px solid;
+        }
+
+        .ov-magic .ov-title {
+            color: var(--magic-primary);
+            border-color: var(--magic-border);
+        }
+
+        .ov-sword .ov-title {
+            color: var(--sword-primary);
+            border-color: var(--sword-border);
+        }
+
+        .ov-xian .ov-title {
+            color: var(--xian-primary);
+            border-color: var(--xian-border);
+        }
+
+        .ov-body {
+            padding: 12px 16px;
+        }
+
+        .ov-stat {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 5px 0;
+            font-size: 12.5px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+            .ov-stat:last-child {
+                border-bottom: none;
+            }
+
+        .ov-stat-key {
+            color: var(--text-3);
+        }
+
+        .ov-stat-val {
+            color: var(--text);
+            font-weight: 500;
+            font-size: 12px;
+            text-align: right;
+        }
+
+        /* ── 副标题 ── */
+        .section-title {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--text-3);
+            font-family: 'JetBrains Mono', monospace;
+            margin: 24px 0 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+            .section-title::after {
+                content: '';
+                flex: 1;
+                height: 1px;
+                background: var(--border);
+            }
+
+        /* ── 冲突说明区 ── */
+        .conflict-row {
+            display: flex;
+            gap: 14px;
+            margin-bottom: 8px;
+        }
+
+        .conflict-icon {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+        }
+
+        .icon-no {
+            background: rgba(248,113,113,0.15);
+        }
+
+        .icon-ok {
+            background: rgba(52,211,153,0.15);
+        }
+
+        .icon-warn {
+            background: rgba(251,191,36,0.15);
+        }
+
+        .conflict-text {
+            font-size: 13px;
+            color: var(--text-2);
+            line-height: 1.65;
+        }
+
+            .conflict-text strong {
+                color: var(--text);
+            }
+
+        /* 响应式 */
+        @media (max-width: 640px) {
+            .section-grid {
+                grid-template-columns: 1fr;
+            }
+
+                .section-grid.thirds {
+                    grid-template-columns: 1fr 1fr;
+                }
+
+            .overview-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .school-list {
+                grid-template-columns: 1fr;
+            }
+
+            .element-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+
+            .tab-nav {
+                overflow-x: auto;
+                flex-wrap: nowrap;
+            }
+
+            .tab-btn {
+                font-size: 12px;
+                padding: 9px 14px;
+            }
+
+            body {
+                padding: 20px 16px 40px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="page">
+
+        <!-- 顶部 -->
+        <div class="header">
+            <p class="header-eyebrow">创作指南 · 能力系统</p>
+            <h1 class="header-title">能力创建快速指南</h1>
+            <p class="header-desc">三套能力系统的核心规则、禁忌与创建要点。在填写人设模板前，请先确认你的角色所属能力类型及对应限制。</p>
+        </div>
+
+        <!-- 全局概览 -->
+        <div class="overview-grid">
+            <div class="overview-card ov-magic">
+                <div class="ov-title">魔法</div>
+                <div class="ov-body">
+                    <div class="ov-stat"><span class="ov-stat-key">能量消耗</span><span class="ov-stat-val">生息（不可回收）</span></div>
+                    <div class="ov-stat"><span class="ov-stat-key">角色类型</span><span class="ov-stat-val">魔法师 / 异魔法师</span></div>
+                    <div class="ov-stat"><span class="ov-stat-key">学习门槛</span><span class="ov-stat-val">需魔力感知天赋</span></div>
+                    <div class="ov-stat"><span class="ov-stat-key">世界影响</span><span class="ov-stat-val badge badge-danger">持续升高魔力</span></div>
+                </div>
+            </div>
+            <div class="overview-card ov-sword">
+                <div class="ov-title">剑术/仙剑术</div>
+                <div class="ov-body">
+                    <div class="ov-stat"><span class="ov-stat-key">能量消耗</span><span class="ov-stat-val">元气（可恢复）或者无消耗</span></div>
+                    <div class="ov-stat"><span class="ov-stat-key">角色类型</span><span class="ov-stat-val">仙术修炼者</span></div>
+                    <div class="ov-stat"><span class="ov-stat-key">学习门槛</span><span class="ov-stat-val">原素感知 + 仙酒（不是必需）</span></div>
+                    <div class="ov-stat"><span class="ov-stat-key">世界影响</span><span class="ov-stat-val badge badge-ok">基本无害</span></div>
+                </div>
+            </div>
+            <div class="overview-card ov-xian">
+                <div class="ov-title">仙术</div>
+                <div class="ov-body">
+                    <div class="ov-stat"><span class="ov-stat-key">能量消耗</span><span class="ov-stat-val">元气（可恢复）</span></div>
+                    <div class="ov-stat"><span class="ov-stat-key">角色类型</span><span class="ov-stat-val">仙术修炼者</span></div>
+                    <div class="ov-stat"><span class="ov-stat-key">学习门槛</span><span class="ov-stat-val">原素亲和 + 修炼</span></div>
+                    <div class="ov-stat"><span class="ov-stat-key">世界影响</span><span class="ov-stat-val badge badge-ok">不破坏平衡</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab 导航 -->
+        <div class="tab-nav">
+            <button class="tab-btn active-magic" onclick="showTab('magic', this)">
+                <span class="tab-dot dot-magic"></span>魔法
+            </button>
+            <button class="tab-btn" onclick="showTab('sword', this)">
+                <span class="tab-dot dot-sword"></span>剑术 / 仙剑术
+            </button>
+            <button class="tab-btn" onclick="showTab('xian', this)">
+                <span class="tab-dot dot-xian"></span>仙术
+            </button>
+        </div>
+
+        <!-- ══════════════ 魔法面板 ══════════════ -->
+        <div id="panel-magic" class="panel active">
+
+            <div class="alert alert-warn">
+                <div class="alert-title">核心约束</div>
+                魔法消耗生息转化的魔力，此过程<strong>不可逆</strong>（异魔法师除外）。每次施法都在推高全球魔力浓度。这是这个世界最根本的设计约束，不可绕开。
+            </div>
+
+            <p class="section-title">施法者类型</p>
+
+            <div class="section-grid">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-header-icon" style="background:var(--magic-bg);">⬡</div>
+                        <span class="card-title">魔法师（普通）</span>
+                    </div>
+                    <div class="card-body">
+                        <ul class="rule-list">
+                            <li class="rule-item">
+                                <span class="rule-label">被动泄漏</span>
+                                <span class="rule-value">体内生息<strong>持续</strong>自发转化为魔力，即使不施法也在发生，无法关闭</span>
+                            </li>
+                            <li class="rule-item">
+                                <span class="rule-label">必须持有法器</span>
+                                <span class="rule-value">法器用于储存溢出魔力，无法器则会被魔力反噬。是魔法师的刚性生存需求</span>
+                            </li>
+                            <li class="rule-item">
+                                <span class="rule-label">可使用</span>
+                                <span class="rule-value rule-value ok">通用魔法 + 魔法师专属魔法</span>
+                            </li>
+                            <li class="rule-item">
+                                <span class="rule-label">不可使用</span>
+                                <span class="rule-value rule-value danger">异魔法师专属术式（直接操控生息）</span>
+                            </li>
+                            <li class="rule-item">
+                                <span class="rule-label">设计要点</span>
+                                <span class="rule-value">需设计角色的法器形态及存储量上限</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-header-icon" style="background:rgba(251,113,133,0.1);">◈</div>
+                        <span class="card-title">异魔法师</span>
+                        <span class="badge badge-danger" style="margin-left:auto;">稀有</span>
+                    </div>
+                    <div class="card-body">
+                        <ul class="rule-list">
+                            <li class="rule-item">
+                                <span class="rule-label">主动控制</span>
+                                <span class="rule-value">可主动控制生息→魔力转化速率，并能将已有魔力<strong>逆向转回生息</strong></span>
+                            </li>
+                            <li class="rule-item">
+                                <span class="rule-label">汲取能力</span>
+                                <span class="rule-value">可从环境中汲取游离魔力补充自身，或者吸收他人的生息延长寿命</span>
+                            </li>
+                            <li class="rule-item">
+                                <span class="rule-label">可使用</span>
+                                <span class="rule-value rule-value ok">通用魔法 + 异魔法师专属术式 + 可触及传说级魔法</span>
+                            </li>
+                            <li class="rule-item">
+                                <span class="rule-label">社会现状</span>
+                                <span class="rule-value rule-value warn">在千源境被称为「汲取者」，受「仙术正统令」迫害。在月轨城受清算派迫害。需隐瞒身份</span>
+                            </li>
+                            <li class="rule-item">
+                                <span class="rule-label">数量</span>
+                                <span class="rule-value">极稀少——末田园时代已知总数不超过一千人</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <p class="section-title">原素亲和（选择一个主导原素，可以选择副原素）</p>
+
+            <div class="card">
+                <div class="card-body">
+                    <div class="element-grid">
+                        <div class="element-chip el-tu">
+                            <span class="element-name">土</span>
+                            <span class="element-tag">稳固 · 结构</span>
+                        </div>
+                        <div class="element-chip el-jin">
+                            <span class="element-name">金</span>
+                            <span class="element-tag">精密 · 控制</span>
+                        </div>
+                        <div class="element-chip el-shui">
+                            <span class="element-name">水</span>
+                            <span class="element-tag">流动 · 幻觉</span>
+                        </div>
+                        <div class="element-chip el-mu">
+                            <span class="element-name">木</span>
+                            <span class="element-tag">生命 · 医疗</span>
+                        </div>
+                        <div class="element-chip el-huo">
+                            <span class="element-name">火</span>
+                            <span class="element-tag">毁灭 · 输出</span>
+                        </div>
+                        <div class="element-chip el-qi">
+                            <span class="element-name">气</span>
+                            <span class="element-tag">隐匿 · 感知</span>
+                        </div>
+                        <div class="element-chip el-guang">
+                            <span class="element-name">光</span>
+                            <span class="element-tag">揭示 · 驱逐</span>
+                        </div>
+                        <div class="element-chip el-an">
+                            <span class="element-name">暗</span>
+                            <span class="element-tag">深层 · 危险</span>
+                        </div>
+                    </div>
+                    <p class="footnote" style="margin-top:12px;">对立原素（土-气 / 金-木 / 水-火 / 光-暗）之间存在天然共鸣与拮抗，跨系施法消耗更高。</p>
+                </div>
+            </div>
+
+            <p class="section-title">八大学派（月轨城体系，若角色出身月轨城）</p>
+
+            <div class="school-list">
+                <div class="school-item">
+                    <div class="school-header">
+                        <div class="school-dot" style="background:var(--jin);"></div>
+                        <span class="school-name">煌金院</span>
+                        <span class="school-el">金派</span>
+                    </div>
+                    <p class="school-desc">魔力精密控制、最小消耗达成最精确效果；「技术流」代名词</p>
+                </div>
+                <div class="school-item">
+                    <div class="school-header">
+                        <div class="school-dot" style="background:var(--mu);"></div>
+                        <span class="school-name">息木院</span>
+                        <span class="school-el">木派</span>
+                    </div>
+                    <p class="school-desc">生命能量、生息研究、医疗方向；唯一公开研究异魔法师能力的学派</p>
+                </div>
+                <div class="school-item">
+                    <div class="school-header">
+                        <div class="school-dot" style="background:var(--shui);"></div>
+                        <span class="school-name">澄水院</span>
+                        <span class="school-el">水派</span>
+                    </div>
+                    <p class="school-desc">魔力流动性与形态转化、幻觉；重视施法「直觉」，对异魔法师抱正面态度。</p>
+                </div>
+                <div class="school-item">
+                    <div class="school-header">
+                        <div class="school-dot" style="background:var(--huo);"></div>
+                        <span class="school-name">焰毁院</span>
+                        <span class="school-el">火派</span>
+                    </div>
+                    <p class="school-desc">毁灭性魔法、高强度输出；执法司主要来源，清算派渗透较深</p>
+                </div>
+                <div class="school-item">
+                    <div class="school-header">
+                        <div class="school-dot" style="background:var(--tu);"></div>
+                        <span class="school-name">稳土院</span>
+                        <span class="school-el">土派</span>
+                    </div>
+                    <p class="school-desc">结构魔法、防御体系、永久性魔法构造；八塔年检主办</p>
+                </div>
+                <div class="school-item">
+                    <div class="school-header">
+                        <div class="school-dot" style="background:var(--qi);"></div>
+                        <span class="school-name">流气院</span>
+                        <span class="school-el">气派</span>
+                    </div>
+                    <p class="school-desc">信息传递、隐蔽魔法、感知与反感知；外务司主要人才来源</p>
+                </div>
+                <div class="school-item">
+                    <div class="school-header">
+                        <div class="school-dot" style="background:var(--guang);"></div>
+                        <span class="school-name">曜光院</span>
+                        <span class="school-el">光派</span>
+                    </div>
+                    <p class="school-desc">揭示、驱逐、世界平衡理论；对异魔法师态度最强硬</p>
+                </div>
+                <div class="school-item">
+                    <div class="school-header">
+                        <div class="school-dot" style="background:var(--an);"></div>
+                        <span class="school-name">渊暗院</span>
+                        <span class="school-el">暗派</span>
+                    </div>
+                    <p class="school-desc">隐匿、深层魔力结构研究；最接近禁忌边界，承受最大外部压力</p>
+                </div>
+            </div>
+
+            <p class="section-title">魔法分类层级</p>
+
+            <div class="card">
+                <div class="card-body">
+                    <ul class="tier-list">
+                        <li class="tier-item">
+                            <div class="tier-badge tier-1">通用</div>
+                            <div class="tier-content">
+                                <div class="tier-title">通用魔法</div>
+                                <div class="tier-desc">魔力提取、塑形、释放。魔法师与异魔法师均可使用。包含原型魔法（魔弹、魔盾等基础术式）和阵列魔法。</div>
+                            </div>
+                        </li>
+                        <li class="tier-item">
+                            <div class="tier-badge tier-2">专属</div>
+                            <div class="tier-content">
+                                <div class="tier-title">魔法师专属魔法</div>
+                                <div class="tier-desc">以魔力为媒介间接影响生息——消耗生息，<strong>不可回收</strong>。仅普通魔法师可用（异魔法师天然以更直接方式操控，不走此路径）。</div>
+                            </div>
+                        </li>
+                        <li class="tier-item">
+                            <div class="tier-badge tier-3">专属</div>
+                            <div class="tier-content">
+                                <div class="tier-title">异魔法师专属魔法</div>
+                                <div class="tier-desc">直接操控生息——可回收、可补充、可汲取环境游离魔力。包含汲取、转化、跃迁、强化、解析等方向。</div>
+                            </div>
+                        </li>
+                        <li class="tier-item">
+                            <div class="tier-badge tier-legend">传说</div>
+                            <div class="tier-content">
+                                <div class="tier-title">三大传说级魔法</div>
+                                <div class="tier-desc">已知仅极少数异魔法师可触及。<span class="badge badge-danger">消逝</span>：使目标从世界上彻底消失，不可逆。<span class="badge badge-warn">回溯</span>：时间系，不可超越施法者自身生命起点。<span class="badge badge-warn">转生</span>：将自身生息附着于目标替代其存在，或通过残存生息复生。代价是记忆、情感或人格的永久丧失。</div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <p class="section-title">研究禁区（月轨城）</p>
+
+            <div class="card">
+                <div class="card-body">
+                    <div class="forbidden-row">
+                        <div class="forbidden-level fl-yellow">黄级</div>
+                        <div class="forbidden-content">
+                            <div class="forbidden-title">限制研究</div>
+                            <div class="forbidden-desc">须有高阶魔法师全程监督，每步骤须记录备案。违反后果：暂停研究资格一至五年。</div>
+                        </div>
+                    </div>
+                    <div class="forbidden-row">
+                        <div class="forbidden-level fl-red">红级</div>
+                        <div class="forbidden-content">
+                            <div class="forbidden-title">封存研究</div>
+                            <div class="forbidden-desc">相关成果已封存，不得引用。违反后果：永久驱逐出城。</div>
+                        </div>
+                    </div>
+                    <div class="forbidden-row">
+                        <div class="forbidden-level fl-black">黑级</div>
+                        <div class="forbidden-content">
+                            <div class="forbidden-title">抹除研究（官方否认其存在）</div>
+                            <div class="forbidden-desc">已知方向：异魔法师「汲取」完整方法论 / 「消逝」施法原理 / 「回溯」可操控性研究。违反后果：不明（从未有人违反后仍留在城内）。</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <p class="section-title">创建要点 — 必须回答</p>
+
+            <div class="code-block">
+                <span class="code-comment"># 魔法能力创建检查</span>
+
+                <span class="code-key">施法者类型</span>：普通魔法师 / 异魔法师
+                <span class="code-key">原素亲和</span>：土 / 金 / 水 / 木 / 火 / 气 / 光 / 暗  <span class="code-comment"># 至少选一个主导原素</span>
+                <span class="code-key">出身学派</span>：<span class="code-opt">（若来自月轨城：煌金/息木/澄水/焰毁/稳土/流气/曜光/渊暗院）</span>
+
+                <span class="code-key">法器</span>：<span class="code-opt">（必填，魔法师需法器储存溢出魔力，描述其形态）</span>
+                <span class="code-key">漏瓶</span>：<span class="code-opt">（日常使用的魔力收集容器，市政定期回收用）</span>
+
+                <span class="code-key">代表术式</span>：
+                <span class="code-comment">- 术式名：</span>
+                <span class="code-comment">- 效果：</span>
+                <span class="code-comment">- 消耗：（每次消耗多少魔力，是否持续）</span>
+                <span class="code-comment">- 限制：（做不到的事 / 失效条件）</span>
+                <span class="code-comment">- 外部表现：（可见迹象）</span>
+
+                <span class="code-key">反噬条件</span>：<span class="code-opt">（无法器时 / 过度施法时发生什么）</span>
+                <span class="code-key">平衡影响</span>：<span class="code-opt">（每次施法向环境输出多少魔力）</span>
+            </div>
+
+            <div class="alert alert-danger" style="margin-top:4px;">
+                <div class="alert-title">需要规避的错误</div>
+                <div class="conflict-row"><div class="conflict-icon icon-no">✕</div><div class="conflict-text"><strong>魔法师可以随时「关掉」被动魔力泄漏</strong> → 错误，无法关闭，这是生理特征</div></div>
+                <div class="conflict-row"><div class="conflict-icon icon-no">✕</div><div class="conflict-text"><strong>使用魔法不消耗生息 / 消耗可以完全恢复</strong> → 错误，转化过程不可逆（异魔法师除外）</div></div>
+                <div class="conflict-row"><div class="conflict-icon icon-no">✕</div><div class="conflict-text"><strong>普通魔法师直接操控生息</strong> → 错误，这是异魔法师专属</div></div>
+                <div class="conflict-row"><div class="conflict-icon icon-no">✕</div><div class="conflict-text"><strong>异魔法师在外公开身份</strong> → 极危险</div></div>
+            </div>
+
+        </div>
+
+        <!-- ══════════════ 剑术/仙剑术面板 ══════════════ -->
+        <div id="panel-sword" class="panel">
+
+            <div class="alert alert-info">
+                <div class="alert-title">核心区别</div>
+                剑术/仙剑术是<strong>仙术的器物媒介专精形式</strong>，以元气通过剑器精确传导，消耗元气而非生息。元气可恢复，不破坏世界平衡。这是千源境主流修炼路径。
+            </div>
+
+            <p class="section-title">基础概念</p>
+
+            <div class="section-grid">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-header-icon" style="background:var(--sword-bg);">⚔</div>
+                        <span class="card-title">能量机制</span>
+                    </div>
+                    <div class="card-body">
+                        <ul class="rule-list">
+                            <li class="rule-item">
+                                <span class="rule-label">消耗</span>
+                                <span class="rule-value rule-value ok">元气——生息的流动形态，可自然恢复</span>
+                            </li>
+                            <li class="rule-item">
+                                <span class="rule-label">恢复方式</span>
+                                <span class="rule-value">休息 / 调息 / 仙酒辅助（提升元气上限及恢复速率）</span>
+                            </li>
+                            <li class="rule-item">
+                                <span class="rule-label">仙酒依赖</span>
+                                <span class="rule-value rule-value warn">高阶仙剑法需仙酒维持元气上限突破。长期依赖高品级仙酒有原素化反噬风险</span>
+                            </li>
+                            <li class="rule-item">
+                                <span class="rule-label">无仙酒状态</span>
+                                <span class="rule-value">仍可施术，但元气上限受限，难以维持高强度技法</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-header-icon" style="background:var(--sword-bg);">◻</div>
+                        <span class="card-title">对抗魔法的优劣</span>
+                    </div>
+                    <div class="card-body">
+                        <ul class="rule-list">
+                            <li class="rule-item">
+                                <span class="rule-label">劣势</span>
+                                <span class="rule-value rule-value warn">元气是「流动的」，魔力是「积蓄的」——正面功率对比通常处于劣势</span>
+                            </li>
+                            <li class="rule-item">
+                                <span class="rule-label">优势</span>
+                                <span class="rule-value">灵活性高、可持续施展、精准可控；剑气外放可实现远程精确打击</span>
+                            </li>
+                            <li class="rule-item">
+                                <span class="rule-label">环境限制</span>
+                                <span class="rule-value">原素场紊乱的地方，仙术效力大幅下降</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <p class="section-title">仙剑道公开剑法五阶</p>
+
+            <div class="sword-stage stage-1">
+                <div class="sword-stage-header">
+                    <span class="sword-stage-num">一阶</span>
+                    <span class="sword-stage-name">基础剑法</span>
+                    <span class="badge badge-ok">入门</span>
+                </div>
+                <div class="sword-stage-body">掌握元气通过剑器传导的基本方法。剑气可短程延伸，动作较大，需要借助仙酒辅助感知。大多数修炼者在此阶段。</div>
+            </div>
+
+            <div class="sword-stage stage-2">
+                <div class="sword-stage-header">
+                    <span class="sword-stage-num">二阶</span>
+                    <span class="sword-stage-name">内化阶</span>
+                    <span class="badge badge-gray">数年积累</span>
+                </div>
+                <div class="sword-stage-body">元气与剑器融合趋于自然，剑气外放控制力提升。施法动作开始内敛，可在中距离精确定向打击。</div>
+            </div>
+
+            <div class="sword-stage stage-3">
+                <div class="sword-stage-header">
+                    <span class="sword-stage-num">三阶</span>
+                    <span class="sword-stage-name">气形阶</span>
+                    <span class="badge badge-gray">十年以上</span>
+                </div>
+                <div class="sword-stage-body">剑气可外放至数丈，并开始尝试「剑气化形」——将剑气凝聚为实体形态。需要稳定的高品级仙酒支持元气上限。</div>
+            </div>
+
+            <div class="sword-stage stage-4">
+                <div class="sword-stage-header">
+                    <span class="sword-stage-num">四阶</span>
+                    <span class="sword-stage-name">化境阶</span>
+                    <span class="badge badge-warn">天赋门槛</span>
+                </div>
+                <div class="sword-stage-body">心剑合一。剑气外放稳定达十丈以上，「剑气化形」纯熟。施法几乎无外部动作，反应速度接近本能。仙剑道中高阶剑士水平。</div>
+            </div>
+
+            <div class="sword-stage stage-5">
+                <div class="sword-stage-header">
+                    <span class="sword-stage-num">五阶</span>
+                    <span class="sword-stage-name">剑仙境</span>
+                    <span class="badge badge-danger">当世仅一人</span>
+                </div>
+                <div class="sword-stage-body">已知最高阶，仙剑道最高等级。人剑合一，化为无形，已掌握全部公开剑法及部分秘技。当世达此境者升格为剑仙。另有秘传剑诀仅传剑仙级别。</div>
+            </div>
+
+            <p class="section-title">仙酒品级与剑术修炼</p>
+
+            <div class="card">
+                <div class="card-body">
+                    <table class="compare-table">
+                        <thead>
+                            <tr>
+                                <th>品级</th>
+                                <th>名称</th>
+                                <th>效力</th>
+                                <th>剑士适用</th>
+                                <th>副作用</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="row-label">一品</td>
+                                <td>醴露</td>
+                                <td>轻微元气提振，约半时辰</td>
+                                <td>普通剑士日常</td>
+                                <td>轻微困意</td>
+                            </tr>
+                            <tr>
+                                <td class="row-label">二品</td>
+                                <td>清醴</td>
+                                <td>明显增强，约一时辰</td>
+                                <td>前线将领配给</td>
+                                <td>困意较强</td>
+                            </tr>
+                            <tr>
+                                <td class="row-label">三品</td>
+                                <td>琼醴</td>
+                                <td>大幅提升，约两时辰</td>
+                                <td>中阶剑士</td>
+                                <td>强烈嗜睡</td>
+                            </tr>
+                            <tr>
+                                <td class="row-label">四品</td>
+                                <td>玉醴</td>
+                                <td>元气上限突破</td>
+                                <td>高阶剑士 / 重大战役</td>
+                                <td><span class="badge badge-danger">反噬风险，可能肢体原素化</span></td>
+                            </tr>
+                            <tr>
+                                <td class="row-label">五品</td>
+                                <td>神醴</td>
+                                <td>仙帝级元气爆发</td>
+                                <td>仙帝专用</td>
+                                <td><span class="badge badge-danger">极高反噬，可致死</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <p class="footnote">原素化反噬机制：仙酒强行拉升元气上限，当原素流转速率超过身体承载能力时，原素沉淀固化于组织中。轻则皮肤硬化，重则脏器原素化</p>
+                </div>
+            </div>
+
+            <p class="section-title">创建要点 — 必须回答</p>
+
+            <div class="code-block">
+                <span class="code-comment"># 剑术/仙剑术能力创建检查</span>
+
+                <span class="code-key-s">仙术阶数</span>：一阶 / 二阶 / 三阶 / 四阶 / 五阶（剑仙，当世仅一人）
+                <span class="code-key-s">原素系别</span>：以哪种原素为主导施展剑术<span class="code-opt">（如当代剑仙主修金系、水系）</span>
+                <span class="code-key-s">惯用武器</span>：剑的名称、材质、、属性、来历
+
+                <span class="code-key-s">剑气外放距离</span>：
+                <span class="code-comment">一阶：短程</span>
+                <span class="code-comment">三阶：数丈</span>
+                <span class="code-comment">五阶：十丈以上</span>
+
+                <span class="code-key-s">代表剑诀</span>：
+                <span class="code-comment">- 名称：</span>
+                <span class="code-comment">- 原理：调动哪种原素，通过什么方式</span>
+                <span class="code-comment">- 效果：</span>
+                <span class="code-comment">- 消耗：多少元气，持续施展代价</span>
+                <span class="code-comment">- 限制：环境限制 / 对抗魔力时的劣势</span>
+
+                <span class="code-key-s">仙酒依赖程度</span>：<span class="code-opt">（需要什么品级，长期依赖程度）</span>
+                <span class="code-key-s">反噬状态</span>：<span class="code-opt">（是否已有原素化症状）</span>
+            </div>
+
+            <div class="alert alert-warn" style="margin-top:4px;">
+                <div class="alert-title">注意事项</div>
+                <div class="conflict-row"><div class="conflict-icon icon-no">✕</div><div class="conflict-text"><strong>五阶剑仙</strong>：当世仅剑仙一人，新建角色不应达此阶</div></div>
+                <div class="conflict-row"><div class="conflict-icon icon-no">✕</div><div class="conflict-text"><strong>高阶仙剑法可以无视原素场紊乱</strong></div></div>
+                <div class="conflict-row"><div class="conflict-icon icon-ok">✓</div><div class="conflict-text">高阶修炼者寿命延长（元气恒流，延缓老化），外貌可比实际年龄年轻</div></div>
+            </div>
+
+        </div>
+
+        <!-- ══════════════ 仙术面板 ══════════════ -->
+        <div id="panel-xian" class="panel">
+
+            <div class="alert alert-ok">
+                <div class="alert-title">核心特性</div>
+                仙术消耗<strong>元气</strong>（生息的流动形态），元气可自然恢复，不产生魔力，不破坏世界平衡。这是仙术与魔法最根本的差异，也是千源境「天道」叙事的能量体系基础。
+            </div>
+
+            <p class="section-title">施法机制</p>
+
+            <div class="section-grid">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-header-icon" style="background:var(--xian-bg);">⊕</div>
+                        <span class="card-title">原理与表现</span>
+                    </div>
+                    <div class="card-body">
+                        <ul class="rule-list">
+                            <li class="rule-item">
+                                <span class="rule-label">做什么</span>
+                                <span class="rule-value">以元气引导原素流动与变化，改变物质的形态、密度、能量状态</span>
+                            </li>
+                            <li class="rule-item">
+                                <span class="rule-label">施法方式</span>
+                                <span class="rule-value">意念控制为主，可内敛（无明显外部动作），比魔法施法更「安静」</span>
+                            </li>
+                            <li class="rule-item">
+                                <span class="rule-label">外观特征</span>
+                                <span class="rule-value">效果纯净，无魔力「污染」感；颜色与所调动原素高度一致</span>
+                            </li>
+                            <li class="rule-item">
+                                <span class="rule-label">长期影响</span>
+                                <span class="rule-value rule-value ok">修炼者寿命延长，身体随主修原素发生对应变化（如土系修炼者皮肤质地）</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-header-icon" style="background:var(--xian-bg);">⊗</div>
+                        <span class="card-title">代价与限制</span>
+                    </div>
+                    <div class="card-body">
+                        <ul class="rule-list">
+                            <li class="rule-item">
+                                <span class="rule-label">元气耗尽</span>
+                                <span class="rule-value">元气耗尽后强行施法会发生反噬——轻则晕厥，重则原素逆流损伤脏器</span>
+                            </li>
+                            <li class="rule-item">
+                                <span class="rule-label">仙酒副作用</span>
+                                <span class="rule-value rule-value warn">依赖高品级仙酒提升元气上限的修炼者，长期积累有「原素化」风险（皮肤硬化、脏器原素化）</span>
+                            </li>
+                            <li class="rule-item">
+                                <span class="rule-label">功率劣势</span>
+                                <span class="rule-value">对抗同方向魔法时，功率通常处于劣势——元气是流动的，魔力是积蓄的</span>
+                            </li>
+                            <li class="rule-item">
+                                <span class="rule-label">环境限制</span>
+                                <span class="rule-value">铁壁岭一带原素场紊乱，仙术效力大幅下降；虫族裂隙附近有干扰场</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <p class="section-title">原素系别 × 仙术方向</p>
+
+            <div class="card">
+                <div class="card-body">
+                    <table class="compare-table">
+                        <thead>
+                            <tr>
+                                <th>原素</th>
+                                <th>核心能力方向</th>
+                                <th>典型效果</th>
+                                <th>修炼者身体变化</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span style="color:var(--tu);font-weight:600;">土</span></td>
+                                <td>凝聚 · 密度 · 形态</td>
+                                <td>岩化、地面控制、防御构造</td>
+                                <td>皮肤逐渐厚实，触感类岩石</td>
+                            </tr>
+                            <tr>
+                                <td><span style="color:var(--jin);font-weight:600;">金</span></td>
+                                <td>切割 · 精密 · 导引</td>
+                                <td>金属操控、精准打击、剑气强化</td>
+                                <td>皮肤呈细微金属光泽</td>
+                            </tr>
+                            <tr>
+                                <td><span style="color:var(--shui);font-weight:600;">水</span></td>
+                                <td>流动 · 净化 · 变形</td>
+                                <td>水系控制、治疗辅助、冰封</td>
+                                <td>皮肤偏凉，体温略低</td>
+                            </tr>
+                            <tr>
+                                <td><span style="color:var(--mu);font-weight:600;">木</span></td>
+                                <td>生长 · 缠绕 · 修复</td>
+                                <td>植物操控、生命感知、毒素</td>
+                                <td>发色偏绿，与植物亲和性强</td>
+                            </tr>
+                            <tr>
+                                <td><span style="color:var(--huo);font-weight:600;">火</span></td>
+                                <td>燃烧 · 爆发 · 蒸发</td>
+                                <td>火焰召唤、热力爆破、温度控制</td>
+                                <td>体温偏高，目光如炬</td>
+                            </tr>
+                            <tr>
+                                <td><span style="color:var(--qi);font-weight:600;">气</span></td>
+                                <td>速度 · 感知 · 气压</td>
+                                <td>气流操控、感知增强、声音控制</td>
+                                <td>身形轻盈，步声极轻</td>
+                            </tr>
+                            <tr>
+                                <td><span style="color:var(--guang);font-weight:600;">光</span></td>
+                                <td>照明 · 净化 · 视觉</td>
+                                <td>光线弯折、真相揭示、驱逐暗系</td>
+                                <td>眼瞳偏亮，昼间更精神</td>
+                            </tr>
+                            <tr>
+                                <td><span style="color:var(--an);font-weight:600;">暗</span></td>
+                                <td>隐匿 · 吸收 · 压制</td>
+                                <td>暗域创造、气息隐匿、对光系压制</td>
+                                <td>眼瞳偏深，夜间感知更强</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <p class="section-title">修炼等级参考</p>
+
+            <div class="card">
+                <div class="card-body">
+                    <ul class="tier-list">
+                        <li class="tier-item">
+                            <div class="tier-badge tier-1">初阶</div>
+                            <div class="tier-content">
+                                <div class="tier-title">感知与引导</div>
+                                <div class="tier-desc">能感知元气流向，以意念引导原素做简单操作。需借助仙酒辅助。大多数普通修炼者的水平。</div>
+                            </div>
+                        </li>
+                        <li class="tier-item">
+                            <div class="tier-badge tier-2">中阶</div>
+                            <div class="tier-content">
+                                <div class="tier-title">稳定操控</div>
+                                <div class="tier-desc">元气流转趋于自然，复合原素组合操控成为可能。施法基本内敛，无明显外部动作。通常需要数年至十年积累。</div>
+                            </div>
+                        </li>
+                        <li class="tier-item">
+                            <div class="tier-badge tier-3">高阶</div>
+                            <div class="tier-content">
+                                <div class="tier-title">融合境</div>
+                                <div class="tier-desc">修炼者与主修原素高度融合，感知范围大幅扩展。部分高阶仙术效果可与同方向魔法功率持平。长期修炼的身体变化明显。</div>
+                            </div>
+                        </li>
+                        <li class="tier-item">
+                            <div class="tier-badge tier-4">极限</div>
+                            <div class="tier-content">
+                                <div class="tier-title">顺应天道</div>
+                                <div class="tier-desc">「以元气顺应原素的内在趋势而非强行引导」——极少数修炼者达到的境界，功耗极低，效果却大幅超越常规。寿命极长。</div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <p class="section-title">仙术与魔法的外观区别（同方向对比）</p>
+
+            <div class="section-grid">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title" style="color:var(--xian-primary);">仙术（以火系为例）</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="attr-row"><div class="attr-key">颜色</div><div class="attr-val">纯净橙黄，边缘清晰，无紊乱感</div></div>
+                        <div class="attr-row"><div class="attr-key">质感</div><div class="attr-val">火焰「听话」，精准覆盖目标，不乱</div></div>
+                        <div class="attr-row"><div class="attr-key">气息</div><div class="attr-val">木质燃烧香气，无异味</div></div>
+                        <div class="attr-row"><div class="attr-key">感受</div><div class="attr-val">施法者感到元气流动顺畅，舒适</div></div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title" style="color:var(--magic-primary);">魔法（以火系为例）</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="attr-row"><div class="attr-key">颜色</div><div class="attr-val">带有紫色或黑色边缘，偶有不稳定闪烁</div></div>
+                        <div class="attr-row"><div class="attr-key">质感</div><div class="attr-val">火焰有一种「溢出感」，边界不完全可控</div></div>
+                        <div class="attr-row"><div class="attr-key">气息</div><div class="attr-val">轻微焦糊气味，感应晶在附近会有反应</div></div>
+                        <div class="attr-row"><div class="attr-key">感受</div><div class="attr-val">施法者感到能量被消耗（生息减少）</div></div>
+                    </div>
+                </div>
+            </div>
+
+            <p class="section-title">创建要点 — 必须回答</p>
+
+            <div class="code-block">
+                <span class="code-comment"># 仙术能力创建检查</span>
+
+                <span class="code-key-x">原素系别</span>：主导原素（必选一，可兼修副系）
+                <span class="code-key-x">修炼等级</span>：初阶 / 中阶 / 高阶 / 极限
+                <span class="code-key-x">修炼年数</span>：<span class="code-opt">（与等级对应，同时还需要确定元气上限）</span>
+
+                <span class="code-key-x">代表术式</span>：
+                <span class="code-comment">- 名称：</span>
+                <span class="code-comment">- 原理：引导了哪种原素，通过什么路径</span>
+                <span class="code-comment">- 效果：</span>
+                <span class="code-comment">- 消耗：多少元气，持续代价</span>
+                <span class="code-comment">- 外部表现：颜色、声音、气味</span>
+                <span class="code-comment">- 限制：环境限制 / 对抗魔法时的功率劣势</span>
+
+                <span class="code-key-x">元气恢复方式</span>：休息 / 调息 / 仙酒 <span class="code-opt">（注明品级）</span>
+                <span class="code-key-x">身体变化</span>：<span class="code-opt">（长期修炼的对应原素身体特征）</span>
+                <span class="code-key-x">仙酒原素化风险</span>：<span class="code-opt">（是否已有反噬痕迹，如皮肤硬化）</span>
+            </div>
+
+            <div class="alert alert-info" style="margin-top:4px;">
+                <div class="alert-title">特殊说明</div>
+                <div class="conflict-row"><div class="conflict-icon icon-ok">✓</div><div class="conflict-text">仙术修炼者寿命延长——元气持续流通延缓老化，高阶者外貌可比实际年龄年轻十至数十岁</div></div>
+                <div class="conflict-row"><div class="conflict-icon icon-ok">✓</div><div class="conflict-text">仙术可以在月轨城内使用（不触发感应晶预警），但大规模仙术施展也会被探索派注意</div></div>
+                <div class="conflict-row"><div class="conflict-icon icon-warn">!</div><div class="conflict-text">千源境外的异魔法师区别提示：某些表现为「仙术」的能力，若施法者是异魔法师，实际上操控的是生息而非元气，外观相似但机制根本不同</div></div>
+            </div>
+
+        </div>
+
+    </div><!-- /page -->
+
+    <script>
+function showTab(type, btn) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => {
+    b.className = 'tab-btn';
+  });
+
+  document.getElementById('panel-' + type).classList.add('active');
+  btn.classList.add('active-' + type);
+}
+    </script>
+</body>
+</html>

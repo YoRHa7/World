@@ -1,0 +1,1419 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>共创指南</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;700&family=Noto+Sans+SC:wght@300;400;500;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+        :root {
+            --bg: #0d1117;
+            --bg2: #161b22;
+            --bg3: #21262d;
+            --bg4: #2d333b;
+            --border: rgba(255,255,255,0.07);
+            --border-m: rgba(255,255,255,0.13);
+            --text: #e6edf3;
+            --text-2: #8b949e;
+            --text-3: #6e7681;
+            --c-setting: #60a5fa; /* 设定补全 - 蓝 */
+            --c-story: #34d399; /* 故事叙事 - 绿 */
+            --c-art: #f472b6; /* 美术视觉 - 粉 */
+            --c-new: #a78bfa; /* 新设定提案 - 紫 */
+            --c-research: #fbbf24; /* 考据整理 - 琥珀 */
+            --c-other: #8b949e; /* 其他 - 灰 */
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Noto Sans SC', sans-serif;
+            font-size: 14px;
+            line-height: 1.7;
+            padding: 0;
+        }
+
+        /* ── 封面区 ── */
+        .hero {
+            background: linear-gradient(160deg, #0d1117 0%, #161b22 50%, #0d1117 100%);
+            border-bottom: 1px solid var(--border);
+            padding: 56px 40px 48px;
+            position: relative;
+            overflow: hidden;
+        }
+
+            .hero::before {
+                content: '';
+                position: absolute;
+                inset: 0;
+                background: radial-gradient(ellipse at 20% 50%, rgba(96,165,250,0.05) 0%, transparent 55%), radial-gradient(ellipse at 80% 30%, rgba(52,211,153,0.04) 0%, transparent 50%), radial-gradient(ellipse at 60% 80%, rgba(167,139,250,0.04) 0%, transparent 45%);
+                pointer-events: none;
+            }
+
+        .hero-inner {
+            max-width: 860px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-eyebrow {
+            font-size: 11px;
+            letter-spacing: 0.28em;
+            color: var(--text-3);
+            text-transform: uppercase;
+            margin-bottom: 16px;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .hero-title {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--text);
+            line-height: 1.25;
+            letter-spacing: 0.04em;
+            margin-bottom: 16px;
+        }
+
+        .hero-sub {
+            font-size: 15px;
+            color: var(--text-2);
+            line-height: 1.8;
+            max-width: 560px;
+            margin-bottom: 28px;
+        }
+
+        .hero-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .hero-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 14px;
+            border-radius: 100px;
+            font-size: 12px;
+            font-weight: 500;
+            border: 1px solid;
+        }
+
+        .ht-blue {
+            background: rgba(96,165,250,0.08);
+            color: var(--c-setting);
+            border-color: rgba(96,165,250,0.2);
+        }
+
+        .ht-green {
+            background: rgba(52,211,153,0.08);
+            color: var(--c-story);
+            border-color: rgba(52,211,153,0.2);
+        }
+
+        .ht-purple {
+            background: rgba(167,139,250,0.08);
+            color: var(--c-new);
+            border-color: rgba(167,139,250,0.2);
+        }
+
+        .ht-gray {
+            background: rgba(255,255,255,0.04);
+            color: var(--text-2);
+            border-color: var(--border);
+        }
+
+        /* ── 主体内容 ── */
+        .main {
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 40px 40px 80px;
+        }
+
+        /* ── 区块标题 ── */
+        .section-title {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--text-3);
+            font-family: 'JetBrains Mono', monospace;
+            margin: 40px 0 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+            .section-title::after {
+                content: '';
+                flex: 1;
+                height: 1px;
+                background: var(--border);
+            }
+
+            .section-title:first-child {
+                margin-top: 0;
+            }
+
+        /* ── 卡片 ── */
+        .card {
+            background: var(--bg2);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 12px;
+        }
+
+            .card:last-child {
+                margin-bottom: 0;
+            }
+
+        .card-header {
+            padding: 11px 16px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 9px;
+        }
+
+        .ch-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .ch-title {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--text-2);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .ch-right {
+            margin-left: auto;
+            display: flex;
+            gap: 6px;
+            align-items: center;
+        }
+
+        .card-body {
+            padding: 14px 16px;
+        }
+
+        /* ── 贡献类型网格 ── */
+        .contrib-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .contrib-card {
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+            background: var(--bg2);
+            transition: border-color 0.15s;
+        }
+
+            .contrib-card:hover {
+                border-color: var(--border-m);
+            }
+
+        .cc-header {
+            padding: 12px 14px 10px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 9px;
+        }
+
+        .cc-icon {
+            width: 28px;
+            height: 28px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .cc-name {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .cc-tag {
+            margin-left: auto;
+            font-size: 10px;
+            padding: 2px 8px;
+            border-radius: 3px;
+            font-family: 'JetBrains Mono', monospace;
+            letter-spacing: 0.06em;
+            border: 1px solid;
+        }
+
+        .cc-body {
+            padding: 10px 14px;
+        }
+
+        .cc-desc {
+            font-size: 12.5px;
+            color: var(--text-2);
+            line-height: 1.65;
+            margin-bottom: 8px;
+        }
+
+        .cc-examples {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+        }
+
+        .cc-ex {
+            font-size: 11px;
+            padding: 2px 8px;
+            border-radius: 3px;
+            background: rgba(255,255,255,0.04);
+            color: var(--text-3);
+            border: 1px solid var(--border);
+        }
+
+        /* 各类型颜色 */
+        .ct-setting .cc-icon {
+            background: rgba(96,165,250,0.12);
+        }
+
+        .ct-setting .cc-tag {
+            color: var(--c-setting);
+            border-color: rgba(96,165,250,0.25);
+            background: rgba(96,165,250,0.08);
+        }
+
+        .ct-setting .cc-icon {
+            color: var(--c-setting);
+        }
+
+        .ct-story .cc-icon {
+            background: rgba(52,211,153,0.12);
+        }
+
+        .ct-story .cc-tag {
+            color: var(--c-story);
+            border-color: rgba(52,211,153,0.25);
+            background: rgba(52,211,153,0.08);
+        }
+
+        .ct-story .cc-icon {
+            color: var(--c-story);
+        }
+
+        .ct-art .cc-icon {
+            background: rgba(244,114,182,0.12);
+        }
+
+        .ct-art .cc-tag {
+            color: var(--c-art);
+            border-color: rgba(244,114,182,0.25);
+            background: rgba(244,114,182,0.08);
+        }
+
+        .ct-art .cc-icon {
+            color: var(--c-art);
+        }
+
+        .ct-new .cc-icon {
+            background: rgba(167,139,250,0.12);
+        }
+
+        .ct-new .cc-tag {
+            color: var(--c-new);
+            border-color: rgba(167,139,250,0.25);
+            background: rgba(167,139,250,0.08);
+        }
+
+        .ct-new .cc-icon {
+            color: var(--c-new);
+        }
+
+        .ct-research .cc-icon {
+            background: rgba(251,191,36,0.12);
+        }
+
+        .ct-research .cc-tag {
+            color: var(--c-research);
+            border-color: rgba(251,191,36,0.25);
+            background: rgba(251,191,36,0.08);
+        }
+
+        .ct-research .cc-icon {
+            color: var(--c-research);
+        }
+
+        .ct-other .cc-icon {
+            background: rgba(255,255,255,0.06);
+        }
+
+        .ct-other .cc-tag {
+            color: var(--text-2);
+            border-color: var(--border);
+            background: rgba(255,255,255,0.04);
+        }
+
+        .ct-other .cc-icon {
+            color: var(--text-2);
+        }
+
+        /* ── 重点方向卡片 ── */
+        .want-list {
+            list-style: none;
+        }
+
+        .want-item {
+            display: flex;
+            gap: 14px;
+            padding: 14px 0;
+            border-bottom: 1px solid var(--border);
+            align-items: flex-start;
+        }
+
+            .want-item:last-child {
+                border-bottom: none;
+            }
+
+        .want-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 7px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+            flex-shrink: 0;
+        }
+
+        .want-content {
+            flex: 1;
+        }
+
+        .want-title {
+            font-size: 13.5px;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 4px;
+        }
+
+        .want-desc {
+            font-size: 12.5px;
+            color: var(--text-2);
+            line-height: 1.65;
+        }
+
+        .want-tag {
+            display: inline-block;
+            font-size: 10px;
+            padding: 1px 7px;
+            border-radius: 3px;
+            margin-left: 6px;
+            vertical-align: middle;
+            font-family: 'JetBrains Mono', monospace;
+            letter-spacing: 0.05em;
+        }
+
+        .wt-hot {
+            background: rgba(248,113,113,0.12);
+            color: #f87171;
+            border: 1px solid rgba(248,113,113,0.25);
+        }
+
+        .wt-open {
+            background: rgba(52,211,153,0.1);
+            color: #34d399;
+            border: 1px solid rgba(52,211,153,0.22);
+        }
+
+        /* ── 步骤流程 ── */
+        .steps {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .step-card {
+            background: var(--bg2);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 14px 16px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .step-num {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 32px;
+            font-weight: 700;
+            color: rgba(255,255,255,0.04);
+            position: absolute;
+            right: 12px;
+            top: 6px;
+            line-height: 1;
+            pointer-events: none;
+            user-select: none;
+        }
+
+        .step-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 6px;
+        }
+
+        .step-desc {
+            font-size: 12.5px;
+            color: var(--text-2);
+            line-height: 1.65;
+        }
+
+        /* ── 规范条目 ── */
+        .rule-list {
+            list-style: none;
+        }
+
+        .rule-item {
+            display: flex;
+            gap: 10px;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border);
+            font-size: 13px;
+            align-items: flex-start;
+        }
+
+            .rule-item:last-child {
+                border-bottom: none;
+            }
+
+        .ri-icon {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            margin-top: 1px;
+        }
+
+        .ri-must {
+            background: rgba(248,113,113,0.15);
+            color: #f87171;
+        }
+
+        .ri-ok {
+            background: rgba(52,211,153,0.15);
+            color: #34d399;
+        }
+
+        .ri-info {
+            background: rgba(96,165,250,0.15);
+            color: #60a5fa;
+        }
+
+        .ri-warn {
+            background: rgba(251,191,36,0.15);
+            color: #fbbf24;
+        }
+
+        .ri-content {
+            flex: 1;
+            color: var(--text-2);
+            line-height: 1.65;
+        }
+
+            .ri-content strong {
+                color: var(--text);
+                font-weight: 600;
+            }
+
+            .ri-content em {
+                color: var(--text-3);
+                font-style: italic;
+                font-size: 12px;
+            }
+
+        /* ── 命名规则 ── */
+        .naming-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        .naming-card {
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 12px 14px;
+            background: var(--bg3);
+        }
+
+        .nc-label {
+            font-size: 10px;
+            font-family: 'JetBrains Mono', monospace;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+
+            .nc-label.nc-no {
+                color: #f87171;
+            }
+
+            .nc-label.nc-yes {
+                color: #34d399;
+            }
+
+        .nc-items {
+            list-style: none;
+        }
+
+        .nc-item {
+            font-size: 12.5px;
+            color: var(--text-2);
+            padding: 3px 0;
+            display: flex;
+            align-items: flex-start;
+            gap: 6px;
+            line-height: 1.55;
+        }
+
+            .nc-item::before {
+                flex-shrink: 0;
+                margin-top: 2px;
+            }
+
+        .nc-no .nc-item::before {
+            content: '✕';
+            color: #f87171;
+            font-size: 10px;
+        }
+
+        .nc-yes .nc-item::before {
+            content: '✓';
+            color: #34d399;
+            font-size: 10px;
+        }
+
+        /* ── 渠道表 ── */
+        .channel-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+
+            .channel-table th {
+                padding: 8px 12px;
+                text-align: left;
+                font-size: 10px;
+                font-weight: 700;
+                letter-spacing: 0.12em;
+                color: var(--text-3);
+                text-transform: uppercase;
+                border-bottom: 1px solid var(--border);
+                font-family: 'JetBrains Mono', monospace;
+            }
+
+            .channel-table td {
+                padding: 10px 12px;
+                border-bottom: 1px solid var(--border);
+                color: var(--text-2);
+                vertical-align: top;
+                line-height: 1.6;
+            }
+
+            .channel-table tr:last-child td {
+                border-bottom: none;
+            }
+
+        .td-name {
+            font-weight: 600;
+            color: var(--text);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+        }
+
+        /* ── 警告/提示框 ── */
+        .alert {
+            padding: 10px 14px;
+            border-radius: 6px;
+            border-left: 3px solid;
+            margin-bottom: 12px;
+            font-size: 13px;
+            line-height: 1.65;
+        }
+
+        .alert-info {
+            background: rgba(96,165,250,0.06);
+            border-color: #60a5fa;
+            color: #93c5fd;
+        }
+
+        .alert-ok {
+            background: rgba(52,211,153,0.06);
+            border-color: #34d399;
+            color: #6ee7b7;
+        }
+
+        .alert-warn {
+            background: rgba(251,191,36,0.06);
+            border-color: #fbbf24;
+            color: #fde68a;
+        }
+
+        .alert-purple {
+            background: rgba(167,139,250,0.06);
+            border-color: #a78bfa;
+            color: #c4b5fd;
+        }
+
+        .alert-title {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+            font-family: 'JetBrains Mono', monospace;
+            opacity: 0.7;
+        }
+
+        /* ── 入门路径 ── */
+        .path-row {
+            display: flex;
+            gap: 0;
+            margin-bottom: 12px;
+            overflow-x: auto;
+        }
+
+        .path-step {
+            flex: 1;
+            min-width: 120px;
+            padding: 14px 16px;
+            background: var(--bg2);
+            border: 1px solid var(--border);
+            border-right: none;
+            position: relative;
+        }
+
+            .path-step:first-child {
+                border-radius: 7px 0 0 7px;
+            }
+
+            .path-step:last-child {
+                border-right: 1px solid var(--border);
+                border-radius: 0 7px 7px 0;
+            }
+
+        .path-num {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            color: var(--text-3);
+            letter-spacing: 0.12em;
+            margin-bottom: 5px;
+        }
+
+        .path-name {
+            font-size: 12.5px;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 4px;
+        }
+
+        .path-hint {
+            font-size: 11.5px;
+            color: var(--text-3);
+            line-height: 1.55;
+        }
+
+        /* ── 提示行 ── */
+        .tip-row {
+            display: flex;
+            gap: 10px;
+            padding: 9px 0;
+            border-bottom: 1px solid var(--border);
+            font-size: 13px;
+            align-items: flex-start;
+        }
+
+            .tip-row:last-child {
+                border-bottom: none;
+            }
+
+        .tip-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            margin-top: 5px;
+        }
+
+        .tip-text {
+            flex: 1;
+            color: var(--text-2);
+            line-height: 1.65;
+        }
+
+            .tip-text strong {
+                color: var(--text);
+                font-weight: 600;
+            }
+
+        /* ── 徽章 ── */
+        .badge {
+            display: inline-block;
+            padding: 2px 9px;
+            border-radius: 3px;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.06em;
+            border: 1px solid;
+            font-family: 'JetBrains Mono', monospace;
+            vertical-align: middle;
+        }
+
+        .b-green {
+            background: rgba(52,211,153,0.08);
+            color: #34d399;
+            border-color: rgba(52,211,153,0.22);
+        }
+
+        .b-gray {
+            background: rgba(255,255,255,0.04);
+            color: var(--text-2);
+            border-color: var(--border);
+        }
+
+        .b-purple {
+            background: rgba(167,139,250,0.08);
+            color: #a78bfa;
+            border-color: rgba(167,139,250,0.22);
+        }
+
+        .b-amber {
+            background: rgba(251,191,36,0.08);
+            color: #fbbf24;
+            border-color: rgba(251,191,36,0.22);
+        }
+
+        /* ── 快速参考区 ── */
+        .quick-ref {
+            background: var(--bg2);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 20px 20px;
+            margin-bottom: 12px;
+        }
+
+        .qr-title {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 12px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .qr-cols {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+
+        .qr-col-title {
+            font-size: 10px;
+            font-family: 'JetBrains Mono', monospace;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+
+            .qr-col-title.qc-no {
+                color: #f87171;
+            }
+
+            .qr-col-title.qc-yes {
+                color: #34d399;
+            }
+
+        .qr-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 7px;
+            padding: 4px 0;
+            font-size: 12.5px;
+            color: var(--text-2);
+            line-height: 1.6;
+        }
+
+        .qr-item-icon {
+            flex-shrink: 0;
+            font-size: 11px;
+            margin-top: 1px;
+        }
+
+            .qr-item-icon.qi-no {
+                color: #f87171;
+            }
+
+            .qr-item-icon.qi-yes {
+                color: #34d399;
+            }
+
+        /* ── 页脚 ── */
+        .footer {
+            border-top: 1px solid var(--border);
+            padding: 24px 40px;
+            max-width: 860px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .footer-contact {
+            font-size: 12px;
+            color: var(--text-3);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+            .footer-contact strong {
+                color: var(--text-2);
+            }
+
+        .footer-note {
+            font-size: 12px;
+            color: var(--text-3);
+            margin-left: auto;
+            font-style: italic;
+        }
+
+        /* 响应式 */
+        @media (max-width: 640px) {
+            .hero {
+                padding: 36px 20px 32px;
+            }
+
+            .main {
+                padding: 28px 20px 60px;
+            }
+
+            .contrib-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .steps {
+                grid-template-columns: 1fr;
+            }
+
+            .naming-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .qr-cols {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-title {
+                font-size: 26px;
+            }
+
+            .path-row {
+                flex-direction: column;
+                gap: 4px;
+            }
+
+            .path-step {
+                border-right: 1px solid var(--border) !important;
+                border-radius: 6px !important;
+                border-bottom: none;
+            }
+
+                .path-step:last-child {
+                    border-bottom: 1px solid var(--border);
+                }
+
+            .footer {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 封面 -->
+    <div class="hero">
+        <div class="hero-inner">
+            <p class="hero-eyebrow">Open Worldbuilding · 共同创作</p>
+            <h1 class="hero-title">共创指南</h1>
+            <p class="hero-sub">
+                这是一个「一起种树」的超宏大世界观。旨在创造通过不同视角的碰撞中自然长出来的东西。<br>
+                
+                读过至少一份文档，有一个想法就可以加入。
+            </p>
+            <div class="hero-tags">
+                <span class="hero-tag ht-green">完全开放</span>
+                <span class="hero-tag ht-blue">无门槛参与</span>
+                <span class="hero-tag ht-purple">任意形式提交</span>
+                <span class="hero-tag ht-gray">可署名 · 可匿名</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="main">
+
+        <!-- ── 贡献类型 ── -->
+        <p class="section-title">可以贡献什么</p>
+
+        <div class="contrib-grid">
+
+            <div class="contrib-card ct-setting">
+                <div class="cc-header">
+                    <div class="cc-icon">◫</div>
+                    <span class="cc-name">设定补全</span>
+                    <span class="cc-tag">SETTING</span>
+                </div>
+                <div class="cc-body">
+                    <p class="cc-desc">现有文档已有骨架，但细节留白——填充那些「知道存在但没写」的角落。</p>
+                    <div class="cc-examples">
+                        <span class="cc-ex">某边境小镇的风土</span>
+                        <span class="cc-ex">某角色的早年经历</span>
+                        <span class="cc-ex">某组织的内部文化</span>
+                        <span class="cc-ex">某地的民间传说</span>
+                        <span class="cc-ex">某物品的使用方法</span>
+                        <span class="cc-ex">某事件的具体细节</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="contrib-card ct-new">
+                <div class="cc-header">
+                    <div class="cc-icon">✦</div>
+                    <span class="cc-name">新设定提案</span>
+                    <span class="cc-tag">PROPOSAL</span>
+                </div>
+                <div class="cc-body">
+                    <p class="cc-desc">文档完全未提及的新内容——只要符合世界框架，都可以提案。</p>
+                    <div class="cc-examples">
+                        <span class="cc-ex">新的区域/岛屿</span>
+                        <span class="cc-ex">新的种族/生物</span>
+                        <span class="cc-ex">民间文化/技术</span>
+                        <span class="cc-ex">新的势力/帮派</span>
+                        <span class="cc-ex">历史事件碎片</span>
+                        <span class="cc-ex">新的能力(魔法仙术等)</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="contrib-card ct-story">
+                <div class="cc-header">
+                    <div class="cc-icon">❧</div>
+                    <span class="cc-name">故事 / 叙事</span>
+                    <span class="cc-tag">STORY</span>
+                </div>
+                <div class="cc-body">
+                    <p class="cc-desc">发生在这个世界里的一切叙事——不一定是涉及主线大人物的，聚焦小人物的日常也受欢迎。</p>
+                    <div class="cc-examples">
+                        <span class="cc-ex">士兵的家书</span>
+                        <span class="cc-ex">一次失败的铸剑</span>
+                        <span class="cc-ex">庆典上的偶遇</span>
+                        <span class="cc-ex">灰隙居民的一天</span>
+                        <span class="cc-ex">律者的巡逻日志</span>
+                        <span class="cc-ex">民谣 · 书信</span>
+                        <span class="cc-ex">或者你想尝试写主线/span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="contrib-card ct-art">
+                <div class="cc-header">
+                    <div class="cc-icon">◈</div>
+                    <span class="cc-name">美术 / 视觉</span>
+                    <span class="cc-tag">ART</span>
+                </div>
+                <div class="cc-body">
+                    <p class="cc-desc">角色偏向二次元风格，背景/场景保持魔幻史诗写实渲染风格。</p>
+                    <div class="cc-examples">
+                        <span class="cc-ex">人物立绘</span>
+                        <span class="cc-ex">场景概念图</span>
+                        <span class="cc-ex">器物设计</span>
+                        <span class="cc-ex">地图草图</span>
+                        <span class="cc-ex">信息图</span>
+                        <span class="cc-ex">速写</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="contrib-card ct-research">
+                <div class="cc-header">
+                    <div class="cc-icon">⊞</div>
+                    <span class="cc-name">考据 / 整理</span>
+                    <span class="cc-tag">RESEARCH</span>
+                </div>
+                <div class="cc-body">
+                    <p class="cc-desc">对现有设定进行交叉验证、时间线梳理、矛盾指出。考据党欢迎。</p>
+                    <div class="cc-examples">
+                        <span class="cc-ex">时间线梳理</span>
+                        <span class="cc-ex">跨文档交叉验证</span>
+                        <span class="cc-ex">年份矛盾指出</span>
+                        <span class="cc-ex">设定一致性检查</span>
+                        <span class="cc-ex">是否存在内在矛盾</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="contrib-card ct-other">
+                <div class="cc-header">
+                    <div class="cc-icon">∞</div>
+                    <span class="cc-name">其他一切</span>
+                    <span class="cc-tag">OTHER</span>
+                </div>
+                <div class="cc-body">
+                    <p class="cc-desc">没有规定的但符合逻辑的——小说、动画、音乐、游戏、跑团规则、信息图……</p>
+                    <div class="cc-examples">
+                        <span class="cc-ex">翻译/转写</span>
+                        <span class="cc-ex">跑团机制</span>
+                        <span class="cc-ex">游戏机制</span>
+                        
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ── 最需要补充的方向 ── -->
+        <p class="section-title">当前最需要填补的方向</p>
+
+        <div class="card">
+            <div class="card-body" style="padding-top:6px;padding-bottom:6px;">
+                <ul class="want-list">
+
+                    <li class="want-item">
+                        <div class="want-icon" style="background:rgba(52,211,153,0.12);color:#34d399;">✍</div>
+                        <div class="want-content">
+                            <div class="want-title">文风重构 <span class="want-tag wt-hot">急需</span></div>
+                            <div class="want-desc">使用有叙事感的语言重写现有偏「记录式」的学术风格文档——保留信息量，但让它读起来更像是有人在讲述。同时由于现有文档中包含部分AI辅助润色，可读性有待提升。任何一份文档都可以作为起点。</div>
+                        </div>
+                    </li>
+
+                    <li class="want-item">
+                        <div class="want-icon" style="background:rgba(96,165,250,0.12);color:#60a5fa;">⊙</div>
+                        <div class="want-content">
+                            <div class="want-title">区域细节 <span class="want-tag wt-open">全面开放</span></div>
+                            <div class="want-desc">几乎每个区域都只有大概的骨架描述。可以是任何形式：某个地点的物品清单、某个机构的内部人际关系、某条街道的气味和声音、某个节日的人群状态。不需要宏大，越细越好。</div>
+                        </div>
+                    </li>
+
+                    <li class="want-item">
+                        <div class="want-icon" style="background: rgba(251,191,36,0.12); color: #60a5fa;">◐</div>
+                        <div class="want-content">
+                            <div class="want-title">民间视角 <span class="want-tag wt-open">全面开放</span></div>
+                            <div class="want-desc">
+                                各势力的普通人怎么过日子、怎么看待大人物、怎么传谣言。<br>
+                                特别欢迎：草原采收工的一个采收季、灰隙居民的一天、秘原村村民如何隐藏自己、北方战线普通士兵的家书、月轨城无触者如何看待魔法师等等赋予这个世界温度的内容。
+                            </div>
+                        </div>
+                    </li>
+
+                    <li class="want-item">
+                        <div class="want-icon" style="background: rgba(167,139,250,0.12); color: #34d399;">◆</div>
+                        <div class="want-content">
+                            <div class="want-title">各自叙事 <span class="want-tag wt-open">急需</span></div>
+                            <div class="want-desc">任何篇幅和题材的故事都欢迎，甚至是主线（推进时间线的内容）。</div>
+                        </div>
+                    </li>
+
+                    <li class="want-item" style="border-bottom:none;">
+                        <div class="want-icon" style="background:rgba(244,114,182,0.12);color:#f472b6;">✿</div>
+                        <div class="want-content">
+                            <div class="want-title">更多种族 / 生物 <span class="want-tag wt-open">参考框架已有</span></div>
+                            <div class="want-desc">类似已有的云絮灵、林雾鹿等，给世界加入更丰富的生态。魔法生物、动植物、奇异的地理现象都算。参考种族创建指南确保能量体系自洽即可。</div>
+                        </div>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+
+        <!-- ── 参与步骤 ── -->
+        <p class="section-title">参与方式 · 四步流程</p>
+
+        <div class="steps">
+            <div class="step-card">
+                <div class="step-num">01</div>
+                <div class="step-title">读一份文档</div>
+                <div class="step-desc">推荐从《世界观概述》或《世界格局一览》开始，也可以直接看你感兴趣的区域或角色的文档。不需要读完所有。</div>
+            </div>
+            <div class="step-card">
+                <div class="step-num">02</div>
+                <div class="step-title">产生一个想法</div>
+                <div class="step-desc">任何想法，一个场景、一个角色、一个「如果……会怎样」、一个发现的细节都算。不需要完整，不需要成体系。</div>
+            </div>
+            <div class="step-card">
+                <div class="step-num">03</div>
+                <div class="step-title">以任意形式表达</div>
+                <div class="step-desc">文字、图片、语音、表格、流程图、草图——任何能让别人理解你在说什么的形式都可以。推荐Markdown格式，但不强制。</div>
+            </div>
+            <div class="step-card">
+                <div class="step-num">04</div>
+                <div class="step-title">通过任意渠道提交</div>
+                <div class="step-desc">见下方渠道表。不确定的想法可以先聊，欢迎随时来问。被采纳的内容按你意愿决定署名方式。</div>
+            </div>
+        </div>
+
+        <!-- ── 提交渠道 ── -->
+        <p class="section-title">提交渠道</p>
+
+        <div class="card">
+            <div class="card-body" style="padding:0;">
+                <table class="channel-table">
+                    <thead>
+                        <tr>
+                            <th>渠道</th>
+                            <th>用途</th>
+                            <th>备注</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="td-name"><a href="https://qm.qq.com/q/ZyWxn2uKOs">QQ群608886521</a></span></td>
+                            <td>主要交流、提交、讨论</td>
+                            <td>首选渠道，随时可联系</td>
+                        </tr>
+                        <tr>
+                            <td><span class="td-name">在线文档共享(先画饼)</span></td>
+                            <td>协作编辑、多人共创</td>
+                            <td>后续建立共享空间</td>
+                        </tr>
+                        <tr>
+                            <td><span class="td-name">口头 / 私信</span></td>
+                            <td>不确定的想法，想先聊一聊</td>
+                            <td>欢迎随时来聊，没有门槛</td>
+                        </tr>
+                        <tr>
+                            <td><span class="td-name"><a href="https://www.matrees.cn/world/overview?worldId=2038155940993589248">matrees平台</a></span></td>
+                            <td>直接对世界观提交提案</td>
+                            <td>适合有把握的完整内容</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- 署名说明 -->
+        <div class="alert alert-ok" style="margin-top:12px;">
+            <div class="alert-title">署名说明</div>
+            可选择<strong>真名、笔名、网名</strong>任意一种署名，也可以匿名提交（注明「不署名」，文档附录只记录「来自匿名共创者」）。所有被采纳的内容均按意愿标注贡献者。
+        </div>
+
+        <!-- ── 内容规范 ── -->
+        <p class="section-title">内容规范</p>
+
+        <div class="card">
+            <div class="card-body" style="padding-top:6px;padding-bottom:6px;">
+                <ul class="rule-list">
+
+                    <li class="rule-item">
+                        <div class="ri-icon ri-must">✕</div>
+                        <div class="ri-content"><strong>不推翻已确立的核心设定</strong>——可以有新的解释、扩展，但不要推翻已定的基础框架。<em>例：「仙酒不是由黄盈草酿造的」这类内容不可接受，除非你发现了真正的逻辑漏洞。</em></div>
+                    </li>
+
+                    <li class="rule-item">
+                        <div class="ri-icon ri-must">✕</div>
+                        <div class="ri-content"><strong>不创造碾压一切的人物/势力/武器</strong>——新内容不能破坏世界格局的内在平衡。强力设定可以有，但必须有对应的代价、限制和弱点。</div>
+                    </li>
+
+                    <li class="rule-item">
+                        <div class="ri-icon ri-must">✕</div>
+                        <div class="ri-content"><strong>禁止2字以上音译式命名</strong>——所有名词基于简洁直白的中文意象，尽可能避免音译（2字音译可接受）。命名时请遵循这个风格。可以在中文名之后另起英文名。<em>例：晶能财团: Crystar ✓ / "克里斯塔尔" ✗</em></div>
+                    </li>
+
+                    <li class="rule-item">
+                        <div class="ri-icon ri-info">⊙</div>
+                        <div class="ri-content"><strong>能量体系自洽是核心中的核心</strong>——如果要创造新的魔法/仙术/科技，请先理解能量体系的基本规则（原素-生息-魔力三层结构，仙术消耗元气，魔法消耗生息）。所有新能力必须有代价。</div>
+                    </li>
+
+                    <li class="rule-item">
+                        <div class="ri-icon ri-ok">✓</div>
+                        <div class="ri-content"><strong>基调可以灵活</strong>——主线偏严肃，但小故事可以轻松、幽默、甚至悲伤、无厘头。小型叙事的情绪范围完全开放。</div>
+                    </li>
+
+                    <li class="rule-item">
+                        <div class="ri-icon ri-ok">✓</div>
+                        <div class="ri-content"><strong>关于AI辅助</strong>——合理使用，不抵触。但所有AI生成的内容务必仔细检查，AI内容不能占大部分篇幅，仅可作为辅助。如果你不是使用AI的熟手，建议不使用（纠错比重写更麻烦）。</div>
+                    </li>
+
+                    <li class="rule-item">
+                        <div class="ri-icon ri-info">⊙</div>
+                        <div class="ri-content"><strong>文档格式建议</strong>——Markdown优先，Doc和TXT也可以。</div>
+                    </li>
+
+                    <li class="rule-item">
+                        <div class="ri-icon ri-info">⊙</div>
+                        <div class="ri-content"><strong>美术风格参考</strong>——整体魔幻史诗风格，角色二次元风格，背景/场景偏写实渲染。不强制完全一致，但提交时可以说明风格倾向。</div>
+                    </li>
+                    <li class="rule-item">
+                        <div class="ri-icon ri-info">⊙</div>
+                        <div class="ri-content"><strong>灰度设计建议</strong>——世界整体不是非黑即白的风格，而是一种结构化困境，最好使用一些灰度设计而非纯粹的恶人或是善人，保证矛盾点和内部张力。</div>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+
+        <!-- ── 命名规则 ── -->
+        <p class="section-title">命名规则详解</p>
+
+        <div class="alert alert-purple" style="margin-bottom:12px;">
+            <div class="alert-title">核心原则</div>
+            所有名词基于<strong>简洁直白的中文意象</strong>，直接看名字就能感受到它是什么。音译外来词建议尽量避免。英文名可以在中文名之后另起，作为补充，或是使用称号的形式，例如：强尼·银手。
+        </div>
+
+        <div class="naming-grid">
+            <div class="naming-card">
+                <div class="nc-label nc-no">✕ 不可以</div>
+                <ul class="nc-items nc-no">
+                    <li class="nc-item">「克里斯塔尔财团」（音译）</li>
+                    <li class="nc-item">「瓦尔哈拉」（神话地名音译）</li>
+                    <li class="nc-item">「艾达玛」（虚构词音译）</li>
+                    <li class="nc-item">「雷格纳洛克事件」</li>
+                    <li class="nc-item">任何只靠音节拼凑的2字以上名字</li>
+                </ul>
+            </div>
+            <div class="naming-card">
+                <div class="nc-label nc-yes">✓ 可以这样做</div>
+                <ul class="nc-items nc-yes">
+                    <li class="nc-item">「晶能财团」（功能直白）: Crystar</li>
+                    <li class="nc-item">「暮冬森林」（意象直白）</li>
+                    <li class="nc-item">「断云关」（地理+意象）</li>
+                    <li class="nc-item">「北海港大撕裂」（事件描述）</li>
+                    <li class="nc-item">「露西」（2字以内音译词）</li>
+                    <li class="nc-item">「布莱德·影刃」（2字以上音译词一定需要加一个简短称号）</li>
+                    <li class="nc-item">看名字就知道是什么的中文名</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- ── 读文档路径 ── -->
+        <p class="section-title">推荐入门路径</p>
+
+        <div class="path-row">
+            <div class="path-step">
+                <div class="path-num">STEP 01</div>
+                <div class="path-name">世界观概述</div>
+                <div class="path-hint">能量体系、世界结构、基本格局</div>
+            </div>
+            <div class="path-step">
+                <div class="path-num">STEP 02</div>
+                <div class="path-name">世界格局一览</div>
+                <div class="path-hint">快速定位当前世界整体</div>
+            </div>
+            <div class="path-step">
+                <div class="path-num">STEP 03</div>
+                <div class="path-name">选择你感兴趣的</div>
+                <div class="path-hint">某势力、某角色、某区域的完整设定</div>
+            </div>
+            <div class="path-step">
+                <div class="path-num">STEP 04</div>
+                <div class="path-name">开始贡献</div>
+                <div class="path-hint">任意形式，通过任意渠道提交</div>
+            </div>
+        </div>
+
+        <div class="alert alert-info">
+            <div class="alert-title">新手提示</div>
+            不需要读完所有文档才能参与。读完《世界观概述》之后，哪怕只是「有一个关于某个小角色早上怎么开始一天的想法」，都完全够了。来聊就行，一起把想法变得具体。
+        </div>
+
+        <!-- ── 快速自检 ── -->
+        <p class="section-title">提交前快速自检</p>
+
+        <div class="quick-ref">
+            <div class="qr-title">核心三问</div>
+            <div class="qr-cols">
+                <div>
+                    <div class="qr-col-title qc-no">如果回答是「是」→ 需要修改</div>
+                    <div class="qr-item"><span class="qr-item-icon qi-no">✕</span><span>这个内容推翻了某个已确立的核心设定吗？</span></div>
+                    <div class="qr-item"><span class="qr-item-icon qi-no">✕</span><span>新角色/势力/能力是否无代价地碾压了现有一切？</span></div>
+                    <div class="qr-item"><span class="qr-item-icon qi-no">✕</span><span>名字里有2字以上音译词吗？</span></div>
+                    <div class="qr-item"><span class="qr-item-icon qi-no">✕</span><span>新的能力有没有代价和限制？</span></div>
+                    <div class="qr-item"><span class="qr-item-icon qi-no">✕</span><span>魔法/仙术的使用符合能量体系规则吗？</span></div>
+                </div>
+                <div>
+                    <div class="qr-col-title qc-yes">如果回答是「是」→ 可以提交</div>
+                    <div class="qr-item"><span class="qr-item-icon qi-yes">✓</span><span>读过至少一份相关的世界观文档了吗？</span></div>
+                    <div class="qr-item"><span class="qr-item-icon qi-yes">✓</span><span>内容能放进现有的地图/势力格局里吗？</span></div>
+                    <div class="qr-item"><span class="qr-item-icon qi-yes">✓</span><span>名字看名字就能感受到它是什么吗？</span></div>
+                    <div class="qr-item"><span class="qr-item-icon qi-yes">✓</span><span>不确定的地方有标注出来让读者知道吗？</span></div>
+                    <div class="qr-item"><span class="qr-item-icon qi-yes">✓</span><span>如果是新能力，代价和限制都写清楚了吗？</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 额外提示 -->
+        <div class="card" style="margin-top:12px;">
+            <div class="card-header">
+                <div class="ch-dot" style="background:#8b949e;"></div>
+                <span class="ch-title">几个不用担心的事</span>
+            </div>
+            <div class="card-body" style="padding-top:6px;padding-bottom:6px;">
+                <div class="tip-row">
+                    <div class="tip-dot" style="background:#34d399;"></div>
+                    <div class="tip-text"><strong>不用担心「不够好」。</strong> 草图、碎片化的想法、「我觉得这里可以有个什么」都可以直接说出来，不需要整理成完整文档才提交。</div>
+                </div>
+                <div class="tip-row">
+                    <div class="tip-dot" style="background:#34d399;"></div>
+                    <div class="tip-text"><strong>不用担心「跟已有内容重复」。</strong> 不同视角对同一个地方的解读可以共存，发现文档里有类似内容也可以来聊，说不定能合并得更丰富。</div>
+                </div>
+                <div class="tip-row">
+                    <div class="tip-dot" style="background:#34d399;"></div>
+                    <div class="tip-text"><strong>不用担心「被否掉」。</strong> 被提出修改意见不等于被拒绝。绝大多数内容都是在讨论中调整的，而不是直接全盘否定。</div>
+                </div>
+                <div class="tip-row" style="border-bottom:none;">
+                    <div class="tip-dot" style="background:#fbbf24;"></div>
+                    <div class="tip-text"><strong>「不确定符不符合世界观」</strong>直接来聊就行，这是最欢迎的问法。带着问题来聊比自己反复查文档然后放弃效率高得多。</div>
+                </div>
+            </div>
+        </div>
+
+    </div><!-- /main -->
+
+    <div style="border-top:1px solid var(--border);padding:24px 40px;max-width:860px;margin:0 auto;display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
+        <div style="font-size:12px;color:var(--text-3);font-family:'JetBrains Mono',monospace;">
+            主要联系方式：<strong style="color:var(--text-2);"><a href="https://qm.qq.com/q/TFGsFmUWYk">QQ608886521</a></strong>
+        </div>
+        <div style="font-size:12px;color:var(--text-3);font-family:'JetBrains Mono',monospace;">
+            <a href="https://www.matrees.cn/world/overview?worldId=2038155940993589248">Matrees平台提案</a>
+        </div>
+        <div style="font-size:12px;color:var(--text-3);font-style:italic;margin-left:auto;">
+            新项目，欢迎来一起种树。
+        </div>
+    </div>
+
+</body>
+</html>
