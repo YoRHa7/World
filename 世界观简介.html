@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>世界概念 · 解析世界简介</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;500;600;700;900&family=Noto+Sans+SC:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap');
+
+:root {
+  --void: #050709;
+  --deep: #080c12;
+  --surface: #0d1421;
+  --raised: #111827;
+  --border: rgba(255,255,255,0.06);
+  --border-m: rgba(255,255,255,0.12);
+  --text: #e8eef8;
+  --text-2: #7a8699;
+  --text-3: #4a5568;
+  --gold: #c9a84c;
+  --gold-dim: rgba(201,168,76,0.15);
+  --gold-border: rgba(201,168,76,0.3);
+  --blue: #4d9de0;
+  --blue-dim: rgba(77,157,224,0.12);
+  --teal: #2dd4bf;
+  --teal-dim: rgba(45,212,191,0.1);
+  --purple: #a78bfa;
+  --purple-dim: rgba(167,139,250,0.1);
+  --red: #ef4444;
+  --red-dim: rgba(239,68,68,0.1);
+  --green: #34d399;
+  --amber: #fbbf24;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--void);
+  color: var(--text);
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 14px;
+  line-height: 1.8;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* HERO */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  overflow: hidden;
+  padding: 80px 24px 60px;
+}
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 40%, rgba(77,157,224,0.06) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 50% at 20% 80%, rgba(167,139,250,0.04) 0%, transparent 50%),
+    radial-gradient(ellipse 40% 40% at 80% 20%, rgba(201,168,76,0.04) 0%, transparent 50%),
+    linear-gradient(180deg, #050709 0%, #080c12 40%, #0a0f1c 100%);
+}
+.hero-bg::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(1px 1px at 15% 25%, rgba(255,255,255,0.3) 0%, transparent 100%),
+    radial-gradient(1px 1px at 35% 60%, rgba(255,255,255,0.2) 0%, transparent 100%),
+    radial-gradient(1px 1px at 55% 15%, rgba(255,255,255,0.25) 0%, transparent 100%),
+    radial-gradient(1px 1px at 75% 40%, rgba(255,255,255,0.2) 0%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 25% 80%, rgba(201,168,76,0.4) 0%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 65% 55%, rgba(77,157,224,0.4) 0%, transparent 100%),
+    radial-gradient(1px 1px at 90% 10%, rgba(255,255,255,0.3) 0%, transparent 100%);
+  pointer-events: none;
+}
+.hero-content { position: relative; z-index: 1; max-width: 720px; }
+.hero-eyebrow {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.35em;
+  color: var(--gold);
+  opacity: 0.7;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+.hero-title {
+  font-family: 'Noto Serif SC', serif;
+  font-size: clamp(36px, 6vw, 72px);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: 0.06em;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+.hero-title-en {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: clamp(11px, 1.5vw, 14px);
+  letter-spacing: 0.25em;
+  color: var(--text-3);
+  margin-bottom: 32px;
+  text-transform: uppercase;
+}
+.hero-divider {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin: 0 auto 32px;
+  max-width: 280px;
+}
+.hd-line { flex: 1; height: 1px; background: linear-gradient(90deg, transparent, var(--gold-border), transparent); }
+.hd-gem { width: 6px; height: 6px; background: var(--gold); transform: rotate(45deg); opacity: 0.6; }
+.hero-desc { font-size: 15px; color: var(--text-2); line-height: 1.9; margin-bottom: 36px; max-width: 560px; margin-left: auto; margin-right: auto; }
+.hero-desc em { color: var(--gold); font-style: normal; font-weight: 500; }
+.hero-tagline { font-family: 'Noto Serif SC', serif; font-size: 13px; color: var(--text-3); letter-spacing: 0.15em; margin-bottom: 48px; font-style: italic; }
+.hero-nav { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+.hero-nav-btn { padding: 8px 20px; border: 1px solid var(--border-m); background: rgba(255,255,255,0.03); color: var(--text-2); text-decoration: none; font-size: 12.5px; letter-spacing: 0.05em; border-radius: 2px; transition: all 0.2s; font-family: 'Noto Serif SC', serif; }
+.hero-nav-btn:hover { background: rgba(255,255,255,0.07); color: var(--text); }
+.scroll-hint { position: absolute; bottom: 32px; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 6px; opacity: 0.3; animation: pulse 2s ease-in-out infinite; }
+@keyframes pulse { 0%, 100% { opacity: 0.3; } 50% { opacity: 0.6; } }
+.scroll-hint span { font-size: 10px; letter-spacing: 0.2em; color: var(--text-3); font-family: 'JetBrains Mono', monospace; }
+.scroll-hint::after { content: '↓'; font-size: 16px; color: var(--text-3); }
+
+/* STICKY NAV */
+.sticky-nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: rgba(5,7,9,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); padding: 0 24px; display: flex; align-items: center; height: 48px; transform: translateY(-100%); transition: transform 0.3s ease; }
+.sticky-nav.visible { transform: translateY(0); }
+.sn-logo { font-family: 'Noto Serif SC', serif; font-size: 14px; font-weight: 700; color: var(--text); letter-spacing: 0.04em; margin-right: auto; }
+.sn-links { display: flex; gap: 24px; }
+.sn-link { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.1em; color: var(--text-3); text-decoration: none; text-transform: uppercase; transition: color 0.2s; }
+.sn-link:hover { color: var(--text); }
+
+/* SECTIONS */
+.section { max-width: 1000px; margin: 0 auto; padding: 80px 24px; border-bottom: 1px solid var(--border); }
+.section:last-child { border-bottom: none; }
+.section-header { display: flex; align-items: flex-end; gap: 20px; margin-bottom: 48px; }
+.section-num { font-family: 'JetBrains Mono', monospace; font-size: 48px; font-weight: 700; color: rgba(255,255,255,0.04); line-height: 1; flex-shrink: 0; user-select: none; }
+.section-label { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--text-3); margin-bottom: 4px; }
+.section-title { font-family: 'Noto Serif SC', serif; font-size: clamp(22px, 3.5vw, 32px); font-weight: 700; color: var(--text); letter-spacing: 0.04em; line-height: 1.2; }
+.section-title .accent { color: var(--gold); }
+
+/* ENERGY */
+.energy-hero { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; margin-bottom: 32px; }
+.energy-panel { background: var(--raised); padding: 28px; position: relative; overflow: hidden; }
+.energy-panel::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; }
+.ep-gen::before { background: linear-gradient(90deg, var(--gold), rgba(201,168,76,0.3)); }
+.ep-life::before { background: linear-gradient(90deg, var(--teal), rgba(45,212,191,0.3)); }
+.ep-magic::before { background: linear-gradient(90deg, var(--purple), rgba(167,139,250,0.3)); }
+.ep-note::before { background: linear-gradient(90deg, var(--blue), rgba(77,157,224,0.3)); }
+.ep-badge { display: inline-block; font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; padding: 3px 10px; border: 1px solid; border-radius: 1px; margin-bottom: 14px; }
+.badge-gen { color: var(--gold); border-color: var(--gold-border); background: var(--gold-dim); }
+.badge-life { color: var(--teal); border-color: rgba(45,212,191,0.3); background: var(--teal-dim); }
+.badge-magic { color: var(--purple); border-color: rgba(167,139,250,0.3); background: var(--purple-dim); }
+.badge-blue { color: var(--blue); border-color: rgba(77,157,224,0.3); background: var(--blue-dim); }
+.ep-title { font-family: 'Noto Serif SC', serif; font-size: 18px; font-weight: 700; color: var(--text); margin-bottom: 12px; }
+.ep-desc { font-size: 13px; color: var(--text-2); line-height: 1.8; }
+.ep-desc strong { color: var(--text); font-weight: 500; }
+.ep-desc em { color: var(--red); font-style: normal; }
+
+.energy-flow { background: var(--surface); border: 1px solid var(--border); padding: 20px 24px; margin-bottom: 32px; }
+.ef-row { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 12px; font-size: 13px; }
+.ef-row:last-child { margin-bottom: 0; }
+.ef-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 5px; }
+.ef-text { color: var(--text-2); line-height: 1.65; }
+.ef-text strong { color: var(--text); font-weight: 500; }
+.ef-text em { font-style: normal; color: var(--red); }
+
+.elements-grid { display: grid; grid-template-columns: repeat(8, 1fr); gap: 6px; }
+.el-chip { background: var(--raised); border: 1px solid var(--border); padding: 12px 6px; text-align: center; border-radius: 2px; }
+.el-char { font-family: 'Noto Serif SC', serif; font-size: 20px; font-weight: 700; display: block; line-height: 1.2; margin-bottom: 6px; }
+.el-tag { font-size: 10px; color: var(--text-3); letter-spacing: 0.06em; display: block; }
+.el-tu { border-top: 2px solid #8b6a3a; } .el-tu .el-char { color: #a07845; }
+.el-jin { border-top: 2px solid #909090; } .el-jin .el-char { color: #b0b0b0; }
+.el-shui { border-top: 2px solid #3a7fa0; } .el-shui .el-char { color: #5ba3c9; }
+.el-mu { border-top: 2px solid #3a7a3a; } .el-mu .el-char { color: #5a9e5a; }
+.el-huo { border-top: 2px solid #a04030; } .el-huo .el-char { color: #c45a3a; }
+.el-qi { border-top: 2px solid #6090b0; } .el-qi .el-char { color: #90b8d0; }
+.el-guang { border-top: 2px solid #a09030; } .el-guang .el-char { color: #d4b840; }
+.el-an { border-top: 2px solid #604080; } .el-an .el-char { color: #9060b0; }
+
+/* FACTIONS */
+.faction-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 2px; margin-bottom: 2px; }
+.faction-card { background: var(--raised); overflow: hidden; }
+.fc-image { width: 100%; height: 160px; overflow: hidden; position: relative; }
+.fc-img-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+.fi-qianyuan { background: linear-gradient(145deg, #1a0f06, #2a1a08, #1a0f06); }
+.fi-qianyuan::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 80% 60% at 50% 30%, rgba(201,140,40,0.2) 0%, transparent 70%), radial-gradient(ellipse 40% 40% at 20% 60%, rgba(220,100,30,0.1) 0%, transparent 60%); }
+.fi-qianyuan::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 20%, rgba(10,6,2,0.65) 100%); }
+.fi-yueguicheng { background: linear-gradient(145deg, #060c18, #0a1428, #060c18); }
+.fi-yueguicheng::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 70% 70% at 50% 50%, rgba(60,100,220,0.15) 0%, transparent 70%), radial-gradient(ellipse 40% 40% at 30% 70%, rgba(100,60,200,0.08) 0%, transparent 60%); }
+.fi-yueguicheng::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 20%, rgba(6,12,24,0.65) 100%); }
+.fi-jiguang { background: linear-gradient(145deg, #060c14, #0c1520, #060c14); }
+.fi-jiguang::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 60% 40% at 50% 20%, rgba(60,160,220,0.16) 0%, transparent 60%), radial-gradient(ellipse 60% 40% at 30% 60%, rgba(220,100,30,0.08) 0%, transparent 60%); }
+.fi-jiguang::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 20%, rgba(6,12,20,0.65) 100%); }
+.fi-symbol { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; height: 100%; }
+.fi-main-char { font-family: 'Noto Serif SC', serif; font-size: 52px; font-weight: 700; line-height: 1; margin-bottom: 4px; opacity: 0.9; }
+.fi-sub-chars { font-family: 'Noto Serif SC', serif; font-size: 14px; opacity: 0.4; letter-spacing: 0.25em; }
+.qianyuan-color { color: #d4a847; }
+.yueguicheng-color { color: #6090d4; }
+.jiguang-color { color: #50c0c0; }
+.fc-body { padding: 18px 20px 20px; }
+.fc-top { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.fc-name { font-family: 'Noto Serif SC', serif; font-size: 16px; font-weight: 700; color: var(--text); letter-spacing: 0.04em; }
+.fc-type { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.08em; color: var(--text-3); margin-left: auto; }
+.fc-desc { font-size: 12.5px; color: var(--text-2); line-height: 1.7; margin-bottom: 10px; }
+.fc-crisis { font-size: 11.5px; color: var(--red); opacity: 0.8; display: flex; align-items: flex-start; gap: 6px; line-height: 1.6; padding-top: 10px; border-top: 1px solid var(--border); }
+.fc-crisis::before { content: '▲'; font-size: 9px; margin-top: 2px; flex-shrink: 0; }
+
+.sec-factions { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; margin-top: 2px; }
+.sf-card { background: var(--raised); padding: 16px 18px; border-left: 2px solid; }
+.sf-name { font-family: 'Noto Serif SC', serif; font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+.sf-desc { font-size: 12px; color: var(--text-2); line-height: 1.65; }
+
+/* TIMELINE */
+.tl-item { display: grid; grid-template-columns: 140px 1px 1fr; gap: 0 24px; }
+.tl-time { text-align: right; padding: 20px 0; }
+.tl-era { font-family: 'Noto Serif SC', serif; font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 3px; }
+.tl-range { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--text-3); letter-spacing: 0.06em; }
+.tl-line { width: 1px; background: var(--border-m); position: relative; }
+.tl-dot { position: absolute; top: 28px; left: 50%; transform: translateX(-50%); width: 8px; height: 8px; border-radius: 50%; border: 1px solid; }
+.tl-content { padding: 18px 0 24px; border-bottom: 1px solid var(--border); }
+.tl-item:last-child .tl-content { border-bottom: none; }
+.tl-item:last-child .tl-line { background: linear-gradient(180deg, var(--border-m), transparent); }
+.tl-content-title { font-size: 13.5px; font-weight: 600; color: var(--text); margin-bottom: 6px; }
+.tl-content-desc { font-size: 12.5px; color: var(--text-2); line-height: 1.75; }
+.tl-content-desc strong { color: var(--text); font-weight: 500; }
+.era-open .tl-dot { background: #4a5568; border-color: #6a7588; }
+.era-element .tl-dot { background: #8b6a3a; border-color: #a07845; }
+.era-pastoral .tl-dot { background: #3a7a3a; border-color: #5a9e5a; }
+.era-end .tl-dot { background: #7a5030; border-color: #a07040; }
+.era-lost .tl-dot { background: #8b3040; border-color: #b04050; }
+.era-analysis .tl-dot { background: #604080; border-color: #9060b0; }
+.era-rebuild .tl-dot { background: #3a7fa0; border-color: #5ba3c9; }
+.era-collapse .tl-dot { background: #8b3030; border-color: #b04040; }
+.era-now .tl-dot { background: var(--gold); border-color: var(--gold); box-shadow: 0 0 8px var(--gold-dim); }
+
+/* CRISIS */
+.crisis-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; margin-bottom: 32px; }
+.crisis-card { background: var(--raised); padding: 20px 22px; border-top: 2px solid var(--red); position: relative; overflow: hidden; }
+.crisis-card::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(239,68,68,0.04) 0%, transparent 60%); pointer-events: none; }
+.crisis-index { font-family: 'JetBrains Mono', monospace; font-size: 32px; font-weight: 700; color: rgba(239,68,68,0.1); position: absolute; right: 14px; top: 8px; line-height: 1; user-select: none; }
+.crisis-title { font-family: 'Noto Serif SC', serif; font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 8px; }
+.crisis-desc { font-size: 12.5px; color: var(--text-2); line-height: 1.7; }
+.crisis-desc strong { color: #f87171; font-weight: 500; }
+
+/* BALANCE BARS */
+.balance-bar { background: var(--surface); border: 1px solid var(--border); padding: 12px 20px; margin-bottom: 6px; display: flex; align-items: center; gap: 16px; }
+.bb-label { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.1em; color: var(--text-3); flex-shrink: 0; width: 80px; }
+.bb-track { flex: 1; height: 4px; background: var(--raised); border-radius: 2px; overflow: hidden; }
+.bb-fill { height: 100%; border-radius: 2px; }
+.bb-val { font-family: 'JetBrains Mono', monospace; font-size: 11px; flex-shrink: 0; width: 80px; text-align: right; }
+
+/* SPACES */
+.space-compare { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; margin-bottom: 24px; }
+.space-card { padding: 28px; position: relative; overflow: hidden; }
+.sc-paradise { background: linear-gradient(145deg, #0a0a08, #141208, #0a0a08); border: 1px solid rgba(201,168,76,0.15); }
+.sc-void { background: linear-gradient(145deg, #06080e, #0a0c16, #06080e); border: 1px solid rgba(120,60,200,0.15); }
+.sc-label { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 14px; display: flex; align-items: center; gap: 10px; }
+.sc-label::after { content: ''; flex: 1; height: 1px; }
+.sc-paradise .sc-label { color: rgba(201,168,76,0.6); } .sc-paradise .sc-label::after { background: rgba(201,168,76,0.15); }
+.sc-void .sc-label { color: rgba(120,60,200,0.6); } .sc-void .sc-label::after { background: rgba(120,60,200,0.15); }
+.sc-title { font-family: 'Noto Serif SC', serif; font-size: 22px; font-weight: 700; margin-bottom: 14px; }
+.sc-paradise .sc-title { color: var(--gold); }
+.sc-void .sc-title { color: #9060d0; }
+.sc-desc { font-size: 13px; color: var(--text-2); line-height: 1.85; }
+.sc-desc strong { font-weight: 500; }
+.sc-paradise .sc-desc strong { color: rgba(201,168,76,0.8); }
+.sc-void .sc-desc strong { color: #9060d0; }
+
+/* GENRE */
+.genre-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; }
+.genre-card { background: var(--raised); padding: 22px 24px; border-left: 3px solid; }
+.genre-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+.gtag { font-size: 11px; padding: 3px 10px; border: 1px solid; border-radius: 2px; font-family: 'JetBrains Mono', monospace; letter-spacing: 0.05em; }
+.genre-links { font-size: 13px; color: var(--text-2); line-height: 1.75; }
+.genre-links strong { color: var(--text); font-weight: 600; }
+
+/* READING PATH */
+.reading-path { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2px; margin-bottom: 24px; }
+.rp-step { background: var(--raised); padding: 20px 18px; position: relative; overflow: hidden; }
+.rp-step::after { content: attr(data-step); position: absolute; right: 12px; bottom: 8px; font-family: 'JetBrains Mono', monospace; font-size: 32px; font-weight: 700; color: rgba(255,255,255,0.04); line-height: 1; pointer-events: none; }
+.rp-label { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-3); margin-bottom: 8px; }
+.rp-title { font-family: 'Noto Serif SC', serif; font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 6px; }
+.rp-desc { font-size: 12px; color: var(--text-2); line-height: 1.65; }
+
+/* INFOBOX */
+.infobox { background: var(--surface); border: 1px solid var(--border); border-left: 3px solid; padding: 14px 18px; margin-bottom: 16px; font-size: 13px; line-height: 1.75; color: var(--text-2); }
+.infobox strong { color: var(--text); font-weight: 500; }
+.ib-gold { border-left-color: var(--gold); }
+.ib-red { border-left-color: var(--red); }
+.ib-blue { border-left-color: var(--blue); }
+.ib-purple { border-left-color: var(--purple); }
+.ib-teal { border-left-color: var(--teal); }
+
+/* FOOTER */
+.footer { background: var(--deep); border-top: 1px solid var(--border); padding: 56px 24px; text-align: center; }
+.footer-inner { max-width: 600px; margin: 0 auto; }
+.footer-title { font-family: 'Noto Serif SC', serif; font-size: 20px; font-weight: 700; color: var(--text); margin-bottom: 12px; }
+.footer-desc { font-size: 13.5px; color: var(--text-2); line-height: 1.8; margin-bottom: 24px; }
+.footer-contact { font-family: 'JetBrains Mono', monospace; font-size: 14px; color: var(--gold); letter-spacing: 0.1em; margin-bottom: 24px; }
+.footer-links { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-bottom: 32px; }
+.footer-link { padding: 7px 18px; border: 1px solid var(--border-m); background: rgba(255,255,255,0.03); color: var(--text-2); text-decoration: none; font-size: 12px; letter-spacing: 0.08em; font-family: 'JetBrains Mono', monospace; border-radius: 2px; transition: all 0.2s; }
+.footer-link:hover { background: rgba(255,255,255,0.07); color: var(--text); }
+.footer-meta { font-size: 11px; color: var(--text-3); letter-spacing: 0.1em; font-family: 'JetBrains Mono', monospace; }
+
+@media (max-width: 680px) {
+  .energy-hero, .faction-grid, .sec-factions, .crisis-grid, .space-compare, .genre-grid { grid-template-columns: 1fr; }
+  .reading-path { grid-template-columns: 1fr 1fr; }
+  .elements-grid { grid-template-columns: repeat(4, 1fr); }
+  .sn-links { display: none; }
+  .tl-item { grid-template-columns: 80px 1px 1fr; gap: 0 12px; }
+}
+</style>
+</head>
+<body>
+
+<nav class="sticky-nav" id="sticky-nav">
+  <div class="sn-logo">已知世界</div>
+  <div class="sn-links">
+    <a href="#energy" class="sn-link">能量体系</a>
+    <a href="#factions" class="sn-link">势力格局</a>
+    <a href="#history" class="sn-link">纪元历史</a>
+    <a href="#crisis" class="sn-link">当前危机</a>
+    <a href="#guide" class="sn-link">入门指引</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <p class="hero-eyebrow">Open Worldbuilding · EC 174年</p>
+    <h1 class="hero-title">解析世界</h1>
+    <p class="hero-title-en">World Concept</p>
+    <div class="hero-divider"><div class="hd-line"></div><div class="hd-gem"></div><div class="hd-line"></div></div>
+    <p class="hero-desc">
+      这个世界没有神，但有<em>仙术</em>、<em>魔法</em>、<em>凝晶</em>、<em>科技</em>，以及一道永远无法愈合的裂缝。<br>
+      一切的设定都是从世界内部出发，为「世界」自己所记录。
+    </p>
+    <p class="hero-tagline">从你感兴趣的那扇门进去，里面比你想象的更深</p>
+    <div class="hero-nav">
+      <a href="#energy" class="hero-nav-btn">能量体系</a>
+      <a href="#factions" class="hero-nav-btn">势力格局</a>
+      <a href="#history" class="hero-nav-btn">纪元历史</a>
+      <a href="#crisis" class="hero-nav-btn">当前危机</a>
+      <a href="#spaces" class="hero-nav-btn">异空间</a>
+      <a href="#guide" class="hero-nav-btn">如何入门</a>
+    </div>
+  </div>
+  <div class="scroll-hint"><span>scroll</span></div>
+</section>
+
+<!-- 01 能量体系 -->
+<section class="section" id="energy">
+  <div class="section-header">
+    <div class="section-num">01</div>
+    <div class="section-info">
+      <div class="section-label">Energy System</div>
+      <h2 class="section-title">能量体系<span class="accent">——世界运转的底层规则</span></h2>
+    </div>
+  </div>
+
+  <div class="energy-hero">
+    <div class="energy-panel ep-gen">
+      <div class="ep-badge badge-gen">原素</div>
+      <div class="ep-title">八种原素构成万物</div>
+      <div class="ep-desc">世界由八种原素构成，是物质存在的基础。按稳定性依次凝结：<strong>土→金→水→木→火→气→光→暗</strong>。原素之间存在对立共鸣关系（土-气、金-木、水-火、光-暗），这些共鸣是世界气候节律与能量流动的基础。</div>
+    </div>
+    <div class="energy-panel ep-life">
+      <div class="ep-badge badge-life">生息</div>
+      <div class="ep-title">生命能量，有限而不可再生</div>
+      <div class="ep-desc">生息是世界本源的直接延伸，附着于有机生命结构之上诞生了生命。<em>生息总量有限，再生缓慢</em>——耗尽后以分散形式归还原素场，无法人为恢复。自然死亡的生息<strong>100%归还世界</strong>；非自然死亡（战争、解析）产生约<strong>30%损耗</strong>，无法被回收机制处理。</div>
+    </div>
+    <div class="energy-panel ep-magic">
+      <div class="ep-badge badge-magic">魔力</div>
+      <div class="ep-title">失控的异化能量</div>
+      <div class="ep-desc">魔力是生息被<strong>强行转化</strong>为高密度不稳定能量的产物。魔法师的生理特征是<em>生息持续被动转化为魔力，无法停止</em>。魔力积累到一定程度后干扰原素自然循环，迫使世界启动回收机制——即世界汲取与世界解析。</div>
+    </div>
+    <div class="energy-panel ep-note">
+      <div class="ep-badge badge-blue">仙术与魔法</div>
+      <div class="ep-title">两种截然不同的能量路径</div>
+      <div class="ep-desc"><strong>仙术</strong>：消耗元气（生息的流动形态，可恢复），引导原素，<em>不破坏世界平衡</em>。<br><strong>魔法</strong>：消耗生息，转化为魔力，<em>持续推高全球魔力浓度</em>。<br><strong>异魔法师</strong>：可主动控制生息-魔力转化，唯一能够<em>降低</em>世界魔力浓度的存在。千源境将其污名为「汲取者」，长期迫害。</div>
+    </div>
+  </div>
+
+  <div class="energy-flow">
+    <p style="font-size:10px;letter-spacing:0.15em;font-family:'JetBrains Mono',monospace;color:var(--text-3);margin-bottom:14px;">世界平衡机制 · 三种层级</p>
+    <div class="ef-row">
+      <div class="ef-dot" style="background:#fbbf24;"></div>
+      <div class="ef-text"><strong>世界汲取</strong>——粗调：局部魔力浓度超过临界值时，强制回收目标生命体的生息，体质弱者可能直接死亡。</div>
+    </div>
+    <div class="ef-row">
+      <div class="ef-dot" style="background:#ef4444;"></div>
+      <div class="ef-text"><strong>世界解析</strong>——格式化：魔力浓度更高时，将区域内所有物质（含生命体）强制还原为原素，<em>不留任何残留</em>。规模可达数百平方公里。失落时代大解析即此机制全球触发。</div>
+    </div>
+    <div class="ef-row">
+      <div class="ef-dot" style="background:#a78bfa;"></div>
+      <div class="ef-text"><strong>献祭机制</strong>——精调：能量接近失衡但未触发解析时，特定生命体会产生内在驱动，前往中心岛世界树前献祭自身生息。献祭者完全消失。</div>
+    </div>
+  </div>
+
+  <p style="font-size:10px;letter-spacing:0.12em;font-family:'JetBrains Mono',monospace;color:var(--text-3);margin-bottom:12px;">八种原素</p>
+  <div class="elements-grid">
+    <div class="el-chip el-tu"><span class="el-char">土</span><span class="el-tag">最稳·最先</span></div>
+    <div class="el-chip el-jin"><span class="el-char">金</span><span class="el-tag">坚锐·精密</span></div>
+    <div class="el-chip el-shui"><span class="el-char">水</span><span class="el-tag">流动·净化</span></div>
+    <div class="el-chip el-mu"><span class="el-char">木</span><span class="el-tag">生长·修复</span></div>
+    <div class="el-chip el-huo"><span class="el-char">火</span><span class="el-tag">燃烧·爆发</span></div>
+    <div class="el-chip el-qi"><span class="el-char">气</span><span class="el-tag">速度·感知</span></div>
+    <div class="el-chip el-guang"><span class="el-char">光</span><span class="el-tag">揭示·驱逐</span></div>
+    <div class="el-chip el-an"><span class="el-char">暗</span><span class="el-tag">隐匿·深层</span></div>
+  </div>
+</section>
+
+<!-- 02 势力格局 -->
+<section class="section" id="factions">
+  <div class="section-header">
+    <div class="section-num">02</div>
+    <div class="section-info">
+      <div class="section-label">Factions</div>
+      <h2 class="section-title">势力格局<span class="accent">——三极文明与周边世界</span></h2>
+    </div>
+  </div>
+
+  <div class="infobox ib-gold" style="margin-bottom:28px;">
+    EC 174年的世界由三种截然不同的文明回答同一个问题：<strong>魔力失控曾经几乎毁灭一切，我们应该怎样活下去？</strong>——三种回答，三套体系。
+  </div>
+
+  <div class="faction-grid">
+    <div class="faction-card">
+      <div class="fc-image">
+          <img src="image/qianyuan.png" style="width:100%;height:100%;object-fit:cover;" alt="千源境">
+      </div>
+      <div class="fc-body">
+        <div class="fc-top"><span class="fc-name">千源境</span><span class="fc-type">XIAN EMPIRE</span></div>
+        <p class="fc-desc">仙术与剑术的帝国，以<strong>仙酒</strong>为权力核心。谁控制仙酒，谁就控制国家。天道信仰。仙帝、酿酒坊、仙剑道三方制衡，平衡了近千年。东方王朝权谋美学。</p>
+        <div class="fc-crisis">南方叛军内战爆发 + 北方虫族压境，两线同时面临崩溃。</div>
+      </div>
+    </div>
+    <div class="faction-card">
+        <div class="fc-image">
+            <img src="image/luna.jpg" style="width:100%;height:100%;object-fit:cover;" alt="月轨城">
+        </div>
+      <div class="fc-body">
+        <div class="fc-top"><span class="fc-name">月轨城</span><span class="fc-type">MAGIC CITY</span></div>
+        <p class="fc-desc">魔法师建立的研究院城市，靠<strong>八塔系统</strong>持续监测魔力浓度，用写进体制的记录代替会遗忘的人类记忆。「知止者存，逾矩者灭」刻于南城门。西幻魔法学院气质。</p>
+        <div class="fc-crisis">暗渊塔自EC 160年起持续深红闪烁，守恒派与探索派分歧加剧，清算派仍在暗中行动。是最先察觉世界再次失衡的地方。</div>
+      </div>
+    </div>
+    <div class="faction-card">
+      <div class="fc-image">
+        < <img src="image/auro.png" style="width:100%;height:100%;object-fit:cover;" alt="极光机枢">
+      </div>
+      <div class="fc-body">
+        <div class="fc-top"><span class="fc-name">极光机枢</span><span class="fc-type">TECH NATION</span></div>
+        <p class="fc-desc">凝晶科技财团组成的国家，六大财团统治，进步教义。完全依靠<strong>凝晶</strong>能源驱动——但凝晶矿脉正在枯竭。赛博朋克/蒸汽朋克工业风格，市民等级制度森严。</p>
+        <div class="fc-crisis">凝晶主矿脉经济开采期仅剩约六十至八十年，人工生息研究触碰平衡禁区，月轨城已断绝外交。</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec-factions">
+      <div class="sf-card" style="border-color:#3a7fa0;"><div class="sf-name">暮冬森林</div><div class="sf-desc">冰雪族与魔法生物栖息地。凛冬巨龙，镜湖，暮冬庆典等奇幻要素。家族长老共治。邻接虫族裂隙，是最近感受到虫族压力的区域。</div></div>
+      <div class="sf-card" style="border-color:#8b6a4a;"><div class="sf-name">紫荆园 · 日光族与暮光族</div><div class="sf-desc">光与暗原素共生的自治领，也是魔法生物的家园之一。日光族（光系）与暮光族（暗系）三百年旧战积怨从未真正消解，联席会是唯一可运作的共治空间。荆约卫维持脆弱中立。</div></div>
+      <div class="sf-card" style="border-color:#4a8a6a;"><div class="sf-name">云屿 · 中立贸易港</div><div class="sf-desc">中立浮空贸易港，所有势力都在此保持联系。时望者每年进行年度时间校准——EC 174年首次宣布数据「存疑」。月蓝残响在此保有秘密联络网络。</div></div>
+      <div class="sf-card" style="border-color:#5a7a9a;"><div class="sf-name">世界之海 · 海人族</div><div class="sf-desc">海人族（水气双系）流群制文明。极光机枢凝晶废料污染严重。</div></div>
+      <div class="sf-card" style="border-color:#6a5a8a;"><div class="sf-name">苍穹国 · 天空之上</div><div class="sf-desc">建于云层以上两万丈的漂浮文明，观测地面已逾一万五千年，至今未被任何地面势力发现。「下行派」正讨论是否主动接触——他们感知到了地面的失衡正在加速。</div></div>
+      <div class="sf-card" style="border-color:#8a4a4a;"><div class="sf-name">虫族裂隙 · 虚空入侵</div><div class="sf-desc">EC 50年大撑裂后形成的永久缺口。三部虫族持续涌出。虫族游离于世界能量体系之外——世界解析不针对它们。千源境北方三镇是最前线。</div></div>
+      <div class="sf-card" style="border-color:#8a4a4a;"><div class="sf-name">熔心王国 · 背面世界</div><div class="sf-desc">曾经位于背面世界的大陆核心地带，以活人喂养凝晶的神权奴隶制帝国。他们将魔力封存于凝晶中，把人喂给了凝晶矿脉。他们灭亡之后，遗产被极光机枢利用。</div></div>
+  </div>
+</section>
+
+<!-- 03 纪元历史 -->
+<section class="section" id="history">
+  <div class="section-header">
+    <div class="section-num">03</div>
+    <div class="section-info">
+      <div class="section-label">Chronology</div>
+      <h2 class="section-title">纪元历史<span class="accent">——人类两次走向灭绝，又两次重建</span></h2>
+    </div>
+  </div>
+  <div class="infobox ib-purple" style="margin-bottom:32px;">历史给出了一个残酷的答案：<strong>「遗忘的刻度」约为三千至四千年</strong>——这是一个重大历史创伤从「活生生的记忆」退化为「与现实脱节的神话」所需的时间。人类已经历了两次这样的循环。</div>
+  <div class="timeline">
+    <div class="tl-item era-open"><div class="tl-time"><div class="tl-era">开源纪</div><div class="tl-range">UC 0—42,436</div></div><div class="tl-line"><div class="tl-dot"></div></div><div class="tl-content"><div class="tl-content-title">虚无与本源</div><div class="tl-content-desc">失乐园以纯粹本源能量存在，虚空完全封闭。世界尚无形态。直到二者发生接触。</div></div></div>
+    <div class="tl-item era-element"><div class="tl-time"><div class="tl-era">原素纪</div><div class="tl-range">UC 42,437—50,220</div></div><div class="tl-line"><div class="tl-dot"></div></div><div class="tl-content"><div class="tl-content-title">八种原素依次凝结，世界获得物质基础</div><div class="tl-content-desc">土最先凝结，暗最晚。固态地层、海洋、大气形成，生息机制确立，生命出现。</div></div></div>
+    <div class="tl-item era-pastoral"><div class="tl-time"><div class="tl-era">田园时代</div><div class="tl-range">UC 50,221—58,021</div></div><div class="tl-line"><div class="tl-dot"></div></div><div class="tl-content"><div class="tl-content-title">人类诞生，平静的黄金时代</div><div class="tl-content-desc">人类出现，仙术发展，世界平衡完好。<strong>此时无魔力</strong>——无人知道将生息强行转化会有什么后果。</div></div></div>
+    <div class="tl-item era-end"><div class="tl-time"><div class="tl-era">末田园时代</div><div class="tl-range">UC 58,022—60,299</div></div><div class="tl-line"><div class="tl-dot"></div></div><div class="tl-content"><div class="tl-content-title">魔法首次出现，千年战争，世界开始反噬</div><div class="tl-content-desc">魔力首次被主动转化，魔法师群体出现。千年战争。<strong>世界汲取首次出现</strong>。熔心王国（以活人生息铸造凝晶）在此期灭亡，留下两个世界赖以为生的凝晶矿脉。</div></div></div>
+    <div class="tl-item era-lost"><div class="tl-time"><div class="tl-era">失落时代</div><div class="tl-range">UC 60,300—60,499</div></div><div class="tl-line"><div class="tl-dot"></div></div><div class="tl-content"><div class="tl-content-title">间断性局部解析，文明崩溃</div><div class="tl-content-desc">间断性局部解析开始，许多文明灭亡。异魔法师月蓝开始积累魔力，准备<strong>大解析</strong>——以一人之力清零整个世界的魔力浓度。代价是无数生命。</div></div></div>
+    <div class="tl-item era-analysis"><div class="tl-time"><div class="tl-era">解析纪元</div><div class="tl-range">UC 60,500—60,799</div></div><div class="tl-line"><div class="tl-dot"></div></div><div class="tl-content"><div class="tl-content-title">大解析：月蓝清零世界魔力，随即消失</div><div class="tl-content-desc">大解析发生，世界魔力归零。月蓝消失，成为此后万年争议的传说。「知止」理念形成，三条文明重建路径分化：仙术路、监测路、纯技术路。</div></div></div>
+    <div class="tl-item era-rebuild"><div class="tl-time"><div class="tl-era">后田园时代</div><div class="tl-range">UC 60,800—69,999</div></div><div class="tl-line"><div class="tl-dot"></div></div><div class="tl-content"><div class="tl-content-title">九千年平静，然后历史教训被遗忘</div><div class="tl-content-desc">历史上最长的平静期。魔力缓慢上升，无人感知。<strong>约三至四千年后</strong>，失落时代的记忆退化为传说，魔力使用重新扩散。</div></div></div>
+    <div class="tl-item era-collapse"><div class="tl-time"><div class="tl-era">崩坏时代</div><div class="tl-range">UC 70,000—71,200</div></div><div class="tl-line"><div class="tl-dot"></div></div><div class="tl-content"><div class="tl-content-title">第二次大规模失衡，文明再次崩溃</div><div class="tl-content-desc">持续性世界汲取，<strong>异魔法师遭大规模猎杀</strong>（「仙术正统令」），文明二次崩溃。历史证明：即便知道教训，也无法阻止集体走向失衡。</div></div></div>
+    <div class="tl-item era-now"><div class="tl-time"><div class="tl-era">世界纪元</div><div class="tl-range">EC 1—174（现在）</div></div><div class="tl-line"><div class="tl-dot"></div></div><div class="tl-content"><div class="tl-content-title">三极格局形成，EC 174年所有危机同时爆发</div><div class="tl-content-desc">千源境立国（EC 前），月轨城建院（EC 50年），极光机枢六约签订（EC 80年）。三大文明并行，尚未真正对话。<strong>EC 174年，所有积累的矛盾同时到达临界。</strong></div></div></div>
+  </div>
+</section>
+
+<!-- 04 当前危机 -->
+<section class="section" id="crisis">
+  <div class="section-header">
+    <div class="section-num">04</div>
+    <div class="section-info">
+      <div class="section-label">Current State · EC 174</div>
+      <h2 class="section-title">EC 174年<span class="accent">——所有危机同时爆发</span></h2>
+    </div>
+  </div>
+  <div class="infobox ib-red" style="margin-bottom:24px;">历史上每一次灾难，都是<strong>单一问题积累到临界</strong>。EC 174年的情况是：所有问题同时到达临界，且没有任何两个势力共享完整的信息视野。世界没有神，也没有人能看到全貌。</div>
+
+  <p style="font-size:10px;letter-spacing:0.15em;font-family:'JetBrains Mono',monospace;color:var(--text-3);margin-bottom:10px;">EC 174年 · 世界状态指标</p>
+  <div class="balance-bar"><div class="bb-label">世界树</div><div class="bb-track"><div class="bb-fill" style="width:15%;background:linear-gradient(90deg,#ef4444,#f87171);"></div></div><div class="bb-val" style="color:#f87171;">持续枯萎</div></div>
+  <div class="balance-bar"><div class="bb-label">暗渊塔</div><div class="bb-track"><div class="bb-fill" style="width:20%;background:linear-gradient(90deg,#8b5cf6,#a78bfa);"></div></div><div class="bb-val" style="color:#a78bfa;">深红异常</div></div>
+  <div class="balance-bar"><div class="bb-label">时间之海</div><div class="bb-track"><div class="bb-fill" style="width:25%;background:linear-gradient(90deg,#3b82f6,#60a5fa);"></div></div><div class="bb-val" style="color:#60a5fa;">校准失准</div></div>
+  <div class="balance-bar"><div class="bb-label">凝晶矿脉</div><div class="bb-track"><div class="bb-fill" style="width:18%;background:linear-gradient(90deg,#f59e0b,#fbbf24);"></div></div><div class="bb-val" style="color:#fbbf24;">趋于枯竭</div></div>
+  <div class="balance-bar" style="margin-bottom:28px;"><div class="bb-label">千源境内战</div><div class="bb-track"><div class="bb-fill" style="width:62%;background:linear-gradient(90deg,#ef4444,#fca5a5);"></div></div><div class="bb-val" style="color:#fca5a5;">南北分裂</div></div>
+
+  <div class="crisis-grid">
+    <div class="crisis-card"><div class="crisis-index">01</div><div class="crisis-title">世界树持续枯萎</div><div class="crisis-desc">中心岛世界树——世界平衡的有机映射——正在枯萎。与暗渊塔异常、时间之海失准在时间线上高度一致。<strong>三个指标同时恶化</strong>，意味着当前局势已超出历史正常区间。</div></div>
+    <div class="crisis-card"><div class="crisis-index">02</div><div class="crisis-title">千源境内战爆发</div><div class="crisis-desc">燕回于EC 174年举旗，口号「仙酒归公，天下共饮」。南方驻军七成倒戈。仙帝面临<strong>南方内战与北方虫族同时压境</strong>，以「待」字应对，两线俱无余力。</div></div>
+    <div class="crisis-card"><div class="crisis-index">03</div><div class="crisis-title">虫族压力持续上升</div><div class="crisis-desc">三部虫族协同作战，北方三镇长期消耗。<strong>剑仙洛云已被异毒感染</strong>，消息封锁，预计六至十二个月进入第三阶段。铁幕营储备因南方赋税中断日减。</div></div>
+    <div class="crisis-card"><div class="crisis-index">04</div><div class="crisis-title">极光机枢触碰禁区</div><div class="crisis-desc">生机财团人工生命研究——<strong>「原型一号」已诞生</strong>——正在以「进步」之名将魔力重新释放进世界平衡。月轨城已断绝外交，无法制止，只能警告。</div></div>
+    <div class="crisis-card"><div class="crisis-index">05</div><div class="crisis-title">失乐园连接持续弱化</div><div class="crisis-desc">世界本源与现实的连接正在弱化（供给减少），同时虚空通过虫族裂隙持续输出异毒（异质涌入）。<strong>已知世界被两侧同时压迫</strong>，各势力从未真正对话。</div></div>
+    <div class="crisis-card"><div class="crisis-index">06</div><div class="crisis-title">信息孤岛困境</div><div class="crisis-desc">月轨城知道暗渊塔异常，<strong>但不知道</strong>它与紫荆园夕海以及暮冬森林黑暗生物密度上升有关。凝晶是人造品的事实——两个世界都不完全知道。没有人能看到全貌。</div></div>
+  </div>
+</section>
+
+<!-- 05 异空间 -->
+<section class="section" id="spaces">
+  <div class="section-header">
+    <div class="section-num">05</div>
+    <div class="section-info">
+      <div class="section-label">Heterospace</div>
+      <h2 class="section-title">异空间<span class="accent">——世界边界之外</span></h2>
+    </div>
+  </div>
+  <div class="space-compare">
+    <div class="space-card sc-paradise">
+      <div class="sc-label">PARADISE LOST · 失乐园</div>
+      <div class="sc-title">失乐园</div>
+      <p class="sc-desc">世界本源所在，原素、生息、魔力追溯到最根本层面的来源。先于「空间」概念而存在，不在任何坐标系内。<br><br>与现实世界的连接正在弱化——这是世界平衡恶化的深层原因。目前无已知的主动进入方式。特定条件下交叠时，产生超越常规的奇异现象。<br><br><strong>失乐园是世界「从何而来」的答案。</strong></p>
+    </div>
+    <div class="space-card sc-void">
+      <div class="sc-label">THE VOID · 虚空</div>
+      <div class="sc-title">虚空</div>
+      <p class="sc-desc">与现实能量体系完全隔绝的封闭空间，虫族的来源地。EC 50年大撑裂事件将虚空强行打开缺口，形成永久性的虫族裂隙，此后持续向现实输出虫族与异毒。<br><br>虚空的能量介质（异毒）与现实体系完全不相容，无法被世界平衡机制识别。<br><br><strong>虚空是「之外还有什么」的一种可能性。</strong></p>
+    </div>
+  </div>
+  <div class="infobox ib-teal">失乐园供给减少 + 虚空持续输出——夹在中间的已知世界，各势力用三种不同的方式面对同一个正在收紧的困境，<strong>互相之间从未真正对话。</strong></div>
+</section>
+
+<!-- 06 入门指引 -->
+<section class="section" id="guide">
+  <div class="section-header">
+    <div class="section-num">06</div>
+    <div class="section-info">
+      <div class="section-label">Reading Guide</div>
+      <h2 class="section-title">如何入门<span class="accent">——从你感兴趣的那扇门进去</span></h2>
+    </div>
+  </div>
+
+  <p style="font-size:10px;letter-spacing:0.15em;font-family:'JetBrains Mono',monospace;color:var(--text-3);margin-bottom:14px;">按兴趣方向选择</p>
+  <div class="genre-grid" style="margin-bottom:32px;">
+    <div class="genre-card" style="border-color:#a07845;">
+      <div class="genre-tags">
+        <span class="gtag" style="color:#c9a84c;border-color:rgba(201,168,76,0.3);background:rgba(201,168,76,0.08);">仙侠</span>
+        <span class="gtag" style="color:#c9a84c;border-color:rgba(201,168,76,0.3);background:rgba(201,168,76,0.08);">东方玄幻</span>
+        <span class="gtag" style="color:#c9a84c;border-color:rgba(201,168,76,0.3);background:rgba(201,168,76,0.08);">王朝权谋</span>
+      </div>
+      <div class="genre-links"><strong>千源境</strong> —— 仙酒为天命之枢，仙帝、酿酒坊、仙剑道三方制衡。仙术/剑术修炼者的帝国。<br><br><strong>苍穹之上理想国</strong> —— 得道成仙的修炼者飞升前往此地，乌托邦社会。</div>
+    </div>
+    <div class="genre-card" style="border-color:#3a6a9a;">
+      <div class="genre-tags">
+        <span class="gtag" style="color:#60a5fa;border-color:rgba(96,165,250,0.3);background:rgba(96,165,250,0.08);">西幻</span>
+        <span class="gtag" style="color:#60a5fa;border-color:rgba(96,165,250,0.3);background:rgba(96,165,250,0.08);">魔法</span>
+        <span class="gtag" style="color:#60a5fa;border-color:rgba(96,165,250,0.3);background:rgba(96,165,250,0.08);">奇幻冒险</span>
+      </div>
+      <div class="genre-links"><strong>月轨城</strong> —— 魔法师的城市，八塔议会、魔力平衡、魔法学院、银脉河。<br><br><strong>暮冬森林</strong> —— 极北的原始森林，凛冬巨龙、魔法生物、古老仪式、猎手族群、丛林法则。<br><br><strong>紫荆园</strong> —— 日光族与暮光族共存的自治领，光与暗的微妙平衡与分割。</div>
+    </div>
+    <div class="genre-card" style="border-color:#3a7a7a;">
+      <div class="genre-tags">
+        <span class="gtag" style="color:#2dd4bf;border-color:rgba(45,212,191,0.3);background:rgba(45,212,191,0.08);">科技</span>
+        <span class="gtag" style="color:#2dd4bf;border-color:rgba(45,212,191,0.3);background:rgba(45,212,191,0.08);">工业</span>
+        <span class="gtag" style="color:#2dd4bf;border-color:rgba(45,212,191,0.3);background:rgba(45,212,191,0.08);">赛博朋克</span>
+        <span class="gtag" style="color:#2dd4bf;border-color:rgba(45,212,191,0.3);background:rgba(45,212,191,0.08);">人工生命</span>
+      </div>
+      <div class="genre-links"><strong>极光机枢</strong> —— 凝晶能源驱动的科技文明，六大财团统治，市民等级制度森严。<br><br>「您正在被「眼」监视。」</div>
+    </div>
+    <div class="genre-card" style="border-color:#7a3a6a;">
+      <div class="genre-tags">
+        <span class="gtag" style="color:#a78bfa;border-color:rgba(167,139,250,0.3);background:rgba(167,139,250,0.08);">世界奥秘</span>
+        <span class="gtag" style="color:#a78bfa;border-color:rgba(167,139,250,0.3);background:rgba(167,139,250,0.08);">史诗设定</span>
+        <span class="gtag" style="color:#a78bfa;border-color:rgba(167,139,250,0.3);background:rgba(167,139,250,0.08);">悬疑恐怖</span>
+      </div>
+      <div class="genre-links"><strong>能量体系</strong> —— 原素·生息·魔力，世界运转的根本规则。<br><br><strong>虫族裂隙 & 异魔法师</strong> —— 虚空中涌出的虫族；被污名化的血脉，能逆转魔力为生息，却遭千年猎杀迫害。<br><br><strong>纪元史志</strong>（八卷）—— 人类两次因魔力走向灭绝，又在世界纪元重新屹立。</div>
+    </div>
+  </div>
+
+  <p style="font-size:10px;letter-spacing:0.15em;font-family:'JetBrains Mono',monospace;color:var(--text-3);margin-bottom:14px;">通用阅读顺序建议</p>
+  <div class="reading-path">
+    <div class="rp-step" data-step="01"><div class="rp-label">Step 01 · 基础框架</div><div class="rp-title">世界观概述</div><div class="rp-desc">能量体系、世界平衡、异空间、纪元简史——建立底层框架</div></div>
+    <div class="rp-step" data-step="02"><div class="rp-label">Step 02 · 了解格局</div><div class="rp-title">三大势力</div><div class="rp-desc">千源境、月轨城、极光机枢——了解当前格局与核心矛盾</div></div>
+    <div class="rp-step" data-step="03"><div class="rp-label">Step 03 · 核心冲突</div><div class="rp-title">虫族 & 世界平衡</div><div class="rp-desc">虫族裂隙、异毒、世界平衡机制——了解世界的核心危机</div></div>
+    <div class="rp-step" data-step="04"><div class="rp-label">Step 04 · 深度理解</div><div class="rp-title">纪元史志（可选）</div><div class="rp-desc">理解为什么世界会走到今天，以及世界之后会怎么走</div></div>
+  </div>
+  <div class="infobox ib-blue">如果你只想直接读故事：短篇小说集——《凝晶人性》《漏瓶》《初醴》——旨在通过不同视角赋予这个世界重量。不需要读完任何设定文档，直接读故事也可以。</div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-title">欢迎共创 / 讨论 / 批评指正</div>
+    <p class="footer-desc">主打一个体量大，基于能量体系和世界法则什么想法都能塞进去。<br>主线风格偏严肃，小故事想怎写怎写。<br>参与门槛：无。只要你读过至少一份世界观文档，就可以开始。</p>
+    <div class="footer-contact">Q608886521</div>
+    <div class="footer-links">
+      <a href="#" class="footer-link">世界格局一览</a>
+      <a href="#" class="footer-link">共创指南</a>
+      <a href="#" class="footer-link">角色创建</a>
+      <a href="#" class="footer-link">概念速查</a>
+    </div>
+    <div class="footer-meta">World Concept · EC 174 · Open Worldbuilding</div>
+  </div>
+</footer>
+
+<script>
+const nav = document.getElementById('sticky-nav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('visible', window.scrollY > window.innerHeight * 0.5);
+});
+</script>
+</body>
+</html>
