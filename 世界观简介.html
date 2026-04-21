@@ -185,7 +185,12 @@ body {
 /* FACTIONS */
 .faction-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 2px; margin-bottom: 2px; }
 .faction-card { background: var(--raised); overflow: hidden; }
-.fc-image { width: 100%; height: 160px; overflow: hidden; position: relative; }
+    .fc-image {
+        width: 100%;
+        aspect-ratio: 1 / 1;
+        overflow: hidden;
+        position: relative;
+    }
 .fc-img-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
 .fi-qianyuan { background: linear-gradient(145deg, #1a0f06, #2a1a08, #1a0f06); }
 .fi-qianyuan::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 80% 60% at 50% 30%, rgba(201,140,40,0.2) 0%, transparent 70%), radial-gradient(ellipse 40% 40% at 20% 60%, rgba(220,100,30,0.1) 0%, transparent 60%); }
@@ -443,7 +448,7 @@ body {
     </div>
     <div class="faction-card">
         <div class="fc-image">
-            <img src="image/Lunaris.jpg" style="width:100%;height:100%;object-fit:cover;" alt="月轨城">
+            <img src="image/Lunaris.png" style="width:100%;height:100%;object-fit:cover;" alt="月轨城">
         </div>
       <div class="fc-body">
         <div class="fc-top"><span class="fc-name">月轨城</span><span class="fc-type">Lunaris</span></div>
