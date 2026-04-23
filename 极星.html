@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>极星理事会</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;600;700&family=Cinzel:wght@400;600;700&family=Noto+Sans+SC:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --void: #05060d;
+  --deep: #080c1a;
+  --abyss: #0d1228;
+  --gold: #c9a84c;
+  --gold-light: #e8c97a;
+  --gold-dim: #7a6030;
+  --star: #d4e4ff;
+  --star-dim: #8fa8cc;
+  --evil-glow: #c43030;
+  --arcane-light: #8b6fd4;
+  --teal-light: #6dd4c0;
+  --text-main: #d8e4f0;
+  --text-muted: #7a92b0;
+  --text-faint: #3d5070;
+  --border: rgba(201,168,76,0.18);
+  --border-strong: rgba(201,168,76,0.4);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--void);color:var(--text-main);font-family:'Noto Sans SC',sans-serif;font-weight:300;line-height:1.8;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;background-image:radial-gradient(1px 1px at 8% 12%,rgba(212,228,255,.7) 0%,transparent 100%),radial-gradient(1px 1px at 23% 38%,rgba(212,228,255,.45) 0%,transparent 100%),radial-gradient(1.5px 1.5px at 39% 7%,rgba(212,228,255,.8) 0%,transparent 100%),radial-gradient(1px 1px at 54% 22%,rgba(212,228,255,.4) 0%,transparent 100%),radial-gradient(1px 1px at 69% 58%,rgba(212,228,255,.55) 0%,transparent 100%),radial-gradient(1.5px 1.5px at 84% 13%,rgba(212,228,255,.7) 0%,transparent 100%),radial-gradient(1px 1px at 91% 43%,rgba(212,228,255,.45) 0%,transparent 100%),radial-gradient(1px 1px at 14% 68%,rgba(212,228,255,.4) 0%,transparent 100%),radial-gradient(1px 1px at 32% 83%,rgba(212,228,255,.55) 0%,transparent 100%),radial-gradient(1.5px 1.5px at 61% 74%,rgba(212,228,255,.5) 0%,transparent 100%),radial-gradient(1px 1px at 4% 51%,rgba(212,228,255,.6) 0%,transparent 100%),radial-gradient(2px 2px at 47% 51%,rgba(201,168,76,.6) 0%,transparent 100%),radial-gradient(1.5px 1.5px at 87% 71%,rgba(201,168,76,.35) 0%,transparent 100%),radial-gradient(1px 1px at 19% 29%,rgba(201,168,76,.25) 0%,transparent 100%);pointer-events:none;z-index:0}
+.container{max-width:940px;margin:0 auto;padding:0 2rem;position:relative;z-index:1}
+
+/* NAV */
+.nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:1rem 2.5rem;display:flex;align-items:center;justify-content:space-between;background:linear-gradient(to bottom,rgba(5,6,13,.96),transparent);backdrop-filter:blur(6px);border-bottom:1px solid transparent;transition:border-color .3s}
+.nav.scrolled{border-bottom-color:var(--border)}
+.nav-logo{font-family:'Noto Serif SC',serif;font-size:1.1rem;color:var(--gold);letter-spacing:.15em;text-decoration:none}
+.nav-links{display:flex;gap:1.6rem;list-style:none}
+.nav-links a{font-size:.65rem;letter-spacing:.22em;color:var(--star-dim);text-decoration:none;transition:color .3s;font-family:'Cinzel',serif}
+.nav-links a:hover{color:var(--gold)}
+
+/* HERO */
+.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;position:relative;padding:4rem 2rem}
+.hero-ring{position:absolute;border-radius:50%;border:1px solid var(--border);animation:rotate-ring linear infinite;pointer-events:none}
+.hero-ring-1{width:420px;height:420px;animation-duration:60s;border-color:rgba(201,168,76,.12)}
+.hero-ring-2{width:580px;height:580px;animation-duration:95s;animation-direction:reverse;border-color:rgba(212,228,255,.06)}
+.hero-ring-3{width:740px;height:740px;animation-duration:130s;border-color:rgba(201,168,76,.05)}
+.hero-ring::before{content:'';position:absolute;width:6px;height:6px;background:var(--gold);border-radius:50%;top:50%;left:-3px;transform:translateY(-50%);box-shadow:0 0 8px var(--gold)}
+@keyframes rotate-ring{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+.hero-subtitle{font-family:'Cinzel',serif;font-size:.68rem;letter-spacing:.5em;color:var(--gold);margin-bottom:2rem;opacity:0;animation:fade-up 1s .3s forwards}
+.hero-title{font-family:'Noto Serif SC',serif;font-size:clamp(3.5rem,10vw,7rem);font-weight:700;letter-spacing:.08em;line-height:1;margin-bottom:1.5rem;background:linear-gradient(160deg,var(--gold-light) 0%,var(--gold) 40%,var(--gold-dim) 80%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;opacity:0;animation:fade-up 1s .5s forwards}
+.hero-en{font-family:'Cinzel',serif;font-size:clamp(.58rem,1.4vw,.85rem);letter-spacing:.35em;color:var(--star-dim);margin-bottom:2.5rem;opacity:0;animation:fade-up 1s .7s forwards}
+.hero-div{display:flex;align-items:center;gap:1rem;margin-bottom:2.5rem;opacity:0;animation:fade-up 1s .9s forwards}
+.hero-div-line{flex:1;max-width:80px;height:1px;background:linear-gradient(90deg,transparent,var(--gold-dim))}
+.hero-div-line.r{background:linear-gradient(90deg,var(--gold-dim),transparent)}
+.hero-div-diamond{width:8px;height:8px;border:1px solid var(--gold);transform:rotate(45deg);background:var(--gold);box-shadow:0 0 12px var(--gold)}
+.hero-quote{max-width:580px;font-size:.88rem;color:var(--star-dim);font-style:italic;line-height:2;opacity:0;animation:fade-up 1s 1.1s forwards}
+.hero-quote cite{display:block;margin-top:.5rem;font-size:.72rem;letter-spacing:.2em;color:var(--gold-dim);font-style:normal}
+.scroll-hint{position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:.5rem;color:var(--text-faint);font-size:.62rem;letter-spacing:.3em;opacity:0;animation:fade-up 1s 1.6s forwards}
+.scroll-hint-line{width:1px;height:40px;background:linear-gradient(to bottom,var(--gold-dim),transparent);animation:scroll-pulse 2s ease-in-out infinite}
+@keyframes scroll-pulse{0%,100%{opacity:.3}50%{opacity:1}}
+@keyframes fade-up{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+
+/* SECTION */
+.section{padding:6rem 0;position:relative;z-index:1}
+.section-header{text-align:center;margin-bottom:3.5rem}
+.section-tag{font-family:'Cinzel',serif;font-size:.62rem;letter-spacing:.5em;color:var(--gold);margin-bottom:1rem}
+.section-title{font-family:'Noto Serif SC',serif;font-size:clamp(1.6rem,4vw,2.4rem);font-weight:600;color:var(--star);line-height:1.3;margin-bottom:1rem}
+.section-desc{font-size:.88rem;color:var(--text-muted);max-width:580px;margin:0 auto}
+.sep{display:flex;align-items:center;gap:1.5rem;margin:4rem 0;opacity:.3}
+.sep-line{flex:1;height:1px;background:var(--gold)}
+.sep-icon{color:var(--gold);font-size:.68rem;letter-spacing:.3em;white-space:nowrap}
+.reveal{opacity:0;transform:translateY(22px);transition:opacity .7s,transform .7s}
+.reveal.visible{opacity:1;transform:translateY(0)}
+
+/* POWER TABS */
+.power-tabs{display:flex;border-bottom:1px solid var(--border);margin-bottom:2rem;overflow-x:auto}
+.power-tab{padding:.75rem 1.4rem;font-size:.68rem;letter-spacing:.25em;color:var(--text-faint);cursor:pointer;border:none;border-bottom:2px solid transparent;background:none;font-family:'Cinzel',serif;transition:all .3s;white-space:nowrap}
+.power-tab:hover{color:var(--star-dim)}
+.power-tab.active{color:var(--gold);border-bottom-color:var(--gold)}
+.power-panel{display:none}
+.power-panel.active{display:block;animation:fade-in .4s}
+@keyframes fade-in{from{opacity:0}to{opacity:1}}
+
+.el-label{font-family:'Cinzel',serif;font-size:.6rem;letter-spacing:.4em;text-align:center;padding:.45rem;border:1px solid var(--border);border-bottom:none;background:var(--abyss)}
+.el-label.pos{color:var(--teal-light)}
+.el-label.neg{color:#e07070}
+.element-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border:1px solid var(--border);margin-bottom:1px}
+.element-card{background:var(--deep);padding:1.4rem 1rem;text-align:center;transition:background .3s}
+.element-card:hover{background:var(--abyss)}
+.el-icon{font-size:1.3rem;margin-bottom:.4rem;display:block}
+.el-name{font-family:'Noto Serif SC',serif;font-size:.95rem;font-weight:600;margin-bottom:.25rem}
+.el-key{font-size:.6rem;letter-spacing:.12em;color:var(--text-faint);line-height:1.6}
+.pos .el-name{color:var(--teal-light)}
+.neg .el-name{color:#e07070}
+
+.law-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.law-card{background:var(--deep);border:1px solid var(--border);padding:1.8rem;position:relative}
+.law-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+.law-name{font-family:'Noto Serif SC',serif;font-size:1.15rem;font-weight:600;color:var(--gold-light);margin-bottom:.25rem}
+.law-keys{font-size:.62rem;color:var(--gold-dim);letter-spacing:.22em;margin-bottom:.8rem}
+.law-desc{font-size:.82rem;color:var(--text-muted);line-height:1.9}
+
+.dl{display:flex;flex-direction:column;gap:1px;border:1px solid var(--border);background:var(--border)}
+.di{background:var(--deep);padding:1.1rem 1.8rem;display:grid;grid-template-columns:90px 110px 1fr;align-items:center;gap:1.5rem;transition:background .3s}
+.di:hover{background:var(--abyss)}
+.d-name{font-family:'Noto Serif SC',serif;font-size:.95rem;font-weight:600}
+.d-keys{font-size:.6rem;color:var(--text-faint);letter-spacing:.14em;line-height:1.5}
+.d-desc{font-size:.8rem;color:var(--text-muted);line-height:1.75}
+
+.nue-box{background:var(--deep);border:1px solid rgba(140,32,32,.4);padding:2rem 2.5rem;margin-bottom:1.5rem;position:relative;overflow:hidden}
+.nue-box::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 100% 0%,rgba(140,32,32,.1),transparent 60%);pointer-events:none}
+.nue-tag{font-family:'Cinzel',serif;font-size:.58rem;letter-spacing:.4em;color:var(--evil-glow);margin-bottom:.7rem}
+.nue-title{font-family:'Noto Serif SC',serif;font-size:1.35rem;font-weight:600;color:var(--star);margin-bottom:.9rem}
+.nue-desc{font-size:.84rem;color:var(--text-muted);line-height:1.9}
+
+/* WORLDS */
+.world-ring-label{display:flex;align-items:center;gap:1rem;margin:2.5rem 0 1rem}
+.world-ring-tag{font-family:'Cinzel',serif;font-size:.58rem;letter-spacing:.4em;padding:.28rem .8rem;border:1px solid}
+.tag-center{border-color:var(--gold);color:var(--gold)}
+.tag-ring1{border-color:var(--arcane-light);color:var(--arcane-light)}
+.tag-ring2{border-color:var(--star-dim);color:var(--star-dim)}
+.tag-special{border-color:var(--evil-glow);color:var(--evil-glow)}
+.world-ring-line{flex:1;height:1px;background:var(--border)}
+.world-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1px;background:var(--border);border:1px solid var(--border)}
+.world-card{background:var(--deep);padding:1.7rem;position:relative;cursor:default;transition:background .3s;overflow:hidden}
+.world-card:hover{background:var(--abyss)}
+.world-card::after{content:'';position:absolute;top:0;left:0;width:0;height:2px;background:var(--wc-accent,var(--gold));transition:width .4s}
+.world-card:hover::after{width:100%}
+.world-card[data-t="center"]{--wc-accent:var(--gold)}
+.world-card[data-t="ring1"]{--wc-accent:var(--arcane-light)}
+.world-card[data-t="ring2"]{--wc-accent:var(--star-dim)}
+.world-card[data-t="special"]{--wc-accent:var(--evil-glow)}
+.wc-name{font-family:'Noto Serif SC',serif;font-size:1.05rem;font-weight:600;color:var(--star);margin-bottom:.3rem}
+.wc-race{font-size:.6rem;letter-spacing:.28em;color:var(--text-faint);margin-bottom:.7rem;font-family:'Cinzel',serif}
+.wc-desc{font-size:.79rem;color:var(--text-muted);line-height:1.8}
+.wc-stats{margin-top:.9rem;display:flex;gap:1rem;flex-wrap:wrap}
+.wc-stat{font-size:.62rem;color:var(--text-faint)}
+.wc-stat span{color:var(--gold-light);font-weight:500}
+
+/* FACTIONS */
+.faction-intro{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);border:1px solid var(--border);margin-bottom:2rem}
+.fi-card{background:var(--deep);padding:2rem;position:relative;overflow:hidden}
+.fi-card::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 0%,rgba(140,32,32,.06),transparent 70%);pointer-events:none}
+.fi-label{font-family:'Cinzel',serif;font-size:.6rem;letter-spacing:.4em;color:var(--evil-glow);margin-bottom:.6rem}
+.fi-title{font-family:'Noto Serif SC',serif;font-size:1.2rem;font-weight:600;color:var(--star);margin-bottom:.8rem}
+.fi-text{font-size:.82rem;color:var(--text-muted);line-height:1.9}
+.faction-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.4rem}
+.faction-card{background:var(--deep);border:1px solid var(--border);padding:2rem 1.7rem;position:relative;overflow:hidden;transition:border-color .4s,background .4s}
+.faction-card:hover{border-color:rgba(196,48,48,.5);background:#110808}
+.faction-card::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 0%,rgba(140,32,32,.08),transparent 70%);opacity:0;transition:opacity .4s}
+.faction-card:hover::before{opacity:1}
+.fc-num{font-family:'Cinzel',serif;font-size:2.8rem;font-weight:700;color:rgba(196,48,48,.07);line-height:1;position:absolute;top:1rem;right:1.2rem}
+.fc-sin{font-family:'Cinzel',serif;font-size:.58rem;letter-spacing:.4em;color:var(--evil-glow);margin-bottom:.45rem}
+.fc-name{font-family:'Noto Serif SC',serif;font-size:1.2rem;font-weight:600;color:var(--star);margin-bottom:.75rem}
+.fc-desc{font-size:.8rem;color:var(--text-muted);line-height:1.85}
+
+/* CULTURE */
+.tech-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;margin-bottom:3rem}
+.tech-card{background:var(--deep);border:1px solid var(--border);border-left:2px solid var(--tc-accent,var(--gold));padding:1.6rem 1.8rem;transition:background .3s}
+.tech-card:hover{background:var(--abyss)}
+.tech-card[data-a="gold"]{--tc-accent:var(--gold)}
+.tech-card[data-a="arcane"]{--tc-accent:var(--arcane-light)}
+.tech-card[data-a="teal"]{--tc-accent:var(--teal-light)}
+.tech-card[data-a="evil"]{--tc-accent:var(--evil-glow)}
+.tech-card[data-a="star"]{--tc-accent:var(--star-dim)}
+.tc-name{font-family:'Noto Serif SC',serif;font-size:1.05rem;font-weight:600;color:var(--star);margin-bottom:.5rem}
+.tc-sub{font-size:.62rem;letter-spacing:.25em;color:var(--text-faint);margin-bottom:.7rem}
+.tc-desc{font-size:.8rem;color:var(--text-muted);line-height:1.85}
+
+.culture-row{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border:1px solid var(--border);margin-bottom:3rem}
+.culture-cell{background:var(--deep);padding:1.5rem;transition:background .3s}
+.culture-cell:hover{background:var(--abyss)}
+.cc-icon{font-size:1.2rem;margin-bottom:.5rem;display:block}
+.cc-name{font-family:'Noto Serif SC',serif;font-size:.95rem;font-weight:600;color:var(--star);margin-bottom:.4rem}
+.cc-text{font-size:.78rem;color:var(--text-muted);line-height:1.8}
+
+.char-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.4rem}
+.char-card{background:var(--deep);border:1px solid var(--border);padding:2rem 1.7rem;position:relative;overflow:hidden}
+.char-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--cc-color,var(--gold)),transparent)}
+.char-card[data-t="hero"]{--cc-color:var(--arcane-light)}
+.char-card[data-t="wrath"]{--cc-color:var(--evil-glow)}
+.char-card[data-t="lust"]{--cc-color:#d470a0}
+.char-portrait{width:44px;height:44px;border-radius:50%;border:1px solid var(--cc-color,var(--gold));display:flex;align-items:center;justify-content:center;font-family:'Noto Serif SC',serif;font-size:1.1rem;color:var(--cc-color,var(--gold));background:rgba(255,255,255,.02);margin-bottom:.9rem}
+.char-name{font-family:'Noto Serif SC',serif;font-size:1.1rem;font-weight:600;color:var(--star);margin-bottom:.15rem}
+.char-name-en{font-family:'Cinzel',serif;font-size:.6rem;color:var(--text-faint);letter-spacing:.2em;margin-bottom:.3rem}
+.char-role{font-size:.6rem;letter-spacing:.28em;padding:.18rem .6rem;border:1px solid var(--cc-color,var(--gold));color:var(--cc-color,var(--gold));display:inline-block;margin-bottom:.9rem}
+.char-desc{font-size:.79rem;color:var(--text-muted);line-height:1.85}
+.char-tags{margin-top:.9rem;display:flex;flex-wrap:wrap;gap:.35rem}
+.char-tag{font-size:.58rem;letter-spacing:.14em;color:var(--text-faint);border:1px solid var(--text-faint);padding:.12rem .45rem}
+
+.org-list{display:flex;flex-direction:column;gap:1px;background:var(--border);border:1px solid var(--border)}
+.org-item{background:var(--deep);padding:1.8rem 2.2rem;display:grid;grid-template-columns:170px 1fr;gap:2rem;align-items:start;transition:background .3s;position:relative}
+.org-item::before{content:'';position:absolute;top:0;bottom:0;left:0;width:2px;background:var(--oc,var(--gold));opacity:0;transition:opacity .3s}
+.org-item:hover::before{opacity:1}
+.org-item:hover{background:var(--abyss)}
+.org-item[data-c="gold"]{--oc:var(--gold)}
+.org-item[data-c="white"]{--oc:#d0ddf0}
+.org-item[data-c="arcane"]{--oc:var(--arcane-light)}
+.org-name{font-family:'Noto Serif SC',serif;font-size:1.05rem;font-weight:600;color:var(--star);margin-bottom:.2rem}
+.org-type{font-size:.6rem;letter-spacing:.22em;color:var(--text-faint);font-family:'Cinzel',serif}
+.org-desc{font-size:.82rem;color:var(--text-muted);line-height:1.9}
+
+/* CONFLICT */
+.conflict-bg{position:relative;padding:5rem 0;overflow:hidden}
+.conflict-bg::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 50% at 20% 50%,rgba(140,32,32,.12),transparent),radial-gradient(ellipse 60% 50% at 80% 50%,rgba(90,63,160,.12),transparent);pointer-events:none}
+.vs-bar{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:2rem;margin-bottom:3rem}
+.vs-side-tag{font-family:'Cinzel',serif;font-size:.6rem;letter-spacing:.4em;margin-bottom:.5rem}
+.vs-side.order .vs-side-tag{color:var(--gold)}
+.vs-side.chaos .vs-side-tag{color:var(--evil-glow);text-align:right}
+.vs-side-title{font-family:'Noto Serif SC',serif;font-size:1.5rem;font-weight:600;line-height:1.2}
+.vs-side.order .vs-side-title{color:var(--star)}
+.vs-side.chaos .vs-side-title{color:#e08080;text-align:right}
+.vs-side-desc{font-size:.8rem;color:var(--text-muted);line-height:1.8;margin-top:.5rem}
+.vs-side.chaos .vs-side-desc{text-align:right}
+.vs-center{display:flex;flex-direction:column;align-items:center;gap:.4rem;font-family:'Cinzel',serif;font-size:1.8rem;font-weight:700;color:var(--gold);letter-spacing:.1em;text-shadow:0 0 20px rgba(201,168,76,.3)}
+.vs-center small{font-size:.55rem;letter-spacing:.4em;color:var(--text-faint)}
+
+.ct-list{display:flex;flex-direction:column;gap:1px;background:var(--border);border:1px solid var(--border)}
+.ct-item{background:var(--deep);padding:1.8rem 2.2rem;display:grid;grid-template-columns:160px 1fr;gap:2rem;align-items:start;transition:background .3s;position:relative}
+.ct-item::before{content:'';position:absolute;top:0;bottom:0;left:0;width:2px;background:var(--ct-color,var(--gold));opacity:0;transition:opacity .3s}
+.ct-item:hover::before{opacity:1}
+.ct-item:hover{background:var(--abyss)}
+.ct-item[data-c="gold"]{--ct-color:var(--gold)}
+.ct-item[data-c="evil"]{--ct-color:var(--evil-glow)}
+.ct-item[data-c="arcane"]{--ct-color:var(--arcane-light)}
+.ct-item[data-c="teal"]{--ct-color:var(--teal-light)}
+.ct-label{font-family:'Noto Serif SC',serif;font-size:1rem;font-weight:600;color:var(--star)}
+.ct-sub{font-size:.6rem;letter-spacing:.22em;color:var(--text-faint);margin-top:.2rem;font-family:'Cinzel',serif}
+.ct-desc{font-size:.83rem;color:var(--text-muted);line-height:1.9}
+
+.epilogue{margin-top:3.5rem;padding:2.5rem;border:1px solid var(--border);background:var(--deep);position:relative;text-align:center}
+.epilogue::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+.epilogue p{font-family:'Noto Serif SC',serif;font-size:1.05rem;color:var(--star-dim);line-height:2;font-style:italic}
+.epilogue cite{display:block;margin-top:.8rem;font-size:.7rem;letter-spacing:.3em;color:var(--gold-dim);font-style:normal;font-family:'Cinzel',serif}
+
+.footer{padding:4rem 0;text-align:center;border-top:1px solid var(--border);position:relative;z-index:1}
+.footer-logo{font-family:'Noto Serif SC',serif;font-size:2rem;color:var(--gold);letter-spacing:.1em;margin-bottom:.8rem}
+.footer-note{font-size:.7rem;color:var(--text-faint);letter-spacing:.22em}
+
+::-webkit-scrollbar{width:3px}
+::-webkit-scrollbar-track{background:var(--void)}
+::-webkit-scrollbar-thumb{background:var(--gold-dim)}
+
+@media(max-width:700px){
+  .element-grid{grid-template-columns:1fr 1fr}
+  .faction-grid,.char-grid{grid-template-columns:1fr}
+  .law-grid,.tech-grid,.faction-intro{grid-template-columns:1fr}
+  .di,.ct-item,.org-item{grid-template-columns:1fr}
+  .vs-bar{grid-template-columns:1fr}
+  .vs-side.chaos .vs-side-title,.vs-side.chaos .vs-side-desc,.vs-side.chaos .vs-side-tag{text-align:left}
+  .culture-row{grid-template-columns:1fr}
+  .nav-links{display:none}
+}
+</style>
+</head>
+<body>
+
+<nav class="nav" id="nav">
+  <a class="nav-logo" href="#">极星</a>
+  <ul class="nav-links">
+    <li><a href="#powers">超凡力量</a></li>
+    <li><a href="#worlds">十一世界</a></li>
+    <li><a href="#factions">大罪兵团</a></li>
+    <li><a href="#culture">文化科技</a></li>
+    <li><a href="#characters">人物</a></li>
+    <li><a href="#conflict">核心冲突</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-ring hero-ring-1"></div>
+  <div class="hero-ring hero-ring-2"></div>
+  <div class="hero-ring hero-ring-3"></div>
+  <p class="hero-subtitle">Polar Star — World Setting</p>
+  <h1 class="hero-title">极星理事会</h1>
+  <p class="hero-en">THE POLAR STAR UNIVERSE</p>
+  <div class="hero-div">
+    <div class="hero-div-line"></div>
+    <div class="hero-div-diamond"></div>
+    <div class="hero-div-line r"></div>
+  </div>
+  <p class="hero-quote">
+    "至上无垠！"
+    <cite>— 极星理事会</cite>
+  </p>
+  <div class="scroll-hint"><span>向下探索</span><div class="scroll-hint-line"></div></div>
+</section>
+
+<!-- ══ §1 超凡力量 ══ -->
+<section class="section" id="powers">
+  <div class="container">
+    <div class="section-header reveal">
+      <p class="section-tag">Power System · 超凡力量体系</p>
+      <h2 class="section-title">世界运作的能量法则</h2>
+      <p class="section-desc">魔力是创世五能之一，广泛存在于万物之中。魔法的本质，是让特定魔力以特殊排列定向流动。</p>
+    </div>
+    <div class="reveal">
+      <div class="power-tabs">
+        <button class="power-tab active" onclick="switchTab(event,'elements')">元素类魔力</button>
+        <button class="power-tab" onclick="switchTab(event,'laws')">法则类魔力</button>
+        <button class="power-tab" onclick="switchTab(event,'derived')">衍生类魔力</button>
+        <button class="power-tab" onclick="switchTab(event,'nue')">孽力体系</button>
+      </div>
+
+      <div class="power-panel active" id="panel-elements">
+        <div class="el-label pos">▲ 四大正元素 · 建构倾向 ▲</div>
+        <div class="element-grid pos">
+          <div class="element-card"><span class="el-icon"></span><div class="el-name">水流</div><div class="el-key">运动 · 包容<br>净化 · 不息</div></div>
+          <div class="element-card"><span class="el-icon"></span><div class="el-name">风息</div><div class="el-key">无相 · 自由<br>转化 · 善变</div></div>
+          <div class="element-card"><span class="el-icon"></span><div class="el-name">大地</div><div class="el-key">稳定 · 固执<br>承载 · 坚忍</div></div>
+          <div class="element-card"><span class="el-icon"></span><div class="el-name">光明</div><div class="el-key">秩序 · 指引<br>揭示 · 崇高</div></div>
+        </div>
+        <div class="el-label neg" style="border-top:1px solid var(--border);margin-top:1px">▼ 四大负元素 · 解构倾向 ▼</div>
+        <div class="element-grid neg">
+          <div class="element-card"><span class="el-icon"></span><div class="el-name">火焰</div><div class="el-key">破坏 · 激化<br>熔融 · 侵略</div></div>
+          <div class="element-card"><span class="el-icon"></span><div class="el-name">寒冰</div><div class="el-key">静滞 · 肃穆<br>终结 · 理性</div></div>
+          <div class="element-card"><span class="el-icon"></span><div class="el-name">雷电</div><div class="el-key">迅捷 · 迸发<br>激活 · 联结</div></div>
+          <div class="element-card"><span class="el-icon"></span><div class="el-name">黑暗</div><div class="el-key">莫测 · 侵蚀<br>加密 · 诡谲</div></div>
+        </div>
+      </div>
+
+      <div class="power-panel" id="panel-laws">
+        <div class="law-grid">
+          <div class="law-card"><div class="law-name">空间法则</div><div class="law-keys">基石 · 折叠 · 对立 · 延展</div><div class="law-desc">折叠扭曲空间，创造传送门、收纳隔间乃至空间迷宫。玩弄虚空即是行走于存在与湮灭的边缘，一次失误便可能永远迷失于深渊。</div></div>
+          <div class="law-card"><div class="law-name">灵魂法则</div><div class="law-keys">生命 · 活化 · 启灵 · 轮回</div><div class="law-desc">修补或撕裂灵魂，与幽魂缔结契约，甚至令逝者苏生。每次直接操作都是对生命最神圣领域的僭越，施法者的灵魂将与灵魂之海产生危险纠缠。</div></div>
+          <div class="law-card"><div class="law-name">时间法则</div><div class="law-keys">进步 · 衔尾 · 因果 · 永恒</div><div class="law-desc">加速或延缓时间流速，窥见若干"可能性的分支"。但逆转既定因果被证明是徒劳，时间之河奔涌向前，法则本身会无情修正一切抹消现实的尝试。</div></div>
+          <div class="law-card"><div class="law-name">引力法则</div><div class="law-keys">逻辑 · 束缚 · 支配 · 吸引</div><div class="law-desc">重写局部引力常数，使人身轻如燕或将其压垮于地，乃至创造星体级伟力。直接作用于物质最基本规则，失控后将被世界修正之力撕得粉碎。</div></div>
+        </div>
+      </div>
+
+      <div class="power-panel" id="panel-derived">
+        <div class="dl">
+          <div class="di"><div class="d-name" style="color:var(--star)">纯净</div><div class="d-keys">满盈 · 超然 · 无垢</div><div class="d-desc">最原始本真的魔力，不含任何元素与法则属性。用途几乎只受施法者想象力限制，但极难掌握，魔力消耗极大。</div></div>
+          <div class="di"><div class="d-name" style="color:var(--evil-glow)">混元</div><div class="d-keys">混沌 · 崩坏 · 黑魔法</div><div class="d-desc">八大元素与四大法则粗暴混合，破坏力强大却极易失控。俗称"黑魔法"，受各地政府与冒险者协会严格管制。</div></div>
+          <div class="di"><div class="d-name" style="color:var(--teal-light)">自然</div><div class="d-keys">温和 · 滋养 · 祥和</div><div class="d-desc">生命能量与四大正元素调配而成，由精灵发现并掌握。可用于治愈伤口或沟通自然，与万物有极好相性。</div></div>
+          <div class="di"><div class="d-name" style="color:var(--star-dim)">罡气</div><div class="d-keys">不挠 · 驶驭 · 内敛</div><div class="d-desc">武者以生命能量与擅长魔力混合而成，由炎夏术士发明。能效与操控性极优，但难以脱离使用者身周储存或制成常规法术。</div></div>
+          <div class="di"><div class="d-name" style="color:#aaaaee">繁星</div><div class="d-keys">宏伟 · 列序 · 闪耀</div><div class="d-desc">借由空中星体的能量调和转换制成，性质随所选星体与星座而异。技艺炉火纯青者可直接与星体对接，抽取庞大的魔力储量。</div></div>
+          <div class="di"><div class="d-name" style="color:#f0a050">龙元</div><div class="d-keys">靖乱 · 匡正 · 调和</div><div class="d-desc">龙族特有的两面魔力，既可封印能量经流要处阻断正常流向，又可活化疏导增强其他魔力。与其他魔力混合时常能使其获得更强的功用与能效。</div></div>
+          <div class="di"><div class="d-name" style="color:var(--arcane-light)">神秘</div><div class="d-keys">无解 · 复杂 · 秘密</div><div class="d-desc">泛指一切契约魔法、心灵魔法等难以归类的神秘力量，种类之繁多，难以用常理认知与细分。</div></div>
+        </div>
+      </div>
+
+      <div class="power-panel" id="panel-nue">
+        <div class="nue-box">
+          <div class="nue-tag">SINFUL ENERGY · 罪之力量</div>
+          <div class="nue-title">孽力——从罪业中诞生的力量</div>
+          <div class="nue-desc">孽力由灵魂与逻辑两种创世能量共同催生，专属于大罪信徒与大罪兵团的力量体系。使用者可通过消耗孽力凝结名为"<strong style="color:var(--evil-glow)">业果</strong>"的能力，借用大罪权能的冰山一角。孽力与魔力一样可实现火球、护盾等效果，但其来源于罪业，使用者不可避免地走向黑暗——这样的人，被称为<strong style="color:var(--evil-glow)">大罪信徒</strong>，是秩序的敌人。</div>
+        </div>
+        <div class="dl">
+          <div class="di"><div class="d-name" style="color:var(--evil-glow)">大罪信徒</div><div class="d-keys">学士 · 武者</div><div class="d-desc">因孽力的强大超凡性质而趋之若鹜，或为学识渊博的学士，或为以孽力强化肉身的武者，皆被视为扰乱秩序的异己。</div></div>
+          <div class="di"><div class="d-name" style="color:#d4906a">业果</div><div class="d-keys">凝结 · 权能 · 特质</div><div class="d-desc">通过消耗孽力凝结获取的特殊能力，可窥见并借用大罪权能的冰山一角，获得凡夫俗子难以企及的强大力量。</div></div>
+          <div class="di"><div class="d-name" style="color:var(--star-dim)">兵团魔物</div><div class="d-keys">大罪兵团 · 同化</div><div class="d-desc">七大罪兵团由孽力缠身的特殊魔物组成。任何向往加入兵团的大罪信徒或普通魔物，都会被同化、彻底重塑为兵团魔物个体。</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ §2 十一世界 ══ -->
+<section class="section" id="worlds">
+  <div class="container">
+    <div class="section-header reveal">
+      <p class="section-tag">Cosmos · 虚空十一世界</p>
+      <h2 class="section-title">空间泡中的星环宇宙</h2>
+      <p class="section-desc">以"空间泡"理论为基础，十一个世界按星环结构排列，各自独立而又彼此牵连。穿越需借助空间系魔法或满足特定条件方可实现。</p>
+    </div>
+
+    <div class="world-ring-label reveal"><span class="world-ring-tag tag-center">中心世界</span><div class="world-ring-line"></div></div>
+    <div class="world-cards reveal">
+      <div class="world-card" data-t="center" style="grid-column:1/-1">
+        <div class="wc-name">群星的世界（主世界）</div>
+        <div class="wc-race">All Races · 极星议会</div>
+        <div class="wc-desc">虚空十一世界的中心，空间容纳量最大、历史最悠久之地。人口众多，各种族和睦共处，是极星议会与冒险者协会总部的所在地，亦是众多巨型跨界组织的发源处。当前局势在各方协力下维持着长久以来的和平稳定。</div>
+        <div class="wc-stats"><span class="wc-stat">魔力指数 <span>V</span></span><span class="wc-stat">罪孽侵蚀 <span>7%</span></span><span class="wc-stat">气候 <span>温和稳定</span></span></div>
+      </div>
+    </div>
+
+    <div class="world-ring-label reveal"><span class="world-ring-tag tag-ring1">第一星环</span><div class="world-ring-line"></div></div>
+    <div class="world-cards reveal">
+      <div class="world-card" data-t="ring1">
+        <div class="wc-name">棋盘的世界</div><div class="wc-race">Human · 人类</div>
+        <div class="wc-desc">地面被不明古代人造物覆盖，生态彻底毁灭。绝大多数种族生活于名为"棋子"的巨型生命方舟之上，资源匮乏，局势动荡，诸多兵团乘虚而入。</div>
+        <div class="wc-stats"><span class="wc-stat">魔力 <span>不稳</span></span><span class="wc-stat">侵蚀 <span>28%</span></span></div>
+      </div>
+      <div class="world-card" data-t="ring1">
+        <div class="wc-name">日照的世界</div><div class="wc-race">Beastkin · 兽人</div>
+        <div class="wc-desc">广袤海洋覆盖大部分地表，灵能构成的巨日悬于天空，光芒柔和，是灵能修炼的圣地。多支大罪兵团联合入侵，使其成为最危急的前线世界之一。</div>
+        <div class="wc-stats"><span class="wc-stat">魔力 <span>IV</span></span><span class="wc-stat">侵蚀 <span>37%</span></span></div>
+      </div>
+      <div class="world-card" data-t="ring1">
+        <div class="wc-name">树海的世界</div><div class="wc-race">Elven · 精灵</div>
+        <div class="wc-desc">非线性空间将世界切割为风格各异的"林区"，不熟悉环境者极易迷失。高精灵与暗精灵和解后，由世界树元老院统一管辖，物产极为丰富。</div>
+        <div class="wc-stats"><span class="wc-stat">魔力 <span>V</span></span><span class="wc-stat">侵蚀 <span>6%</span></span></div>
+      </div>
+    </div>
+
+    <div class="world-ring-label reveal"><span class="world-ring-tag tag-ring2">第二星环</span><div class="world-ring-line"></div></div>
+    <div class="world-cards reveal">
+      <div class="world-card" data-t="ring2">
+        <div class="wc-name">冰焰的世界</div><div class="wc-race">Dwarven · 矮人</div>
+        <div class="wc-desc">绝大多数区域处于极端高温或严寒中，矮人族居于巨型钢铁地堡或移动都市，工业与魔法研究十分先进，矿产资源丰富。</div>
+        <div class="wc-stats"><span class="wc-stat">魔力 <span>VI</span></span><span class="wc-stat">政权 <span>铁星</span></span></div>
+      </div>
+      <div class="world-card" data-t="ring2">
+        <div class="wc-name">瀚海的世界</div><div class="wc-race">Merfolk · 鱼人</div>
+        <div class="wc-desc">鱼人海洋联邦"司洋之庭"的领地，以巨型水下移动都市"锚点城"闻名，持续组织远征探索深海资源，实力稳健。</div>
+        <div class="wc-stats"><span class="wc-stat">政权 <span>司洋之庭</span></span></div>
+      </div>
+      <div class="world-card" data-t="ring2">
+        <div class="wc-name">常暗的世界</div><div class="wc-race">Demon · 魔族</div>
+        <div class="wc-desc">常年黑暗的魔族领地，科技水平名列十一世界前茅。定期遭遇大规模魔力风暴，在黑暗与动荡中锻造出独特的文明形态。</div>
+        <div class="wc-stats"><span class="wc-stat">特性 <span>永暗 · 风暴</span></span></div>
+      </div>
+    </div>
+
+    <div class="world-ring-label reveal"><span class="world-ring-tag tag-special">特殊位面</span><div class="world-ring-line"></div></div>
+    <div class="world-cards reveal">
+      <div class="world-card" data-t="special">
+        <div class="wc-name">锻炉的世界</div><div class="wc-race">Machina · 机铠 · 古神希玛守护</div>
+        <div class="wc-desc">由古神希玛管理守卫的特殊位面，精密制造、仿生科技、微型魔力装置等领域引领整个虚空前沿，被认为是科技天花板之一。</div>
+      </div>
+      <div class="world-card" data-t="special">
+        <div class="wc-name">破败的世界</div><div class="wc-race">Unknown · 无领导核心</div>
+        <div class="wc-desc">十一世界中最为混乱动荡的位面，是混沌与黑暗力量的聚集之地，大罪兵团的孽力在此最为浓烈，几乎难以立足。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ §3 大罪兵团 ══ -->
+<section class="section" id="factions">
+  <div class="container">
+    <div class="section-header reveal">
+      <p class="section-tag">Enemy · 纪元之敌</p>
+      <h2 class="section-title">七大罪兵团</h2>
+      <p class="section-desc">以孽力驱动的魔物军团，各以一宗大罪为旗号。彼此并非统一战线，相互争斗，却共同成为十一世界秩序的终极威胁。</p>
+    </div>
+    <div class="faction-intro reveal">
+      <div class="fi-card">
+        <div class="fi-label">SEVEN SINS · 罪孽的诠释</div>
+        <div class="fi-title">大罪的重新定义</div>
+        <div class="fi-text">本世界观对七宗大罪赋予了新的内涵：<strong style="color:var(--evil-glow)">色欲</strong>是一切超出实际需求和本分的欲望；<strong style="color:var(--evil-glow)">怠惰</strong>是对外物最深层次的拒绝与否定、病态的不作为与永恒。其余五罪各代表一种扭曲的欲望与存在形式，并各有具象化的大罪化身。</div>
+      </div>
+      <div class="fi-card">
+        <div class="fi-label">INCARNATION · 大罪化身</div>
+        <div class="fi-title">化身并非兵团之主</div>
+        <div class="fi-text">七大兵团中，只有怠惰的庭院兵团与傲慢的耀光兵团与大罪化身存在直接联系。其余兵团皆为<strong style="color:var(--star-dim)">自发形成</strong>的孽力魔物集群——他们的恶行是自主的，并非某位大罪化身的指令。化身们各自游历世界，有自己的意志与立场。</div>
+      </div>
+    </div>
+    <div class="faction-grid reveal">
+      <div class="faction-card"><div class="fc-num">I</div><div class="fc-sin">Wrath · 暴怒</div><div class="fc-name">劫焰兵团</div><div class="fc-desc">以毁灭为唯一目的——将生灵斩尽杀绝，将建筑摧毁殆尽，将一切文明与秩序的踪迹尽数抹去。火光与灰烬是他们留下的唯一签名。</div></div>
+      <div class="faction-card"><div class="fc-num">II</div><div class="fc-sin">Lust · 色欲</div><div class="fc-name">肉潮兵团</div><div class="fc-desc">血肉进化的恐怖集群，拥有十种核心特质，可在繁殖中持续融合进化。整合狩猎、回路升魔、蜂巢意志、启灵神经……每次进化都更难被击败。色欲化身菈丝特认为其对"色欲"的理解过于浅薄。</div></div>
+      <div class="faction-card"><div class="fc-num">III</div><div class="fc-sin">Sloth · 怠惰</div><div class="fc-name">庭院兵团</div><div class="fc-desc">与怠惰化身缇安直接相关，是七大兵团中最为安分的存在。其威胁不在于暴力，而在于那深不可测、拒绝一切外物的永恒否定——存在本身就是对秩序的消解。</div></div>
+      <div class="faction-card"><div class="fc-num">IV</div><div class="fc-sin">Pride · 傲慢</div><div class="fc-name">耀光兵团</div><div class="fc-desc">以压倒性姿态侵凌各界，曾与幻海兵团联合入侵云峦界，在"极昼战役"中与天翼族爆发激烈冲突，与傲慢化身存在直接联系。</div></div>
+      <div class="faction-card"><div class="fc-num">V</div><div class="fc-sin">Envy · 嫉妒</div><div class="fc-name">猎兵兵团</div><div class="fc-desc">随机无差别屠杀，对幸存者施以极刑。以飞艇为载具从天而降——如天使般降落，如恶魔般收割。以虐杀与极刑闻名于十一世界。</div></div>
+      <div class="faction-card"><div class="fc-num">VI</div><div class="fc-sin">Illusion · 幻海</div><div class="fc-name">幻海兵团</div><div class="fc-desc">与耀光兵团联合入侵日照界与云峦界，是当前侵略活动最为活跃的兵团之一。详细设定持续完善中。</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ §4 文化科技 ══ -->
+<section class="section" id="culture">
+  <div class="container">
+    <div class="section-header reveal">
+      <p class="section-tag">Civilization · 文化与科技</p>
+      <h2 class="section-title">魔力朋克的群星时代</h2>
+      <p class="section-desc">魔法与工业的深度融合，催生出这个世界独特的魔力朋克文明——浮空城漂于云端，列车穿越大陆，报刊传递着十一世界的风云动态。</p>
+    </div>
+
+    <p class="section-tag reveal" style="text-align:left;margin-bottom:1rem">Technology · 魔力科技造物</p>
+    <div class="tech-grid reveal">
+      <div class="tech-card" data-a="gold"><div class="tc-name">魔力管道与魔石应用</div><div class="tc-sub">Urban Infrastructure · 城市基础设施</div><div class="tc-desc">城市建设之初便在地下铺设如同电力系统般的"魔力管道"，为建筑统一供能。普通家庭使用魔石灯照明，公共图书馆配有魔偶管理员与魔力地图供查询。</div></div>
+      <div class="tech-card" data-a="arcane"><div class="tc-name">浮空城</div><div class="tc-sub">Floating City · 冒险者协会所属</div><div class="tc-desc">以大功率魔力引擎驱动的巨型浮空城市，是冒险者协会的据点之一，亦是跨界旅行的重要载具。"幺贰"等浮空城常作为研学旅行与冒险的出发点。</div></div>
+      <div class="tech-card" data-a="teal"><div class="tc-name">机械魔乘 · 机铠酒馆</div><div class="tc-sub">Magitek Train · 机铠族文化</div><div class="tc-desc">机铠族的陆行魔法列车，是其旅居四方的托身之所。部分列车长将车厢改装为"机铠酒馆"，出售罕见佳酿，大受各界旅客欢迎。</div></div>
+      <div class="tech-card" data-a="star"><div class="tc-name">"天使"系列魔力机甲</div><div class="tc-sub">Angel Series · 天翼族军事装备</div><div class="tc-desc">天翼族"穹顶"政权研发的顶尖单兵魔装，配备魔力机炮矩阵、导弹系统与异构羽翼重剑。高阶型号"炽天使"速度之快令精锐老兵难以锁定视线。</div></div>
+      <div class="tech-card" data-a="evil"><div class="tc-name">锚点城</div><div class="tc-sub">Anchor City · 鱼人族移动都市</div><div class="tc-desc">鱼人族的巨型水下移动都市，可组成远征舰队探索深海。司洋之庭曾组织由20艘锚点城组成的舰队探索彩淀洋深处的特产矿石。</div></div>
+      <div class="tech-card" data-a="arcane"><div class="tc-name">魔力枪械</div><div class="tc-sub">Magitek Firearms · 机铠族发明</div><div class="tc-desc">机铠族掌握魔力驱动与击发的枪械技术。如"世界树掠影"——经稀有魔法材料深度定制的突击步枪，枪身嵌入魔力回路与祝福铭文，兼顾精准与超凡性能。</div></div>
+    </div>
+
+    <div class="sep reveal"><div class="sep-line"></div><div class="sep-icon">✦ 日常文化 ✦</div><div class="sep-line"></div></div>
+    <div class="culture-row reveal">
+      <div class="culture-cell"><span class="cc-icon">📰</span><div class="cc-name">《风云快报》</div><div class="cc-text">炎夏烟雨山报社出版的跨界月刊，设有头条"惊霆特报"、新闻简报"坐观风云"、博物百科"八方攫星"与读者投稿"茶余听雨"，是十一世界最广泛流通的媒体之一。</div></div>
+      <div class="culture-cell"><span class="cc-icon">🍶</span><div class="cc-name">饮食与日常</div><div class="cc-text">各世界饮食风格迥异：日照界的刺身与寿司、兽人的大块炖肉、精灵风味香肠烤肉……机铠酒馆中更可品尝到各界独有的稀有佳酿，是旅行者最爱的歇脚之所。</div></div>
+      <div class="culture-cell"><span class="cc-icon">📖</span><div class="cc-name">文艺创作</div><div class="cc-text">群星时代文艺繁荣，小说、绘画、音乐、舞蹈等艺术形式各具风采。如《浮空城上，苍风所记之事》等创作，记录着时代中人与人、人与世界之间的故事。</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ §4b 人物 ══ -->
+<section class="section" id="characters" style="padding-top:0">
+  <div class="container">
+    <div class="section-header reveal">
+      <p class="section-tag">Characters · 代表人物</p>
+      <h2 class="section-title">繁星之中的引路者</h2>
+      <p class="section-desc">他们的故事，是群星时代最鲜活的注脚。</p>
+    </div>
+    <div class="char-grid reveal">
+      <div class="char-card" data-t="hero">
+        <div class="char-portrait">夏</div>
+        <div class="char-name">夏烨</div><div class="char-name-en">Xia Ye</div>
+        <div class="char-role">穿越者 · 巡林者</div>
+        <div class="char-desc">前世为猝死大学生，灵魂穿越后在树海的世界以婴儿之姿重生，凭完整的前世记忆与超凡的魔力亲和性在精灵社会中成长。师从巡林者阿德勒，精通双手剑术与多系魔力，持定制步枪"世界树掠影"行走于十一世界。</div>
+        <div class="char-tags"><span class="char-tag">巡林者初级园丁</span><span class="char-tag">九级冒险者</span><span class="char-tag">水流·龙元</span></div>
+      </div>
+      <div class="char-card" data-t="wrath">
+        <div class="char-portrait">艾</div>
+        <div class="char-name">艾拉·芙烈米娅</div><div class="char-name-en">Ira · Flamyia</div>
+        <div class="char-role">暴怒化身 · 大罪</div>
+        <div class="char-desc">暴怒大罪的具象化存在，以19岁女性形态游历世界。外表温柔善良、充满活力，与大罪化身的本质形成强烈反差。持漆黑的暴怒罪刃，在烈怒之中可毫无保留地施展大罪权能。珍视伙伴与弱者。</div>
+        <div class="char-tags"><span class="char-tag">八级冒险者</span><span class="char-tag">火焰 · 孽力</span><span class="char-tag">秩序中立</span></div>
+      </div>
+      <div class="char-card" data-t="lust">
+        <div class="char-portrait">菈</div>
+        <div class="char-name">菈丝特·爱洛丝</div><div class="char-name-en">Rastre · Eros</div>
+        <div class="char-role">色欲化身 · 大罪</div>
+        <div class="char-desc">色欲大罪的化身，以16岁少女形象周游十一世界，以旅行商人、作家、画家等多重身份示人。持"临幸"长枪与"卑乞"长鞭，拥有概念毒素"曼陀罗"与感官诱惑"忘忧果"等强力手段。</div>
+        <div class="char-tags"><span class="char-tag">旅行者 · 艺术家</span><span class="char-tag">色欲孽力</span><span class="char-tag">大罪化身</span></div>
+      </div>
+    </div>
+
+    <div class="sep reveal"><div class="sep-line"></div><div class="sep-icon">✦ 主要组织 ✦</div><div class="sep-line"></div></div>
+    <div class="org-list reveal">
+      <div class="org-item" data-c="gold"><div><div class="org-name">极星理事会</div><div class="org-type">Polar Star Council · 跨界协商</div></div><div class="org-desc">群星时代初期成立的巨型跨界协商组织，由各世界主流政权共同支持建立。颁布《极星法典》为跨界司法提供基准，协调各界和平、经济与安全事务，是十一世界共同繁荣的制度象征。</div></div>
+      <div class="org-item" data-c="white"><div><div class="org-name">纯白审判</div><div class="org-type">White Tribunal · 跨界军事</div></div><div class="org-desc">应对各世界罪孽侵蚀威胁而建立的跨界军事组织。追捕七罪罪徒、遏制孽力私研、讨伐大罪兵团。设有"白之审判庭"，下属涤罪剑锋团等活跃于各世界最前线。</div></div>
+      <div class="org-item" data-c="arcane"><div><div class="org-name">冒险者协会</div><div class="org-type">Adventurers Guild · 民间行会</div></div><div class="org-desc">覆盖全十一世界的专业行会，等级由九级（新人）至一级（顶尖），旗下运营浮空城据点，发行月刊《风云快报》，是世界上规模最大的民间专业组织。</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ §5 核心冲突 ══ -->
+<section class="section conflict-bg" id="conflict">
+  <div class="container">
+    <div class="section-header reveal">
+      <p class="section-tag">Core Conflict · 核心冲突</p>
+      <h2 class="section-title">秩序与孽力的永恒博弈</h2>
+      <p class="section-desc">这是信仰、力量、存在意义与人性深处的多重裂痕。</p>
+    </div>
+
+    <div class="vs-bar reveal">
+      <div class="vs-side order">
+        <div class="vs-side-tag">Order · 秩序阵营</div>
+        <div class="vs-side-title">白方<br>九大种族联盟</div>
+        <div class="vs-side-desc">极星议会、纯白审判、冒险者协会、各世界政权。以法典与秩序构筑防线，以魔力与科技对抗侵蚀。他们的武器是团结，他们的弱点是内部的裂痕。</div>
+      </div>
+      <div class="vs-center">VS<small>群星时代</small></div>
+      <div class="vs-side chaos">
+        <div class="vs-side-tag">Chaos · 混沌阵营</div>
+        <div class="vs-side-title">黑方<br>七大罪兵团</div>
+        <div class="vs-side-desc">七大孽力兵团各自为战，彼此争斗，却共同以罪孽侵蚀着十一世界的每一个角落。他们没有统一的意志，这使他们更加难以被彻底击溃。</div>
+      </div>
+    </div>
+
+    <div class="ct-list reveal">
+      <div class="ct-item" data-c="gold">
+        <div><div class="ct-label">罪孽侵蚀</div><div class="ct-sub">Corruption · 世界级威胁</div></div>
+        <div class="ct-desc">各世界的"罪孽侵蚀率"持续攀升。从日照界的37%到破败界的极限，孽力如同瘟疫般腐蚀着世界的边缘。极星议会将其列为群星时代最优先的安全威胁，但各界政权的应对能力参差不齐。</div>
+      </div>
+      <div class="ct-item" data-c="evil">
+        <div><div class="ct-label">大罪信徒</div><div class="ct-sub">Heresy · 内部威胁</div></div>
+        <div class="ct-desc">孽力的诱惑并非只作用于魔物。人类学士、武者，乃至种族中的精英，都可能因孽力的强大超凡性质而走上大罪信徒之路——威胁不只来自外部，每一个文明内部都潜藏着倒戈的可能。</div>
+      </div>
+      <div class="ct-item" data-c="arcane">
+        <div><div class="ct-label">化身的立场</div><div class="ct-sub">Incarnation · 意志独立</div></div>
+        <div class="ct-desc">大罪化身并非兵团的主人，却是罪孽权能的具象。艾拉以暴怒化身之姿游走于秩序阵营，菈丝特以色欲化身之名自由旅行——她们的存在本身就是对"黑白分明"的世界秩序的挑战与质疑。</div>
+      </div>
+      <div class="ct-item" data-c="teal">
+        <div><div class="ct-label">知识与管制</div><div class="ct-sub">Law · 禁忌与自由</div></div>
+        <div class="ct-desc">混元魔法与孽力的研究被严格管制，但知识本身无法被彻底抹除。禁忌力量的存在使法律体系与执法边界不断被挑战——而纯白审判的权力扩张，本身也引发了关于自由与管控的深层争议。</div>
+      </div>
+      <div class="ct-item" data-c="gold">
+        <div><div class="ct-label">无主之战</div><div class="ct-sub">Autonomy · 无终结的敌人</div></div>
+        <div class="ct-desc">七大罪兵团并非某个统一意志在指挥，它们自发形成、各自为战，甚至彼此攻伐。这意味着即使消灭一支兵团，也无法换来持久和平；若要找到"终止战争的源头"，似乎根本不存在这样的目标。</div>
+      </div>
+    </div>
+
+    <div class="epilogue reveal">
+      <p>"如繁星般的英杰在群星时代的苍穹中闪耀引路，<br>而孽力的黑潮，也同样在每一个世界的边缘悄然涌动。<br>秩序与混沌的博弈没有终点——<br>只有每一个选择，在漫长的黑夜中发出微光。"</p>
+      <cite>— 《星历通史》序言</cite>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-logo">极星</div>
+    <p class="footer-note">POLAR STAR UNIVERSE · WORLD SETTING v1.0</p>
+    <p style="margin-top:1rem;font-size:.7rem;color:var(--text-faint);line-height:2">超凡 · 世界 · 大罪 · 文明 · 冲突<br>群星时代的序章，已然开启。</p>
+  </div>
+</footer>
+
+<script>
+const nav=document.getElementById('nav');
+window.addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>50));
+const obs=new IntersectionObserver((entries)=>{
+  entries.forEach((e,i)=>{if(e.isIntersecting){setTimeout(()=>e.target.classList.add('visible'),i*70);obs.unobserve(e.target)}});
+},{threshold:0.07});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+function switchTab(e,id){
+  document.querySelectorAll('.power-tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.power-panel').forEach(p=>p.classList.remove('active'));
+  e.target.classList.add('active');
+  document.getElementById('panel-'+id).classList.add('active');
+}
+</script>
+</body>
+</html>
