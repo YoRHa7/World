@@ -8,21 +8,21 @@
         @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;500;600;700;900&family=Noto+Sans+SC:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap');
 
         :root {
-            --void: #03040a;
-            --deep: #060810;
-            --surface: #090c18;
-            --raised: #0d1020;
-            --border: rgba(255,255,255,.05);
-            --border-m: rgba(255,255,255,.1);
-            --text: #dde6f4;
-            --text-2: #6878a0;
-            --text-3: #303850;
-            --gold: #c9a84c;
-            --gold-b: rgba(201,168,76,.25);
-            --blue: #4d9de0;
-            --teal: #2dd4bf;
-            --purple: #a78bfa;
-            --red: #ef4444;
+            --void: #06030f;
+            --deep: #09050a;
+            --surface: #110a1c;
+            --raised: #17102a;
+            --border: rgba(201,168,76,.08);
+            --border-m: rgba(201,168,76,.16);
+            --text: #f0e8ff;
+            --text-2: #b8a8d8;
+            --text-3: #6a5890;
+            --gold: #e8c060;
+            --gold-b: rgba(232,192,96,.3);
+            --blue: #7ab8f0;
+            --teal: #50e8d0;
+            --purple: #c8a0ff;
+            --red: #ff6666;
         }
 
         *, *::before, *::after {
@@ -45,21 +45,33 @@
             overflow-x: hidden;
         }
 
-            /* grid + scan */
+            /* dual energy flow + grid */
             body::before {
                 content: "";
                 position: fixed;
                 inset: 0;
-                background-image: linear-gradient(rgba(255,255,255,.01) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.01) 1px,transparent 1px);
-                background-size: 48px 48px;
+                background: radial-gradient(ellipse 120% 80% at 20% 30%, rgba(232,192,96,.06) 0%, transparent 55%), radial-gradient(ellipse 100% 90% at 80% 70%, rgba(180,130,255,.07) 0%, transparent 55%), radial-gradient(ellipse 80% 60% at 50% 50%, rgba(140,80,220,.03) 0%, transparent 50%), linear-gradient(rgba(232,192,96,.018) 1px, transparent 1px), linear-gradient(90deg, rgba(180,130,255,.018) 1px, transparent 1px);
+                background-size: 100% 100%, 100% 100%, 100% 100%, 52px 52px, 52px 52px;
                 pointer-events: none;
                 z-index: 0;
-                animation: gridDrift 80s linear infinite;
+                animation: energyShift 12s ease-in-out infinite, gridDrift 80s linear infinite;
             }
 
         @keyframes gridDrift {
             to {
-                background-position: 48px 48px;
+                background-position: 52px 52px, 52px 52px, 52px 52px, 52px 52px, 52px 52px;
+            }
+        }
+
+        @keyframes energyShift {
+            0%,100% {
+                background: radial-gradient(ellipse 120% 80% at 20% 30%, rgba(232,192,96,.06) 0%, transparent 55%), radial-gradient(ellipse 100% 90% at 80% 70%, rgba(180,130,255,.07) 0%, transparent 55%), radial-gradient(ellipse 80% 60% at 50% 50%, rgba(140,80,220,.03) 0%, transparent 50%), linear-gradient(rgba(232,192,96,.018) 1px, transparent 1px), linear-gradient(90deg, rgba(180,130,255,.018) 1px, transparent 1px);
+                background-size: 100% 100%, 100% 100%, 100% 100%, 52px 52px, 52px 52px;
+            }
+
+            50% {
+                background: radial-gradient(ellipse 120% 80% at 75% 65%, rgba(232,192,96,.07) 0%, transparent 55%), radial-gradient(ellipse 100% 90% at 25% 35%, rgba(180,130,255,.08) 0%, transparent 55%), radial-gradient(ellipse 80% 60% at 50% 50%, rgba(200,160,100,.04) 0%, transparent 50%), linear-gradient(rgba(180,130,255,.018) 1px, transparent 1px), linear-gradient(90deg, rgba(232,192,96,.018) 1px, transparent 1px);
+                background-size: 100% 100%, 100% 100%, 100% 100%, 52px 52px, 52px 52px;
             }
         }
 
@@ -70,7 +82,7 @@
             left: 0;
             right: 0;
             height: 1px;
-            background: linear-gradient(90deg,transparent,rgba(201,168,76,.07),transparent);
+            background: linear-gradient(90deg,transparent,rgba(232,192,96,.18),rgba(180,120,255,.12),transparent);
             animation: scanLine 18s linear infinite;
             pointer-events: none;
             z-index: 1;
@@ -337,13 +349,36 @@
             letter-spacing: .14em;
             margin-bottom: 8px;
             display: inline-block;
-            background: linear-gradient(90deg,#c9a84c,#90c0d8,#a78bfa,#2dd4bf,#d46040,#d8c040,#c9a84c);
+            background: linear-gradient(90deg,#e8c060,#c0a0ff,#60e8d0,#e8c060,#c0a0ff,#e8c060);
             background-size: 400% 100%;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            animation: titleShift 6s ease-in-out infinite, titleFlicker 12s ease-in-out infinite;
+            color: transparent;
+            animation: titleShift 5s ease-in-out infinite, cy2077Shake 1s step-start infinite;
+            position: relative;
         }
+
+            .hero-title::before, .hero-title::after {
+                content: attr(data-text);
+                position: absolute;
+                inset: 0;
+                background: inherit;
+                background-clip: text;
+                -webkit-background-clip: text;
+                color: transparent;
+                pointer-events: none;
+            }
+
+            .hero-title::before {
+                -webkit-text-fill-color: rgba(232,192,96,.7);
+                animation: glitchBefore 1s step-start infinite;
+            }
+
+            .hero-title::after {
+                -webkit-text-fill-color: rgba(180,130,255,.7);
+                animation: glitchAfter 1s step-start infinite;
+            }
 
         @keyframes titleShift {
             0%,100% {
@@ -355,37 +390,153 @@
             }
         }
 
-        @keyframes titleFlicker {
-            0%,82%,100% {
-                filter: none;
-            }
-
-            83% {
-                filter: brightness(2.5) contrast(1.5);
-                transform: translateX(-2px);
-            }
-
-            83.4% {
-                filter: none;
+        @keyframes cy2077Shake {
+            0% {
                 transform: none;
+                filter: none;
+            }
+            /* 0-80ms: quiet */
+            8% {
+                transform: translate(-4px, 2px) skewX(-1deg);
+                filter: brightness(1.8) saturate(1.4);
+                clip-path: polygon(0 15%, 100% 15%, 100% 38%, 0 38%);
             }
 
-            84% {
+            9% {
+                transform: translate(5px, -1px) skewX(2deg);
+                filter: brightness(2.5) hue-rotate(30deg);
+                clip-path: polygon(0 50%, 100% 50%, 100% 75%, 0 75%);
+            }
+
+            10% {
+                transform: translate(-3px, 3px);
                 filter: brightness(3) saturate(0);
-                transform: translateX(2px);
+                clip-path: polygon(0 0, 100% 0, 100% 30%, 0 30%);
             }
 
-            84.4% {
-                filter: none;
+            11% {
+                transform: translate(4px, -2px) skewX(-2deg);
+                filter: brightness(2) hue-rotate(-20deg);
+                clip-path: none;
+            }
+
+            12% {
                 transform: none;
-            }
-
-            90% {
-                filter: brightness(1.6);
-            }
-
-            90.3% {
                 filter: none;
+                clip-path: none;
+            }
+            /* second burst */
+            14% {
+                transform: translate(6px, 0) skewX(3deg);
+                filter: brightness(2.2);
+            }
+
+            15% {
+                transform: translate(-5px, 1px) skewX(-2deg);
+                filter: brightness(1.6) hue-rotate(45deg);
+            }
+
+            16% {
+                transform: none;
+                filter: none;
+            }
+            /* micro jitter */
+            18% {
+                transform: translate(2px, -1px);
+            }
+
+            19% {
+                transform: translate(-2px, 1px);
+            }
+
+            20% {
+                transform: none;
+                filter: none;
+            }
+            /* rest of second cycle */
+            100% {
+                transform: none;
+                filter: none;
+            }
+        }
+
+        @keyframes glitchBefore {
+            0%,7%,13%,100% {
+                clip-path: none;
+                transform: none;
+                opacity: 0;
+            }
+
+            8% {
+                clip-path: polygon(0 20%, 100% 20%, 100% 40%, 0 40%);
+                transform: translate(-6px, 0);
+                opacity: 1;
+            }
+
+            9% {
+                clip-path: polygon(0 55%, 100% 55%, 100% 75%, 0 75%);
+                transform: translate(4px, 0);
+                opacity: 1;
+            }
+
+            10% {
+                clip-path: polygon(0 0, 100% 0, 100% 20%, 0 20%);
+                transform: translate(-3px, 0);
+                opacity: 1;
+            }
+
+            11% {
+                opacity: 0;
+            }
+
+            14% {
+                clip-path: polygon(0 30%, 100% 30%, 100% 60%, 0 60%);
+                transform: translate(7px, 0);
+                opacity: 1;
+            }
+
+            15% {
+                opacity: 0;
+            }
+        }
+
+        @keyframes glitchAfter {
+            0%,7%,13%,100% {
+                clip-path: none;
+                transform: none;
+                opacity: 0;
+            }
+
+            8% {
+                clip-path: polygon(0 60%, 100% 60%, 100% 80%, 0 80%);
+                transform: translate(5px, 0);
+                opacity: 1;
+            }
+
+            9% {
+                clip-path: polygon(0 10%, 100% 10%, 100% 35%, 0 35%);
+                transform: translate(-4px, 0);
+                opacity: 1;
+            }
+
+            10% {
+                clip-path: polygon(0 70%, 100% 70%, 100% 90%, 0 90%);
+                transform: translate(3px, 0);
+                opacity: 1;
+            }
+
+            11% {
+                opacity: 0;
+            }
+
+            14% {
+                clip-path: polygon(0 0, 100% 0, 100% 25%, 0 25%);
+                transform: translate(-6px, 0);
+                opacity: 1;
+            }
+
+            15% {
+                opacity: 0;
             }
         }
 
@@ -3228,7 +3379,7 @@
         <div id="hero-stars" style="position:absolute;inset:0;pointer-events:none;"></div>
         <div class="hero-content">
             <p class="hero-pre">Open Worldbuilding · EC 174年</p>
-            <h1 class="hero-title">解析世界</h1>
+            <h1 class="hero-title" data-text="解析世界">解析世界</h1>
             <p class="hero-sub">Factions &amp; 宣传页</p>
             <div class="hero-divider"><div class="hdl"></div><div class="hdg"></div><div class="hdl"></div></div>
             <p class="hero-desc">
@@ -4066,88 +4217,888 @@
                 <div style="font-size:12px;color:rgba(80,120,180,.5);letter-spacing:.1em;font-family:'JetBrains Mono',monospace;margin-top:4px;text-align:center;">// 对应八种原素 · 用写进体制的记录代替会遗忘的人类记忆</div>
             </div>
             <div style="padding:28px 36px;">
-                <div class="tier-icon-grid tier-icon-grid-4" style="margin-bottom:20px;">
-                    <div class="tier-card tier-alarm">
-                        <div class="tier-card-img" style="border-color:rgba(239,68,68,.2);background:rgba(239,68,68,.03);"><img src="image/渊暗院.png" alt="" onerror="this.style.display='none'"><div class="tier-card-img-ph" style="color:rgba(144,96,192,.4);">暗</div></div>
-                        <div class="tier-card-body">
-                            <div class="tier-card-title" style="color:#9060c0;">暗渊塔</div>
-                            <div class="tier-card-sub">渊暗学院</div>
-                            <div class="tier-card-desc">专研暗元素与隐匿、深层魔力结构、异常能量研究。</div>
-                            <div class="tier-card-status tier-status-crit">⚠ 深红警报 EC160+</div>
+                <!-- ══ 八塔八边形 v2 — wider ring, clickable detail panel ══ -->
+                <style>
+                    /* ─ container ─ */
+                    .oct2-wrap {
+                        position: relative;
+                        width: 100%;
+                        max-width: 680px;
+                        margin: 0 auto 0;
+                    }
+                    /* ─ square ring canvas ─ */
+                    .oct2-canvas {
+                        position: relative;
+                        width: 100%;
+                        padding-bottom: 100%; /* 1:1 */
+                    }
+
+                    .oct2-canvas-inner {
+                        position: absolute;
+                        inset: 0;
+                    }
+
+                    /* ─ decorative rings (center, not nodes) ─ */
+                    .oct2-ring {
+                        position: absolute;
+                        top: 50%;
+                        left: 50%;
+                        border-radius: 50%;
+                        transform: translate(-50%,-50%);
+                        pointer-events: none;
+                    }
+
+                    .oct2-r1 {
+                        width: 24%;
+                        height: 24%;
+                        border: 1px solid rgba(80,144,224,.18);
+                        animation: octSpin 25s linear infinite;
+                    }
+
+                    .oct2-r2 {
+                        width: 58%;
+                        height: 58%;
+                        border: 1px solid rgba(80,144,224,.1);
+                        animation: octSpin 40s linear infinite reverse;
+                    }
+
+                    .oct2-r3 {
+                        width: 88%;
+                        height: 88%;
+                        border: 1px dashed rgba(80,144,224,.06);
+                        animation: octSpin 60s linear infinite;
+                    }
+                    /* dot marks on outer ring (8 points) */
+                    .oct2-r2::before {
+                        content: "";
+                        position: absolute;
+                        top: 50%;
+                        left: 50%;
+                        width: 5px;
+                        height: 5px;
+                        border-radius: 50%;
+                        background: rgba(80,144,224,.35);
+                        transform: translateX(-50%) translateY(-50%) translateY(-290%);
+                        box-shadow: 0 15px 0 rgba(80,144,224,.25), 11px 11px 0 rgba(80,144,224,.18), 15px 0 0 rgba(80,144,224,.18), 11px -11px 0 rgba(80,144,224,.18), 0 -15px 0 rgba(80,144,224,.18), -11px -11px 0 rgba(80,144,224,.18), -15px 0 0 rgba(80,144,224,.18), -11px 11px 0 rgba(80,144,224,.18);
+                    }
+
+                    @keyframes octSpin {
+                        to {
+                            transform: translate(-50%,-50%) rotate(360deg);
+                        }
+                    }
+
+                    /* ─ center hub ─ */
+                    .oct2-hub {
+                        position: absolute;
+                        top: 50%;
+                        left: 50%;
+                        transform: translate(-50%,-50%);
+                        width: 11%;
+                        height: 11%;
+                        background: radial-gradient(circle, rgba(80,144,224,.15), rgba(80,60,160,.08));
+                        border: 1px solid rgba(80,144,224,.35);
+                        border-radius: 50%;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        z-index: 4;
+                    }
+
+                        .oct2-hub span {
+                            font-family: 'JetBrains Mono', monospace;
+                            font-size: clamp(5px, 1.1vw, 9px);
+                            letter-spacing: .06em;
+                            color: rgba(120,170,240,.7);
+                            text-align: center;
+                            line-height: 1.4;
+                        }
+
+                    /* ─ SVG connector lines ─ */
+                    .oct2-svg {
+                        position: absolute;
+                        inset: 0;
+                        width: 100%;
+                        height: 100%;
+                        pointer-events: none;
+                        z-index: 1;
+                    }
+
+                    .oct2-line {
+                        stroke: rgba(80,144,224,.1);
+                        stroke-width: 1;
+                        fill: none;
+                    }
+
+                        .oct2-line.alarm {
+                            stroke: rgba(239,68,68,.15);
+                        }
+
+                    /* ─ each node ─ */
+                    .oct2-node {
+                        position: absolute;
+                        width: 19%;
+                        aspect-ratio: 1/1; /* 19% of 680px ≈ 129px */
+                        transform: translate(-50%,-50%);
+                        z-index: 5;
+                        cursor: pointer;
+                    }
+
+                    .oct2-node-inner {
+                        width: 100%;
+                        height: 100%;
+                        background: rgba(14,20,42,.92);
+                        border: 1px solid rgba(80,144,224,.22);
+                        border-radius: 3px;
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        justify-content: center;
+                        overflow: hidden;
+                        position: relative;
+                        transition: transform .25s cubic-bezier(.16,1,.3,1), box-shadow .25s, border-color .25s;
+                    }
+
+                        .oct2-node-inner:hover,
+                        .oct2-node.selected .oct2-node-inner {
+                            transform: scale(1.12);
+                            border-color: rgba(80,144,224,.6);
+                            box-shadow: 0 0 28px rgba(80,144,224,.3), 0 0 6px rgba(80,144,224,.2) inset;
+                        }
+
+                    .oct2-node.alarm .oct2-node-inner {
+                        border-color: rgba(239,68,68,.45);
+                        background: rgba(30,8,8,.92);
+                    }
+
+                    .oct2-node.alarm:hover .oct2-node-inner,
+                    .oct2-node.alarm.selected .oct2-node-inner {
+                        border-color: rgba(239,68,68,.8);
+                        box-shadow: 0 0 28px rgba(239,68,68,.35), 0 0 6px rgba(239,68,68,.15) inset;
+                    }
+                    /* image fill */
+                    .oct2-node-bg {
+                        position: absolute;
+                        inset: 0;
+                        overflow: hidden;
+                    }
+
+                        .oct2-node-bg img {
+                            width: 100%;
+                            height: 100%;
+                            object-fit: cover;
+                            opacity: .5;
+                            transition: opacity .3s;
+                        }
+
+                    .oct2-node:hover .oct2-node-bg img,
+                    .oct2-node.selected .oct2-node-bg img {
+                        opacity: .7;
+                    }
+                    /* element char */
+                    .oct2-elem {
+                        font-family: 'Noto Serif SC', serif;
+                        font-size: clamp(18px, 3.2vw, 30px);
+                        font-weight: 900;
+                        line-height: 1;
+                        position: relative;
+                        z-index: 2;
+                        text-shadow: 0 0 12px currentColor;
+                    }
+                    /* tower short name */
+                    .oct2-name {
+                        font-family: 'Noto Serif SC', serif;
+                        font-size: clamp(8px, 1.1vw, 11px);
+                        color: rgba(160,195,240,.8);
+                        position: relative;
+                        z-index: 2;
+                        margin-top: 3px;
+                        text-align: center;
+                        line-height: 1.2;
+                    }
+                    /* status pip */
+                    .oct2-pip {
+                        position: absolute;
+                        bottom: 4px;
+                        left: 50%;
+                        transform: translateX(-50%);
+                        font-size: clamp(6px, .9vw, 8px);
+                        font-family: 'JetBrains Mono', monospace;
+                        white-space: nowrap;
+                        z-index: 3;
+                        letter-spacing: .02em;
+                    }
+
+                    /* ─ DETAIL PANEL (below ring) ─ */
+                    .oct2-detail {
+                        margin-top: 16px;
+                        border: 1px solid rgba(80,144,224,.15);
+                        background: rgba(10,16,34,.95);
+                        transition: opacity .3s, transform .3s;
+                        overflow: hidden;
+                        min-height: 88px;
+                    }
+
+                        .oct2-detail.empty {
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            opacity: .45;
+                        }
+
+                    .oct2-detail-prompt {
+                        font-family: 'JetBrains Mono', monospace;
+                        font-size: 11px;
+                        letter-spacing: .15em;
+                        color: rgba(80,120,200,.5);
+                        text-align: center;
+                    }
+
+                    .oct2-detail-content {
+                        display: flex;
+                        gap: 0;
+                    }
+                    /* left: 1:1 image */
+                    .oct2-detail-img {
+                        flex-shrink: 0;
+                        width: 88px;
+                        height: 88px;
+                        overflow: hidden;
+                        position: relative;
+                        background: rgba(10,20,40,.8);
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                    }
+
+                        .oct2-detail-img img {
+                            width: 100%;
+                            height: 100%;
+                            object-fit: cover;
+                        }
+
+                    .oct2-detail-img-ph {
+                        font-family: 'Noto Serif SC', serif;
+                        font-size: 38px;
+                        font-weight: 900;
+                        opacity: .12;
+                        user-select: none;
+                    }
+                    /* right: text */
+                    .oct2-detail-text {
+                        flex: 1;
+                        padding: 14px 18px;
+                        display: flex;
+                        flex-direction: column;
+                        gap: 4px;
+                        border-left: 2px solid rgba(80,144,224,.15);
+                    }
+
+                    .oct2-detail.alarm .oct2-detail-text {
+                        border-left-color: rgba(239,68,68,.25);
+                    }
+
+                    .oct2-detail-title {
+                        font-family: 'Noto Serif SC', serif;
+                        font-size: 16px;
+                        font-weight: 700;
+                        line-height: 1.2;
+                    }
+
+                    .oct2-detail-sub {
+                        font-family: 'JetBrains Mono', monospace;
+                        font-size: 9px;
+                        letter-spacing: .14em;
+                        opacity: .5;
+                        text-transform: uppercase;
+                    }
+
+                    .oct2-detail-desc {
+                        font-size: 12.5px;
+                        color: rgba(160,190,240,.7);
+                        line-height: 1.75;
+                        flex: 1;
+                        margin-top: 2px;
+                    }
+
+                    .oct2-detail-status {
+                        font-family: 'JetBrains Mono', monospace;
+                        font-size: 9px;
+                        padding: 3px 8px;
+                        border: 1px solid;
+                        display: inline-block;
+                        align-self: flex-start;
+                        margin-top: 2px;
+                    }
+
+                        .oct2-detail-status.ok {
+                            color: rgba(52,211,153,.7);
+                            border-color: rgba(52,211,153,.25);
+                        }
+
+                        .oct2-detail-status.warn {
+                            color: rgba(251,191,36,.7);
+                            border-color: rgba(251,191,36,.25);
+                        }
+
+                        .oct2-detail-status.crit {
+                            color: rgba(239,68,68,.9);
+                            border-color: rgba(239,68,68,.35);
+                            animation: critBlink 1.5s step-start infinite;
+                        }
+
+                    /* ── AUTOPLAY SPLASH ── */
+                    .bgm-splash {
+                        position: fixed;
+                        inset: 0;
+                        z-index: 99999;
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        justify-content: center;
+                        cursor: pointer;
+                        /* invisible — only catches the click */
+                    }
+
+                    .bgm-splash-hint {
+                        position: fixed;
+                        bottom: 64px;
+                        left: 50%;
+                        transform: translateX(-50%);
+                        background: rgba(8,4,16,.92);
+                        border: 1px solid rgba(232,192,96,.35);
+                        padding: 10px 28px;
+                        font-family: "JetBrains Mono", monospace;
+                        font-size: 11px;
+                        letter-spacing: .15em;
+                        color: rgba(232,192,96,.8);
+                        animation: splashPulse 1.6s ease-in-out infinite;
+                        white-space: nowrap;
+                        pointer-events: none;
+                        z-index: 100000;
+                    }
+
+                    @keyframes splashPulse {
+                        0%,100% {
+                            opacity: .5;
+                            box-shadow: 0 0 0 rgba(232,192,96,0);
+                        }
+
+                        50% {
+                            opacity: 1;
+                            box-shadow: 0 0 18px rgba(232,192,96,.25);
+                        }
+                    }
+
+                    /* ══ BGM PLAYER BAR ══ */
+                    .bgm-bar {
+                        position: fixed;
+                        bottom: 0;
+                        left: 0;
+                        right: 0;
+                        z-index: 9000;
+                        background: rgba(6,3,14,.97);
+                        border-top: 1px solid rgba(232,192,96,.22);
+                        backdrop-filter: blur(20px);
+                        transition: transform .4s cubic-bezier(.16,1,.3,1);
+                        box-shadow: 0 -2px 32px rgba(140,80,220,.1);
+                    }
+
+                        .bgm-bar.hidden {
+                            transform: translateY(100%);
+                        }
+
+                    .bgm-hide-btn {
+                        position: absolute;
+                        top: -26px;
+                        left: 50%;
+                        transform: translateX(-50%);
+                        background: rgba(6,3,14,.95);
+                        border: 1px solid rgba(232,192,96,.2);
+                        border-bottom: none;
+                        padding: 3px 18px 0;
+                        font-family: "JetBrains Mono",monospace;
+                        font-size: 9px;
+                        letter-spacing: .12em;
+                        color: rgba(200,160,80,.55);
+                        cursor: pointer;
+                        border-radius: 4px 4px 0 0;
+                        transition: color .2s;
+                        white-space: nowrap;
+                    }
+
+                        .bgm-hide-btn:hover {
+                            color: var(--gold);
+                        }
+
+                    .bgm-main-row {
+                        display: flex;
+                        flex-direction: row;
+                        align-items: center;
+                        gap: 12px;
+                        height: 52px;
+                        padding: 0 20px;
+                        overflow: hidden;
+                    }
+
+                    .bgm-disc {
+                        flex-shrink: 0;
+                        width: 32px;
+                        height: 32px;
+                        border-radius: 50%;
+                        background: radial-gradient(circle, rgba(232,192,96,.2) 0%, rgba(180,100,255,.12) 70%);
+                        border: 1px solid rgba(232,192,96,.3);
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        font-size: 13px;
+                        line-height: 1;
+                        animation: discSpin 4s linear infinite paused;
+                    }
+
+                        .bgm-disc.spinning {
+                            animation-play-state: running;
+                        }
+
+                    @keyframes discSpin {
+                        to {
+                            transform: rotate(360deg);
+                        }
+                    }
+
+                    .bgm-info {
+                        flex: 0 0 140px;
+                        min-width: 0;
+                        overflow: hidden;
+                    }
+
+                    .bgm-track-name {
+                        font-family: "JetBrains Mono",monospace;
+                        font-size: 11px;
+                        letter-spacing: .05em;
+                        color: rgba(232,192,96,.9);
+                        white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                    }
+
+                    .bgm-progress {
+                        flex: 1;
+                        height: 4px;
+                        background: rgba(255,255,255,.06);
+                        cursor: pointer;
+                        position: relative;
+                        border-radius: 2px;
+                        min-width: 60px;
+                    }
+
+                    .bgm-progress-fill {
+                        height: 100%;
+                        border-radius: 2px;
+                        background: linear-gradient(90deg, rgba(232,192,96,.85), rgba(180,120,255,.85));
+                        width: 0%;
+                        position: relative;
+                        transition: width .4s linear;
+                    }
+
+                        .bgm-progress-fill::after {
+                            content: "";
+                            position: absolute;
+                            right: -5px;
+                            top: -4px;
+                            width: 10px;
+                            height: 10px;
+                            border-radius: 50%;
+                            background: rgba(232,192,96,.9);
+                            box-shadow: 0 0 8px rgba(232,192,96,.5);
+                        }
+
+                    .bgm-time {
+                        flex-shrink: 0;
+                        font-family: "JetBrains Mono",monospace;
+                        font-size: 9px;
+                        letter-spacing: .05em;
+                        color: rgba(180,150,100,.5);
+                        white-space: nowrap;
+                    }
+
+                    .bgm-controls {
+                        flex-shrink: 0;
+                        display: flex;
+                        align-items: center;
+                        gap: 2px;
+                    }
+
+                    .bgm-btn {
+                        background: none;
+                        border: none;
+                        cursor: pointer;
+                        color: rgba(200,160,100,.6);
+                        font-size: 14px;
+                        padding: 4px 5px;
+                        transition: color .2s;
+                        line-height: 1;
+                        display: flex;
+                        align-items: center;
+                    }
+
+                        .bgm-btn:hover {
+                            color: var(--gold);
+                        }
+
+                        .bgm-btn.active {
+                            color: rgba(180,120,255,.9);
+                        }
+
+                    .bgm-vol-wrap {
+                        flex-shrink: 0;
+                        display: flex;
+                        align-items: center;
+                        gap: 5px;
+                    }
+
+                    .bgm-vol-icon {
+                        color: rgba(180,150,100,.45);
+                        font-size: 11px;
+                        line-height: 1;
+                    }
+
+                    .bgm-vol {
+                        -webkit-appearance: none;
+                        width: 62px;
+                        height: 3px;
+                        background: rgba(255,255,255,.08);
+                        border-radius: 2px;
+                        cursor: pointer;
+                    }
+
+                        .bgm-vol::-webkit-slider-thumb {
+                            -webkit-appearance: none;
+                            width: 11px;
+                            height: 11px;
+                            border-radius: 50%;
+                            background: rgba(232,192,96,.8);
+                            cursor: pointer;
+                        }
+
+                    .bgm-list-btn {
+                        flex-shrink: 0;
+                        background: none;
+                        border: 1px solid rgba(255,255,255,.08);
+                        padding: 3px 10px;
+                        font-family: "JetBrains Mono",monospace;
+                        font-size: 9px;
+                        letter-spacing: .1em;
+                        color: rgba(180,150,100,.5);
+                        cursor: pointer;
+                        transition: all .2s;
+                        white-space: nowrap;
+                    }
+
+                        .bgm-list-btn:hover {
+                            color: var(--gold);
+                            border-color: rgba(232,192,96,.3);
+                        }
+
+                    /* playlist drawer */
+                    .bgm-playlist {
+                        border-top: 1px solid rgba(232,192,96,.07);
+                        max-height: 0;
+                        overflow: hidden;
+                        transition: max-height .4s cubic-bezier(.16,1,.3,1);
+                    }
+
+                        .bgm-playlist.open {
+                            max-height: 210px;
+                            overflow-y: auto;
+                        }
+
+                    .bgm-playlist-inner {
+                        padding: 4px 0;
+                    }
+
+                    .bgm-track-item {
+                        padding: 6px 20px;
+                        display: flex;
+                        align-items: center;
+                        gap: 10px;
+                        cursor: pointer;
+                        transition: background .15s;
+                        font-family: "JetBrains Mono",monospace;
+                        font-size: 10px;
+                        letter-spacing: .06em;
+                        color: rgba(180,150,110,.5);
+                    }
+
+                        .bgm-track-item:hover {
+                            background: rgba(232,192,96,.04);
+                            color: rgba(232,192,96,.8);
+                        }
+
+                        .bgm-track-item.playing {
+                            color: rgba(232,192,96,.9);
+                        }
+
+                    .bgm-track-dot {
+                        width: 6px;
+                        height: 6px;
+                        border-radius: 50%;
+                        background: rgba(255,255,255,.12);
+                        flex-shrink: 0;
+                    }
+
+                    .bgm-track-item.playing .bgm-track-dot {
+                        background: rgba(232,192,96,.8);
+                        box-shadow: 0 0 8px rgba(232,192,96,.5);
+                    }
+
+                    /* show button when bar is hidden */
+                    .bgm-show-btn {
+                        position: fixed;
+                        bottom: 0;
+                        left: 50%;
+                        transform: translateX(-50%);
+                        z-index: 8999;
+                        background: rgba(6,3,14,.95);
+                        border: 1px solid rgba(232,192,96,.2);
+                        border-bottom: none;
+                        padding: 4px 20px 0;
+                        font-family: "JetBrains Mono",monospace;
+                        font-size: 9px;
+                        letter-spacing: .12em;
+                        color: rgba(200,160,80,.5);
+                        cursor: pointer;
+                        transition: all .2s;
+                        border-radius: 5px 5px 0 0;
+                        display: none;
+                    }
+
+                        .bgm-show-btn.visible {
+                            display: block;
+                        }
+
+                        .bgm-show-btn:hover {
+                            color: var(--gold);
+                        }
+                    /* splash */
+                    .bgm-splash {
+                        position: fixed;
+                        inset: 0;
+                        z-index: 99999;
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        justify-content: center;
+                        cursor: pointer;
+                    }
+
+                    .bgm-splash-hint {
+                        position: fixed;
+                        bottom: 64px;
+                        left: 50%;
+                        transform: translateX(-50%);
+                        background: rgba(6,3,14,.92);
+                        border: 1px solid rgba(232,192,96,.35);
+                        padding: 9px 26px;
+                        font-family: "JetBrains Mono",monospace;
+                        font-size: 11px;
+                        letter-spacing: .15em;
+                        color: rgba(232,192,96,.8);
+                        animation: splashPulse 1.6s ease-in-out infinite;
+                        white-space: nowrap;
+                        pointer-events: none;
+                        z-index: 100000;
+                    }
+
+                    @keyframes splashPulse {
+                        0%,100% {
+                            opacity: .5;
+                            box-shadow: none;
+                        }
+
+                        50% {
+                            opacity: 1;
+                            box-shadow: 0 0 18px rgba(232,192,96,.25);
+                        }
+                    }
+                </style>
+
+                <!-- DATA for 8 towers -->
+                <script>
+                    var OCT_TOWERS = [
+                        {
+                            id: 0, elem: "暗", name: "暗渊塔", academy: "渊暗学院",
+                            color: "#b080e0", alarm: true,
+                            img: "image/渊暗院.png", ph: "暗",
+                            desc: "专研暗元素与隐匿、深层魔力结构、异常能量研究。",
+                            status: "crit", statusText: "⚠ 深红警报 EC160+"
+                        },
+                        {
+                            id: 1, elem: "光", name: "光曜塔", academy: "曜光学院",
+                            color: "#e0d060", alarm: false,
+                            img: "image/曜光院.png", ph: "光",
+                            desc: "研究光系魔法与揭示、驱逐、世界平衡理论。",
+                            status: "ok", statusText: "● 正常"
+                        },
+                        {
+                            id: 2, elem: "金", name: "金煌塔", academy: "煌金学院",
+                            color: "#d0d0d0", alarm: false,
+                            img: "image/煌金院.png", ph: "金",
+                            desc: "研究金系魔法与魔力结构化、精密控制、法器制造。",
+                            status: "ok", statusText: "● 正常"
+                        },
+                        {
+                            id: 3, elem: "土", name: "土稳塔", academy: "稳土学院",
+                            color: "#d4a060", alarm: false,
+                            img: "image/稳土院.png", ph: "土",
+                            desc: "研究土系原素与结构魔法、防御体系、建筑与维护。",
+                            status: "ok", statusText: "● 正常"
+                        },
+                        {
+                            id: 4, elem: "水", name: "水澄塔", academy: "澄水学院",
+                            color: "#70c0e0", alarm: false,
+                            img: "image/澄水院.png", ph: "水",
+                            desc: "研究水系魔法与魔力流动性、形态转化、幻觉与治愈。",
+                            status: "warn", statusText: "◎ 数据异常"
+                        },
+                        {
+                            id: 5, elem: "木", name: "木息塔", academy: "息木学院",
+                            color: "#70c070", alarm: false,
+                            img: "image/息木院.png", ph: "木",
+                            desc: "研究木系魔法与生命能量、生息研究、医疗魔法。",
+                            status: "warn", statusText: "◎ 轻度异常"
+                        },
+                        {
+                            id: 6, elem: "火", name: "火焰塔", academy: "焰火学院",
+                            color: "#e07060", alarm: false,
+                            img: "image/焰火院.png", ph: "火",
+                            desc: "研究火系魔法与毁灭性魔法、高强度输出、战斗施法。",
+                            status: "ok", statusText: "● 正常"
+                        },
+                        {
+                            id: 7, elem: "气", name: "气流塔", academy: "流气学院",
+                            color: "#a0d0e8", alarm: false,
+                            img: "image/流气院.png", ph: "气",
+                            desc: "研究气系魔法与信息传递、隐蔽施法、气象感知。",
+                            status: "ok", statusText: "● 正常"
+                        },
+                    ];
+                    // Angles: top=−90°, then −45°,0°,45°,90°,135°,180°,225° (clockwise)
+                    // R = 41% of container. positions = 50 + R*cos(a), 50 + R*sin(a)
+                    var OCT_POS = (function () {
+                        var R = 41, out = [];
+                        for (var i = 0; i < 8; i++) {
+                            var a = (-90 + i * 45) * Math.PI / 180;
+                            out.push({
+                                left: (50 + R * Math.cos(a)).toFixed(2) + '%',
+                                top: (50 + R * Math.sin(a)).toFixed(2) + '%'
+                            });
+                        }
+                        return out;
+                    })();
+                </script>
+
+                <!-- HTML ring -->
+                <div class="oct2-wrap">
+                    <div class="oct2-canvas">
+                        <div class="oct2-canvas-inner">
+                            <!-- decorative rings -->
+                            <div class="oct2-ring oct2-r1"></div>
+                            <div class="oct2-ring oct2-r2"></div>
+                            <div class="oct2-ring oct2-r3"></div>
+                            <!-- center hub -->
+                            <div class="oct2-hub"><span>八<br>塔</span></div>
+                            <!-- SVG connector lines (generated by JS) -->
+                            <svg class="oct2-svg" id="oct2-svg" viewBox="0 0 100 100" preserveAspectRatio="none"></svg>
+                            <!-- nodes (generated by JS) -->
+                            <div id="oct2-nodes"></div>
                         </div>
                     </div>
-                    <div class="tier-card">
-                        <div class="tier-card-img"><img src="image/曜光院.png" alt="" onerror="this.style.display='none'"><div class="tier-card-img-ph" style="color:rgba(216,192,64,.4);">光</div></div>
-                        <div class="tier-card-body">
-                            <div class="tier-card-title" style="color:#d8c040;">光曜塔</div>
-                            <div class="tier-card-sub">曜光学院</div>
-                            <div class="tier-card-desc">研究光系魔法与揭示、驱逐、世界平衡理论。</div>
-                            <div class="tier-card-status tier-status-ok">● 正常</div>
-                        </div>
-                    </div>
-                    <div class="tier-card">
-                        <div class="tier-card-img"><img src="image/煌金院.png" alt="" onerror="this.style.display='none'"><div class="tier-card-img-ph" style="color:rgba(192,192,192,.4);">金</div></div>
-                        <div class="tier-card-body">
-                            <div class="tier-card-title" style="color:#c0c0c0;">金煌塔</div>
-                            <div class="tier-card-sub">煌金学院</div>
-                            <div class="tier-card-desc">研究金系魔法与魔力结构化、精密控制、法器制造。</div>
-                            <div class="tier-card-status tier-status-ok">● 正常</div>
-                        </div>
-                    </div>
-                    <div class="tier-card">
-                        <div class="tier-card-img"><img src="image/稳土院.png" alt="" onerror="this.style.display='none'"><div class="tier-card-img-ph" style="color:rgba(196,146,74,.4);">土</div></div>
-                        <div class="tier-card-body">
-                            <div class="tier-card-title" style="color:#c4924a;">土稳塔</div>
-                            <div class="tier-card-sub">稳土学院</div>
-                            <div class="tier-card-desc">研究土系原素与结构魔法、防御体系、建筑与维护。</div>
-                            <div class="tier-card-status tier-status-ok">● 正常</div>
-                        </div>
-                    </div>
-                    <div class="tier-card">
-                        <div class="tier-card-img"><img src="image/澄水院.png" alt="" onerror="this.style.display='none'"><div class="tier-card-img-ph" style="color:rgba(96,176,208,.4);">水</div></div>
-                        <div class="tier-card-body">
-                            <div class="tier-card-title" style="color:#60b0d0;">水澄塔</div>
-                            <div class="tier-card-sub">澄水学院</div>
-                            <div class="tier-card-desc">研究水系魔法与魔力流动性与形态转化、幻觉与治愈。</div>
-                            <div class="tier-card-status tier-status-warn">◎ 数据异常</div>
-                        </div>
-                    </div>
-                    <div class="tier-card">
-                        <div class="tier-card-img"><img src="image/息木院.png" alt="" onerror="this.style.display='none'"><div class="tier-card-img-ph" style="color:rgba(96,174,96,.4);">木</div></div>
-                        <div class="tier-card-body">
-                            <div class="tier-card-title" style="color:#60ae60;">木息塔</div>
-                            <div class="tier-card-sub">息木学院</div>
-                            <div class="tier-card-desc">研究木系魔法与生命能量、生息研究、医疗魔法。</div>
-                            <div class="tier-card-status tier-status-warn">◎ 轻度异常</div>
-                        </div>
-                    </div>
-                    <div class="tier-card">
-                        <div class="tier-card-img"><img src="image/焰火院.png" alt="" onerror="this.style.display='none'"><div class="tier-card-img-ph" style="color:rgba(212,96,64,.4);">火</div></div>
-                        <div class="tier-card-body">
-                            <div class="tier-card-title" style="color:#d46040;">火焰塔</div>
-                            <div class="tier-card-sub">焰火学院</div>
-                            <div class="tier-card-desc">研究火系魔法与毁灭性魔法、高强度输出、战斗施法。</div>
-                            <div class="tier-card-status tier-status-ok">● 正常</div>
-                        </div>
-                    </div>
-                    <div class="tier-card">
-                        <div class="tier-card-img"><img src="image/流气院.png" alt="" onerror="this.style.display='none'"><div class="tier-card-img-ph" style="color:rgba(144,192,216,.4);">气</div></div>
-                        <div class="tier-card-body">
-                            <div class="tier-card-title" style="color:#90c0d8;">气流塔</div>
-                            <div class="tier-card-sub">流气学院</div>
-                            <div class="tier-card-desc">研究气系魔法与信息传递、隐蔽施法、气象感知。</div>
-                            <div class="tier-card-status tier-status-ok">● 正常</div>
-                        </div>
+                    <!-- detail panel -->
+                    <div class="oct2-detail empty" id="oct2-detail">
+                        <div class="oct2-detail-prompt">↑ 点击任意学院查看详情</div>
                     </div>
                 </div>
-                <div class="lu-factions">
-                    <div class="lu-faction"><div class="lu-faction-name">守恒派</div><div class="lu-faction-desc">主张遵循「知止」原则，拒绝任何可能推高魔力浓度的研究。当前多数派，但影响力正在衰退。</div></div>
-                    <div class="lu-faction"><div class="lu-faction-name">探索派</div><div class="lu-faction-desc">主张在可控条件下研究暗渊塔异常的根本原因和异魔法师相关的危险研究，认为不干预才是真正的危险。</div></div>
-                    <div class="lu-faction" style="border-color:rgba(239,68,68,.15);"><div class="lu-faction-name" style="color:rgba(239,68,68,.6);">清算派（暗中）</div><div class="lu-faction-desc">主张以清算所有逾矩者和异魔法师，包括极光机枢。人数极少，但已有行动迹象。</div></div>
-                </div>
+
+                <script>
+                    (function () {
+                        var svg = document.getElementById('oct2-svg');
+                        var nodesWrap = document.getElementById('oct2-nodes');
+                        var detail = document.getElementById('oct2-detail');
+                        var selected = -1;
+
+                        // Draw connector lines (SVG, coordinate space 0-100)
+                        OCT_POS.forEach(function (p, i) {
+                            var lx = parseFloat(p.left), ly = parseFloat(p.top);
+                            var t = OCT_TOWERS[i];
+                            var line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                            line.setAttribute('x1', '50'); line.setAttribute('y1', '50');
+                            line.setAttribute('x2', lx.toString()); line.setAttribute('y2', ly.toString());
+                            line.setAttribute('class', 'oct2-line' + (t.alarm ? ' alarm' : ''));
+                            svg.appendChild(line);
+                        });
+
+                        // Build nodes
+                        OCT_TOWERS.forEach(function (t, i) {
+                            var p = OCT_POS[i];
+                            var node = document.createElement('div');
+                            node.className = 'oct2-node' + (t.alarm ? ' alarm' : '');
+                            node.id = 'oct2-node-' + i;
+                            node.style.left = p.left;
+                            node.style.top = p.top;
+                            node.innerHTML =
+                                '<div class="oct2-node-inner">'
+                                + '<div class="oct2-node-bg"><img src="' + t.img + '" alt="" onerror="this.style.display=\'none\'"></div>'
+                                + '<div class="oct2-elem" style="color:' + t.color + '">' + t.elem + '</div>'
+                                + '<div class="oct2-name">' + t.name + '</div>'
+                                + '<div class="oct2-pip" style="color:' + (t.alarm ? 'rgba(239,68,68,.85)' : 'rgba(80,160,80,.7)') + ';">'
+                                + (t.alarm ? '⚠' : '●') + '</div>'
+                                + '</div>';
+                            node.addEventListener('click', function () { selectTower(i); });
+                            nodesWrap.appendChild(node);
+                        });
+
+                        function selectTower(i) {
+                            // deselect previous
+                            if (selected >= 0) {
+                                document.getElementById('oct2-node-' + selected).classList.remove('selected');
+                            }
+                            if (selected === i) { // toggle off
+                                selected = -1;
+                                detail.className = 'oct2-detail empty';
+                                detail.innerHTML = '<div class="oct2-detail-prompt">↑ 点击任意学院查看详情</div>';
+                                return;
+                            }
+                            selected = i;
+                            document.getElementById('oct2-node-' + i).classList.add('selected');
+                            var t = OCT_TOWERS[i];
+                            detail.className = 'oct2-detail' + (t.alarm ? ' alarm' : '');
+                            detail.innerHTML =
+                                '<div class="oct2-detail-content">'
+                                + '<div class="oct2-detail-img">'
+                                + '<img src="' + t.img + '" alt="" onerror="this.style.display=\'none\'">'
+                                + '<div class="oct2-detail-img-ph" style="color:' + t.color + '">' + t.ph + '</div>'
+                                + '</div>'
+                                + '<div class="oct2-detail-text">'
+                                + '<div class="oct2-detail-title" style="color:' + t.color + '">' + t.name + ' · ' + t.academy + '</div>'
+                                + '<div class="oct2-detail-sub">对应原素：' + t.elem + '系 · Lunaris · 月轨城</div>'
+                                + '<div class="oct2-detail-desc">' + t.desc + '</div>'
+                                + '<div class="oct2-detail-status ' + t.status + '">' + t.statusText + '</div>'
+                                + '</div>'
+                                + '</div>';
+                        }
+                    })();
+                </script>
+
+            </div>
+            <div class="lu-factions">
+                <div class="lu-faction"><div class="lu-faction-name">守恒派</div><div class="lu-faction-desc">主张遵循「知止」原则，拒绝任何可能推高魔力浓度的研究。当前多数派，但影响力正在衰退。</div></div>
+                <div class="lu-faction"><div class="lu-faction-name">探索派</div><div class="lu-faction-desc">主张在可控条件下研究暗渊塔异常的根本原因和异魔法师相关的危险研究，认为不干预才是真正的危险。</div></div>
+                <div class="lu-faction" style="border-color:rgba(239,68,68,.15);"><div class="lu-faction-name" style="color:rgba(239,68,68,.6);">清算派（暗中）</div><div class="lu-faction-desc">主张以清算所有逾矩者和异魔法师，包括极光机枢。人数极少，但已有行动迹象。</div></div>
             </div>
         </div>
     </div>
+    
 
     <!-- fac3-am 极光机枢六大财团 -->
     <div class="fac3-overlay" id="fac3-am">
@@ -4338,7 +5289,7 @@
                 img: "image/羽月.png",
                 role: "// 异魔法师的后代",
                 desc: "<p>她的成长之路并非传统的英雄之旅，是在多方势力的裂缝中逐渐看清世界的真相：世界的失衡正在加速，虫族裂隙无法关闭，而能够解决这一切的钥匙，可能恰恰握在像她这样不该存在的人手中</p><p>羽月是异魔法师和仙剑道剑士的后代，从小就学会了剑法。长大后离开家园前往月轨城学习魔法知识，期间遇到了将陪伴她一生的挚友花枫。也是在月轨城，羽月学会了系统的魔法和世界平衡知识，学会了控制自己的能力，从此担上了拯救世界的责任。</p>",
-                tags: ["月轨城", "澄水院","EC 174年"]
+                tags: ["月轨城", "澄水院", "EC 174年"]
             },
             {
                 name: "灰火花", faction: "月轨城", factionColor: "#4d9de0",
@@ -4379,7 +5330,7 @@
                 tags: ["极光机枢", "原型一号", "EC 174年"]
             },
             {
-            name: "花枫", faction: "月轨城", factionColor: "#ef4444",
+                name: "花枫", faction: "月轨城", factionColor: "#ef4444",
                 factionBg: "rgba(239,68,68,.08)", factionBorder: "rgba239,68,68,.3)",
                 accentColor: "#ef4444",
                 img: "image/花枫.png",
@@ -4566,5 +5517,174 @@
             if (e.key === 'ArrowLeft' && document.getElementById('char-modal').style.display === 'flex') prevChar();
         });
     </script>
+
+    <!-- BGM PLAYER BAR -->
+    <audio id="bgm-audio"></audio>
+    <div class="bgm-show-btn" id="bgm-show-btn" onclick="showBgm()">♪ 音乐</div>
+    <div class="bgm-bar" id="bgm-bar">
+        <button class="bgm-hide-btn" onclick="hideBgm()">▼ 隐藏</button>
+        <div class="bgm-main-row">
+            <div class="bgm-disc" id="bgm-disc">♪</div>
+            <div class="bgm-info">
+                <div class="bgm-track-name" id="bgm-track-name">— 选择曲目 —</div>
+            </div>
+            <div class="bgm-progress" id="bgm-progress" onclick="seekBgm(event)">
+                <div class="bgm-progress-fill" id="bgm-prog-fill"></div>
+            </div>
+            <div class="bgm-time" id="bgm-time">0:00 / 0:00</div>
+            <div class="bgm-controls">
+                <button class="bgm-btn" id="bgm-prev-btn" onclick="bgmPrev()" title="上一首">⏮</button>
+                <button class="bgm-btn" id="bgm-play-btn" onclick="bgmToggle()" title="播放/暂停">▶</button>
+                <button class="bgm-btn" id="bgm-next-btn" onclick="bgmNext()" title="下一首">⏭</button>
+                <button class="bgm-btn" id="bgm-loop-btn" onclick="bgmToggleLoop()" title="循环">↻</button>
+            </div>
+            <div class="bgm-vol-wrap">
+                <span class="bgm-vol-icon">♪</span>
+                <input type="range" class="bgm-vol" id="bgm-vol" min="0" max="1" step="0.02" value="0.65" oninput="bgmSetVol(this.value)">
+            </div>
+            <button class="bgm-list-btn" onclick="bgmToggleList()">曲目 ▾</button>
+        </div>
+        <div class="bgm-playlist" id="bgm-playlist">
+            <div class="bgm-playlist-inner" id="bgm-playlist-inner"></div>
+        </div>
+    </div>
+
+    <script>
+        // ── BGM PLAYER ──────────────────────────────────────────────
+        const BGM_TRACKS = [
+            { name: "Cascade", src: "music/针目针目珍 - Cascade.mp3" },
+            { name: "王都アウルリウム夜", src: "music/清田愛未 - 王都アウルリウム夜.mp3" },
+            { name: "日常", src: "music/清田愛未 - 日常.mp3" },
+            { name: "異形ノ末路：丁", src: "music/岡部啓一,瀬尾祥太郎 - 異形ノ末路：丁.mp3" },
+            { name: "ノアとミオ 〜二人の調べ", src: "music/光田康典 - ノアとミオ 〜二人の調べ.mp3" },
+            { name: "Ending", src: "music/祖堅正慶,矢崎早彩 - Ending – Unused.mp3" },
+            { name: "桜の下に眠るもの", src: "music/椎名豪,髙田龍一（MONACA) - 桜の下に眠るもの.mp3" },
+            { name: "ケヴェス軍コロニー夜", src: "music/平松建治 - ケヴェス軍コロニー夜.mp3" },
+            { name: "思い出", src: "music/清田愛未 - 思い出.mp3" },
+        ];
+        let bgmIdx = 0, bgmPlaying = false, bgmLoop = false, bgmListOpen = false;
+        const audio = document.getElementById('bgm-audio');
+        const disc = document.getElementById('bgm-disc');
+        const playBtn = document.getElementById('bgm-play-btn');
+        const trackName = document.getElementById('bgm-track-name');
+        const progFill = document.getElementById('bgm-prog-fill');
+        const timeEl = document.getElementById('bgm-time');
+        const volEl = document.getElementById('bgm-vol');
+        const listEl = document.getElementById('bgm-playlist');
+        const listInner = document.getElementById('bgm-playlist-inner');
+
+        function fmtTime(s) { const m = Math.floor(s / 60), ss = Math.floor(s % 60); return m + ":" + (ss < 10 ? "0" : "") + ss; }
+
+        function bgmLoad(idx, autoplay) {
+            bgmIdx = ((idx % BGM_TRACKS.length) + BGM_TRACKS.length) % BGM_TRACKS.length;
+            const t = BGM_TRACKS[bgmIdx];
+            audio.src = t.src;
+            audio.volume = parseFloat(volEl.value);
+            trackName.textContent = t.name;
+            trackName.className = 'bgm-track-name' + (t.name.length > 18 ? ' scrolling' : '');
+            renderList();
+            if (autoplay) { audio.play().then(bgmSetPlaying).catch(() => { }); }
+        }
+        function bgmSetPlaying() {
+            bgmPlaying = true;
+            playBtn.textContent = '⏸';
+            disc.classList.add('spinning');
+        }
+        function bgmSetPaused() {
+            bgmPlaying = false;
+            playBtn.textContent = '▶';
+            disc.classList.remove('spinning');
+        }
+        function bgmToggle() {
+            if (bgmPlaying) { audio.pause(); bgmSetPaused(); }
+            else {
+                if (!audio.src || audio.src === window.location.href) bgmLoad(bgmIdx, true);
+                else audio.play().then(bgmSetPlaying).catch(() => { });
+            }
+        }
+        function bgmPrev() { bgmLoad(bgmIdx - 1, bgmPlaying); }
+        function bgmNext() { bgmLoad(bgmIdx + 1, bgmPlaying); }
+        function bgmSetVol(v) { audio.volume = parseFloat(v); }
+        function bgmToggleLoop() {
+            bgmLoop = !bgmLoop;
+            audio.loop = bgmLoop;
+            document.getElementById('bgm-loop-btn').classList.toggle('active', bgmLoop);
+        }
+        function bgmToggleList() {
+            bgmListOpen = !bgmListOpen;
+            listEl.classList.toggle('open', bgmListOpen);
+        }
+        function seekBgm(e) {
+            if (!audio.duration) return;
+            const rect = document.getElementById('bgm-progress').getBoundingClientRect();
+            const ratio = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+            audio.currentTime = ratio * audio.duration;
+        }
+        function renderList() {
+            listInner.innerHTML = BGM_TRACKS.map((t, i) =>
+                `<div class="bgm-track-item${i === bgmIdx ? ' playing' : ''}" onclick="bgmLoad(${i},true)">
+                    <div class="bgm-track-dot"></div>
+                    <span>${t.name}</span>
+                </div>`
+            ).join('');
+        }
+        audio.addEventListener('timeupdate', () => {
+            if (!audio.duration) return;
+            const pct = (audio.currentTime / audio.duration * 100).toFixed(1);
+            progFill.style.width = pct + '%';
+            timeEl.textContent = fmtTime(audio.currentTime) + ' / ' + fmtTime(audio.duration);
+        });
+        audio.addEventListener('ended', () => { if (!bgmLoop) bgmNext(); });
+        audio.addEventListener('pause', bgmSetPaused);
+        audio.addEventListener('play', bgmSetPlaying);
+
+        function hideBgm() {
+            document.getElementById('bgm-bar').classList.add('hidden');
+            document.getElementById('bgm-show-btn').classList.add('visible');
+        }
+        function showBgm() {
+            document.getElementById('bgm-bar').classList.remove('hidden');
+            document.getElementById('bgm-show-btn').classList.remove('visible');
+        }
+
+        // init tracks
+        renderList();
+        bgmLoad(0, false);
+        // autoplay handled by splash overlay (see below)
+    </script>
+
+
+    <!-- AUTOPLAY SPLASH: invisible click-catcher -->
+    <div class="bgm-splash" id="bgm-splash" onclick="bgmSplashStart()"></div>
+    <div class="bgm-splash-hint" id="bgm-splash-hint">♪ 点击任意处开始播放</div>
+    <script>
+        function bgmSplashStart() {
+            const splash = document.getElementById('bgm-splash');
+            const hint = document.getElementById('bgm-splash-hint');
+            if (!splash) return;
+            audio.play().then(() => {
+                bgmSetPlaying();
+                splash.remove();
+                hint.remove();
+            }).catch(() => {
+                // still blocked — remove overlay and let user use the player manually
+                splash.remove();
+                hint.remove();
+            });
+        }
+        // Also try direct autoplay immediately (works on file:// and permissive browsers)
+        window.addEventListener('DOMContentLoaded', () => {
+            audio.play().then(() => {
+                bgmSetPlaying();
+                const s = document.getElementById('bgm-splash');
+                const h = document.getElementById('bgm-splash-hint');
+                if (s) s.remove();
+                if (h) h.remove();
+            }).catch(() => {
+                // browser blocked — splash stays, waiting for click
+            });
+        });
+    </script>
+
 </body>
 </html>
