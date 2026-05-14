@@ -4,2032 +4,2221 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>解析世界 · 共创指南</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;500;600;700;900&family=Noto+Sans+SC:wght@300;400;500&family=JetBrains+Mono:wght@400;500&family=Cinzel+Decorative:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;500;600;700;900&family=Noto+Sans+SC:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap');
+            :root {
+                --void: #05020e;
+                --deep: #080414;
+                --surface: #0f0820;
+                --raised: #14102a;
+                --border: rgba(180,130,255,.1);
+                --border-m: rgba(180,130,255,.22);
+                --text: #ede8ff;
+                --text-2: #b8a8d8;
+                --text-3: #6a5890;
+                --gold: #e8b850;
+                --gold-b: rgba(232,184,80,.3);
+                --purple: #c090ff;
+                --purple-deep: #7030c0;
+                --blue: #7ab8f0;
+                --teal: #50e8d0;
+                --red: #ff6666;
+                --green: #50d899;
+                --pink: #f472b6;
+            }
 
-        :root {
-            --void: #06030f;
-            --deep: #09050a;
-            --surface: #110a1c;
-            --raised: #17102a;
-            --border: rgba(201,168,76,.08);
-            --border-m: rgba(201,168,76,.16);
-            --text: #f0e8ff;
-            --text-2: #b8a8d8;
-            --text-3: #6a5890;
-            --gold: #e8c060;
-            --gold-b: rgba(232,192,96,.3);
-            --blue: #7ab8f0;
-            --teal: #50e8d0;
-            --purple: #c8a0ff;
-            --red: #ff6666;
-            --green: #50d899;
-        }
+            *, *::before, *::after {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
 
-        *, *::before, *::after {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+            html {
+                scroll-behavior: smooth;
+            }
 
-        html {
-            scroll-behavior: smooth;
-        }
+            body {
+                background: var(--void);
+                color: var(--text);
+                font-family: "Noto Sans SC", sans-serif;
+                font-size: 14px;
+                line-height: 1.8;
+                min-height: 100vh;
+                overflow-x: hidden;
+            }
 
-        body {
-            background: var(--void);
-            color: var(--text);
-            font-family: "Noto Sans SC", sans-serif;
-            font-size: 14px;
-            line-height: 1.8;
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
+            /* ═══════════════════════════════════════
+           MAIN GUIDE
+        ═══════════════════════════════════════ */
+            #guide {
+                opacity: 1;
+            }
 
+            /* ═══════════════════════════════════════
+           MAIN GUIDE
+        ═══════════════════════════════════════ */
+            #guide {
+                opacity: 1;
+            }
+
+            /* Animated background */
             body::before {
                 content: "";
                 position: fixed;
                 inset: 0;
-                background: radial-gradient(ellipse 120% 80% at 20% 30%, rgba(232,192,96,.06) 0%, transparent 55%), radial-gradient(ellipse 100% 90% at 80% 70%, rgba(180,130,255,.07) 0%, transparent 55%), linear-gradient(rgba(232,192,96,.018) 1px, transparent 1px), linear-gradient(90deg, rgba(180,130,255,.018) 1px, transparent 1px);
+                background: radial-gradient(ellipse 120% 80% at 20% 30%, rgba(120,60,200,.06) 0%, transparent 55%), radial-gradient(ellipse 100% 90% at 80% 70%, rgba(80,40,160,.07) 0%, transparent 55%), linear-gradient(rgba(180,100,255,.018) 1px, transparent 1px), linear-gradient(90deg, rgba(180,100,255,.018) 1px, transparent 1px);
                 background-size: 100% 100%, 100% 100%, 52px 52px, 52px 52px;
                 pointer-events: none;
                 z-index: 0;
                 animation: gridDrift 80s linear infinite;
             }
 
-        @keyframes gridDrift {
-            to {
-                background-position: 0 0, 0 0, 52px 52px, 52px 52px;
-            }
-        }
-
-        body::after {
-            content: "";
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(232,192,96,.18), rgba(180,120,255,.12), transparent);
-            animation: scanLine 18s linear infinite;
-            pointer-events: none;
-            z-index: 1;
-        }
-
-        @keyframes scanLine {
-            from {
-                top: -1px;
-            }
-
-            to {
-                top: 100%;
-            }
-        }
-
-        /* ── NAV ── */
-        .nav {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 300;
-            background: rgba(3,4,10,.95);
-            backdrop-filter: blur(16px);
-            border-bottom: 1px solid var(--border);
-            height: 46px;
-            display: flex;
-            align-items: center;
-            padding: 0 32px;
-            transform: translateY(-100%);
-            transition: transform .4s cubic-bezier(.16,1,.3,1);
-        }
-
-            .nav.visible {
-                transform: translateY(0);
-            }
-
-        .nav-logo {
-            font-family: "Noto Serif SC", serif;
-            font-size: 13px;
-            font-weight: 700;
-            color: var(--text);
-            letter-spacing: .06em;
-            margin-right: auto;
-        }
-
-        .nav-links {
-            display: flex;
-        }
-
-        .nav-link {
-            font-family: "JetBrains Mono", monospace;
-            font-size: 9.5px;
-            letter-spacing: .1em;
-            color: var(--text-3);
-            text-decoration: none;
-            text-transform: uppercase;
-            padding: 0 14px;
-            border-left: 1px solid var(--border);
-            height: 46px;
-            display: flex;
-            align-items: center;
-            transition: all .2s;
-        }
-
-            .nav-link:hover {
-                color: var(--text);
-                background: rgba(255,255,255,.02);
-            }
-
-        /* ── HERO ── */
-        .hero {
-            position: relative;
-            min-height: 60vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            overflow: hidden;
-            padding: 100px 24px 72px;
-        }
-
-        .hero-glows {
-            position: absolute;
-            inset: 0;
-            pointer-events: none;
-        }
-
-        .hg {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(80px);
-        }
-
-        .hg1 {
-            width: 500px;
-            height: 240px;
-            top: 40%;
-            left: 50%;
-            transform: translate(-50%,-50%);
-            background: radial-gradient(ellipse, rgba(77,157,224,.06), transparent 70%);
-            animation: breathe 9s ease-in-out infinite;
-        }
-
-        .hg2 {
-            width: 260px;
-            height: 260px;
-            top: 60%;
-            left: 8%;
-            background: radial-gradient(ellipse, rgba(201,168,76,.05), transparent 70%);
-            animation: breathe 7s ease-in-out infinite reverse;
-        }
-
-        .hg3 {
-            width: 240px;
-            height: 240px;
-            top: 25%;
-            right: 6%;
-            background: radial-gradient(ellipse, rgba(167,139,250,.05), transparent 70%);
-            animation: breathe 11s ease-in-out infinite;
-        }
-
-        @keyframes breathe {
-            0%,100% {
-                opacity: .5;
-            }
-
-            50% {
-                opacity: 1;
-            }
-        }
-
-        /* crack lines */
-        .hero-cracks {
-            position: absolute;
-            inset: 0;
-            pointer-events: none;
-        }
-
-        .crack {
-            position: absolute;
-            background: linear-gradient(transparent, rgba(201,168,76,.1), transparent);
-            pointer-events: none;
-        }
-
-        .c1 {
-            top: 0;
-            left: 33%;
-            width: 1px;
-            height: 42%;
-            transform: rotate(9deg);
-            transform-origin: top;
-        }
-
-        .c2 {
-            top: 0;
-            left: 60%;
-            width: 1px;
-            height: 36%;
-            transform: rotate(-6deg);
-            transform-origin: top;
-        }
-
-        .c3 {
-            bottom: 0;
-            left: 25%;
-            width: 1px;
-            height: 38%;
-            transform: rotate(-13deg);
-            transform-origin: bottom;
-        }
-
-        .c4 {
-            bottom: 0;
-            right: 20%;
-            width: 1px;
-            height: 33%;
-            transform: rotate(8deg);
-            transform-origin: bottom;
-        }
-
-        .hero-content {
-            position: relative;
-            z-index: 2;
-            max-width: 760px;
-        }
-
-        .hero-pre {
-            font-family: "JetBrains Mono", monospace;
-            font-size: 9.5px;
-            letter-spacing: .4em;
-            color: var(--gold);
-            opacity: .6;
-            text-transform: uppercase;
-            margin-bottom: 24px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 16px;
-        }
-
-            .hero-pre::before, .hero-pre::after {
-                content: "";
-                width: 36px;
-                height: 1px;
-            }
-
-            .hero-pre::before {
-                background: linear-gradient(90deg, transparent, var(--gold-b));
-            }
-
-            .hero-pre::after {
-                background: linear-gradient(90deg, var(--gold-b), transparent);
-            }
-
-        .hero-title {
-            font-family: "Noto Serif SC", serif;
-            font-size: clamp(42px, 8vw, 88px);
-            font-weight: 900;
-            line-height: .9;
-            letter-spacing: .14em;
-            margin-bottom: 8px;
-            display: inline-block;
-            background: linear-gradient(90deg, #e8c060, #c0a0ff, #60e8d0, #e8c060, #c0a0ff, #e8c060);
-            background-size: 400% 100%;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            color: transparent;
-            animation: titleShift 5s ease-in-out infinite;
-        }
-
-        @keyframes titleShift {
-            0%,100% {
-                background-position: 0% 50%;
-            }
-
-            50% {
-                background-position: 100% 50%;
-            }
-        }
-
-        .hero-sub {
-            font-family: "JetBrains Mono", monospace;
-            font-size: 10px;
-            letter-spacing: .4em;
-            color: var(--text-3);
-            margin-bottom: 28px;
-            text-transform: uppercase;
-        }
-
-        .hero-divider {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin: 0 auto 28px;
-            max-width: 280px;
-        }
-
-        .hdl {
-            flex: 1;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, var(--gold-b), transparent);
-        }
-
-        .hdg {
-            width: 8px;
-            height: 8px;
-            background: var(--gold);
-            transform: rotate(45deg);
-            opacity: .5;
-            animation: gemPulse 3s ease-in-out infinite;
-            box-shadow: 0 0 12px rgba(201,168,76,.4);
-        }
-
-        @keyframes gemPulse {
-            0%,100% {
-                box-shadow: 0 0 6px rgba(201,168,76,.3);
-                opacity: .5;
-            }
-
-            50% {
-                box-shadow: 0 0 24px rgba(201,168,76,.7);
-                opacity: .9;
-            }
-        }
-
-        .hero-desc {
-            font-size: 15px;
-            color: var(--text-2);
-            line-height: 2;
-            margin-bottom: 36px;
-            max-width: 540px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-            .hero-desc em {
-                font-style: normal;
-                font-weight: 500;
-            }
-
-                .hero-desc em.eg {
-                    color: var(--gold);
+            @keyframes gridDrift {
+                to {
+                    background-position: 0 0, 0 0, 52px 52px, 52px 52px;
                 }
-
-                .hero-desc em.ec {
-                    color: var(--teal);
-                }
-
-                .hero-desc em.ep {
-                    color: var(--purple);
-                }
-
-        .hero-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            justify-content: center;
-        }
-
-        .hero-tag {
-            padding: 5px 18px;
-            font-family: "JetBrains Mono", monospace;
-            font-size: 10px;
-            letter-spacing: .12em;
-            text-transform: uppercase;
-            border: 1px solid;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            transition: all .25s;
-        }
-
-        .ht-gold {
-            background: rgba(232,192,96,.06);
-            border-color: var(--gold-b);
-            color: var(--gold);
-        }
-
-        .ht-blue {
-            background: rgba(122,184,240,.06);
-            border-color: rgba(122,184,240,.28);
-            color: var(--blue);
-        }
-
-        .ht-teal {
-            background: rgba(80,232,208,.06);
-            border-color: rgba(80,232,208,.28);
-            color: var(--teal);
-        }
-
-        .ht-purple {
-            background: rgba(200,160,255,.06);
-            border-color: rgba(200,160,255,.28);
-            color: var(--purple);
-        }
-
-        .scroll-hint {
-            position: absolute;
-            bottom: 32px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 6px;
-            animation: sf 2s ease-in-out infinite;
-        }
-
-        @keyframes sf {
-            0%,100% {
-                transform: translateX(-50%) translateY(0);
-                opacity: .3;
             }
 
-            50% {
-                transform: translateX(-50%) translateY(5px);
-                opacity: .6;
-            }
-        }
-
-        .scroll-hint span {
-            font-size: 8.5px;
-            letter-spacing: .3em;
-            color: var(--text-3);
-            font-family: "JetBrains Mono", monospace;
-        }
-
-        .scroll-bar {
-            width: 1px;
-            height: 24px;
-            background: linear-gradient(180deg, var(--text-3), transparent);
-        }
-
-        /* ── SECTION WRAPPER ── */
-        .sec {
-            position: relative;
-            z-index: 1;
-            max-width: 1060px;
-            margin: 0 auto;
-            padding: 72px 32px;
-        }
-
-        .sec-header {
-            text-align: center;
-            margin-bottom: 48px;
-        }
-
-        .sec-label {
-            font-family: "JetBrains Mono", monospace;
-            font-size: 9px;
-            letter-spacing: .3em;
-            text-transform: uppercase;
-            color: var(--text-3);
-            margin-bottom: 8px;
-        }
-
-        .sec-title {
-            font-family: "Noto Serif SC", serif;
-            font-size: clamp(20px,2.8vw,32px);
-            font-weight: 700;
-            color: var(--text);
-            letter-spacing: .06em;
-        }
-
-            .sec-title em {
-                font-style: normal;
-                color: var(--gold);
-            }
-
-        .sec-div {
-            width: 60px;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, var(--gold-b), transparent);
-            margin: 14px auto 0;
-        }
-
-        /* ── ZONE BACKGROUNDS ── */
-        .zone-a {
-            position: relative;
-            border-top: 1px solid var(--border);
-        }
-
-            .zone-a::before {
-                content: "";
-                position: absolute;
-                inset: 0;
-                background: radial-gradient(ellipse 80% 50% at 50% 50%, rgba(201,168,76,.03), transparent);
-                pointer-events: none;
-            }
-
-        .zone-b {
-            position: relative;
-            background: linear-gradient(180deg, rgba(7,9,20,.8), rgba(4,6,14,.9), rgba(7,9,20,.8));
-            border-top: 1px solid var(--border);
-        }
-
-            .zone-b::before {
-                content: "";
-                position: absolute;
-                inset: 0;
-                background: radial-gradient(ellipse 70% 40% at 50% 50%, rgba(77,157,224,.03), transparent);
-                pointer-events: none;
-            }
-
-        .zone-c {
-            position: relative;
-            border-top: 1px solid var(--border);
-            background: linear-gradient(180deg, rgba(8,4,18,.8), rgba(4,2,12,.9), rgba(8,4,18,.8));
-        }
-
-            .zone-c::before {
-                content: "";
-                position: absolute;
-                inset: 0;
-                background: radial-gradient(ellipse 70% 40% at 30% 50%, rgba(160,80,220,.04), transparent), radial-gradient(ellipse 60% 40% at 70% 50%, rgba(50,220,200,.04), transparent);
-                pointer-events: none;
-            }
-
-        /* ── CONTRIBUTION TYPE CARDS ── */
-        .contrib-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 8px;
-        }
-
-        .contrib-card {
-            position: relative;
-            overflow: hidden;
-            border: 1px solid var(--border);
-            transition: transform .3s cubic-bezier(.16,1,.3,1), box-shadow .3s;
-        }
-
-            .contrib-card:hover {
-                transform: translateY(-4px);
-            }
-
-        .contrib-top-bar {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 2px;
-        }
-
-            .contrib-top-bar::after {
-                content: "";
-                position: absolute;
-                inset: 0;
-                background: linear-gradient(90deg, transparent, rgba(255,255,255,.5), transparent);
-                animation: barSweep 3s ease-in-out infinite;
-            }
-
-        @keyframes barSweep {
-            0%,100% {
-                transform: translateX(-100%);
-            }
-
-            50% {
-                transform: translateX(100%);
-            }
-        }
-
-        .contrib-header {
-            padding: 16px 18px 12px;
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .contrib-icon {
-            width: 30px;
-            height: 30px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 16px;
-            flex-shrink: 0;
-            border: 1px solid;
-        }
-
-        .contrib-name {
-            font-family: "Noto Serif SC", serif;
-            font-size: 15px;
-            font-weight: 700;
-            color: var(--text);
-        }
-
-        .contrib-badge {
-            margin-left: auto;
-            font-family: "JetBrains Mono", monospace;
-            font-size: 8.5px;
-            letter-spacing: .15em;
-            padding: 2px 8px;
-            border: 1px solid;
-            text-transform: uppercase;
-        }
-
-        .contrib-body {
-            padding: 14px 18px 16px;
-        }
-
-        .contrib-desc {
-            font-size: 12.5px;
-            color: var(--text-2);
-            line-height: 1.7;
-            margin-bottom: 10px;
-        }
-
-        .contrib-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 4px;
-        }
-
-        .contrib-ex {
-            font-size: 10.5px;
-            padding: 2px 8px;
-            background: rgba(255,255,255,.03);
-            border: 1px solid var(--border);
-            color: var(--text-3);
-            font-family: "JetBrains Mono", monospace;
-        }
-
-        /* contrib type colors */
-        .ct-setting {
-            background: rgba(122,184,240,.02);
-        }
-
-            .ct-setting .contrib-top-bar {
-                background: linear-gradient(90deg, #1040a0, #5090e0, #1040a0);
-            }
-
-            .ct-setting:hover {
-                box-shadow: 0 10px 40px rgba(80,144,224,.12);
-            }
-
-            .ct-setting .contrib-icon {
-                color: var(--blue);
-                border-color: rgba(122,184,240,.3);
-                background: rgba(122,184,240,.06);
-            }
-
-            .ct-setting .contrib-badge {
-                color: var(--blue);
-                border-color: rgba(122,184,240,.3);
-                background: rgba(122,184,240,.06);
-            }
-
-        .ct-new {
-            background: rgba(200,160,255,.02);
-        }
-
-            .ct-new .contrib-top-bar {
-                background: linear-gradient(90deg, #300860, #9040d0, #300860);
-            }
-
-            .ct-new:hover {
-                box-shadow: 0 10px 40px rgba(160,80,220,.12);
-            }
-
-            .ct-new .contrib-icon {
-                color: var(--purple);
-                border-color: rgba(200,160,255,.3);
-                background: rgba(200,160,255,.06);
-            }
-
-            .ct-new .contrib-badge {
-                color: var(--purple);
-                border-color: rgba(200,160,255,.3);
-                background: rgba(200,160,255,.06);
-            }
-
-        .ct-story {
-            background: rgba(80,232,208,.02);
-        }
-
-            .ct-story .contrib-top-bar {
-                background: linear-gradient(90deg, #104040, #30c8a0, #104040);
-            }
-
-            .ct-story:hover {
-                box-shadow: 0 10px 40px rgba(50,200,160,.12);
-            }
-
-            .ct-story .contrib-icon {
-                color: var(--teal);
-                border-color: rgba(80,232,208,.3);
-                background: rgba(80,232,208,.06);
-            }
-
-            .ct-story .contrib-badge {
-                color: var(--teal);
-                border-color: rgba(80,232,208,.3);
-                background: rgba(80,232,208,.06);
-            }
-
-        .ct-art {
-            background: rgba(244,114,182,.02);
-        }
-
-            .ct-art .contrib-top-bar {
-                background: linear-gradient(90deg, #600840, #d050a0, #600840);
-            }
-
-            .ct-art:hover {
-                box-shadow: 0 10px 40px rgba(200,80,160,.12);
-            }
-
-            .ct-art .contrib-icon {
-                color: #f472b6;
-                border-color: rgba(244,114,182,.3);
-                background: rgba(244,114,182,.06);
-            }
-
-            .ct-art .contrib-badge {
-                color: #f472b6;
-                border-color: rgba(244,114,182,.3);
-                background: rgba(244,114,182,.06);
-            }
-
-        .ct-research {
-            background: rgba(232,192,96,.02);
-        }
-
-            .ct-research .contrib-top-bar {
-                background: linear-gradient(90deg, #604010, #d09040, #604010);
-            }
-
-            .ct-research:hover {
-                box-shadow: 0 10px 40px rgba(200,150,60,.12);
-            }
-
-            .ct-research .contrib-icon {
-                color: var(--gold);
-                border-color: var(--gold-b);
-                background: rgba(232,192,96,.06);
-            }
-
-            .ct-research .contrib-badge {
-                color: var(--gold);
-                border-color: var(--gold-b);
-                background: rgba(232,192,96,.06);
-            }
-
-        .ct-other {
-            background: rgba(255,255,255,.01);
-        }
-
-            .ct-other .contrib-top-bar {
-                background: linear-gradient(90deg, #303030, #707070, #303030);
-            }
-
-            .ct-other:hover {
-                box-shadow: 0 10px 40px rgba(100,100,100,.08);
-            }
-
-            .ct-other .contrib-icon {
-                color: var(--text-2);
-                border-color: var(--border);
-                background: rgba(255,255,255,.04);
-            }
-
-            .ct-other .contrib-badge {
-                color: var(--text-2);
-                border-color: var(--border);
-                background: rgba(255,255,255,.03);
-            }
-
-        /* ── WANT LIST ── */
-        .want-list {
-            display: flex;
-            flex-direction: column;
-            gap: 0;
-        }
-
-        .want-item {
-            display: flex;
-            gap: 18px;
-            padding: 18px 0;
-            border-bottom: 1px solid var(--border);
-            align-items: flex-start;
-        }
-
-            .want-item:first-child {
-                padding-top: 0;
-            }
-
-            .want-item:last-child {
-                border-bottom: none;
-                padding-bottom: 0;
-            }
-
-        .want-icon {
-            width: 36px;
-            height: 36px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 16px;
-            flex-shrink: 0;
-            border: 1px solid;
-        }
-
-        .want-content {
-            flex: 1;
-        }
-
-        .want-title {
-            font-family: "Noto Serif SC", serif;
-            font-size: 14px;
-            font-weight: 700;
-            color: var(--text);
-            margin-bottom: 5px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .want-desc {
-            font-size: 12.5px;
-            color: var(--text-2);
-            line-height: 1.75;
-        }
-
-        .want-tag {
-            font-family: "JetBrains Mono", monospace;
-            font-size: 8.5px;
-            letter-spacing: .15em;
-            padding: 2px 8px;
-            border: 1px solid;
-            text-transform: uppercase;
-        }
-
-        .wt-hot {
-            color: #ff8080;
-            border-color: rgba(255,100,100,.35);
-            background: rgba(255,100,100,.07);
-        }
-
-        .wt-open {
-            color: var(--green);
-            border-color: rgba(80,216,150,.35);
-            background: rgba(80,216,150,.07);
-        }
-
-        /* ── STEPS ── */
-        .steps-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 8px;
-        }
-
-        .step-card {
-            background: var(--raised);
-            border: 1px solid var(--border);
-            padding: 20px 22px;
-            position: relative;
-            overflow: hidden;
-            transition: border-color .2s;
-        }
-
-            .step-card:hover {
-                border-color: var(--border-m);
-            }
-
-        .step-num {
-            font-family: "JetBrains Mono", monospace;
-            font-size: 48px;
-            font-weight: 700;
-            color: rgba(255,255,255,.04);
-            position: absolute;
-            right: 12px;
-            top: 8px;
-            line-height: 1;
-            pointer-events: none;
-            user-select: none;
-        }
-
-        .step-label {
-            font-family: "JetBrains Mono", monospace;
-            font-size: 9px;
-            letter-spacing: .22em;
-            color: var(--text-3);
-            text-transform: uppercase;
-            margin-bottom: 10px;
-        }
-
-        .step-title {
-            font-family: "Noto Serif SC", serif;
-            font-size: 15px;
-            font-weight: 700;
-            color: var(--text);
-            margin-bottom: 8px;
-        }
-
-        .step-desc {
-            font-size: 12.5px;
-            color: var(--text-2);
-            line-height: 1.7;
-        }
-
-        /* ── CHANNELS TABLE ── */
-        .channel-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-            .channel-table th {
-                padding: 10px 16px;
-                text-align: left;
-                font-family: "JetBrains Mono", monospace;
-                font-size: 9px;
-                letter-spacing: .2em;
-                text-transform: uppercase;
-                color: var(--text-3);
+            /* ── NAV ── */
+            .nav {
+                position: fixed;
+                top: 36px;
+                left: 0;
+                right: 0;
+                z-index: 300;
+                background: rgba(4,2,12,.95);
+                backdrop-filter: blur(16px);
                 border-bottom: 1px solid var(--border);
+                height: 46px;
+                display: flex;
+                align-items: center;
+                padding: 0 32px;
+                transform: translateY(-130%);
+                transition: transform .4s cubic-bezier(.16,1,.3,1);
             }
 
-            .channel-table td {
-                padding: 12px 16px;
-                border-bottom: 1px solid var(--border);
-                color: var(--text-2);
-                vertical-align: top;
-                line-height: 1.65;
+                .nav.visible {
+                    transform: translateY(0);
+                }
+
+            .nav-logo {
+                font-family: "Noto Serif SC", serif;
                 font-size: 13px;
+                font-weight: 700;
+                color: var(--text);
+                letter-spacing: .06em;
+                margin-right: auto;
             }
 
-            .channel-table tr:last-child td {
-                border-bottom: none;
+            .nav-links {
+                display: flex;
             }
 
-        .td-name {
-            font-family: "Noto Serif SC", serif;
-            font-weight: 700;
-            color: var(--text);
-        }
-
-        .channel-table a {
-            color: var(--gold);
-            text-decoration: none;
-        }
-
-            .channel-table a:hover {
-                text-decoration: underline;
-            }
-
-        /* ── ALERT BOXES ── */
-        .alert {
-            padding: 12px 16px;
-            border-left: 3px solid;
-            margin-bottom: 12px;
-            font-size: 13px;
-            line-height: 1.7;
-            background: var(--raised);
-        }
-
-        .alert-title {
-            font-family: "JetBrains Mono", monospace;
-            font-size: 9px;
-            letter-spacing: .2em;
-            text-transform: uppercase;
-            margin-bottom: 6px;
-            opacity: .65;
-        }
-
-        .alert-gold {
-            border-color: var(--gold);
-            color: rgba(232,192,96,.8);
-        }
-
-            .alert-gold .alert-title {
-                color: var(--gold);
-            }
-
-        .alert-teal {
-            border-color: var(--teal);
-            color: rgba(80,232,208,.8);
-        }
-
-            .alert-teal .alert-title {
-                color: var(--teal);
-            }
-
-        .alert-purple {
-            border-color: var(--purple);
-            color: rgba(200,160,255,.8);
-        }
-
-            .alert-purple .alert-title {
-                color: var(--purple);
-            }
-
-        .alert-red {
-            border-color: var(--red);
-            color: rgba(255,100,100,.8);
-        }
-
-            .alert-red .alert-title {
-                color: var(--red);
-            }
-
-        .alert strong {
-            color: var(--text);
-            font-weight: 600;
-        }
-
-        /* ── NAMING GRID ── */
-        .naming-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 8px;
-        }
-
-        .naming-card {
-            border: 1px solid var(--border);
-            padding: 16px 18px;
-            background: var(--raised);
-        }
-
-        .nc-label {
-            font-family: "JetBrains Mono", monospace;
-            font-size: 9px;
-            letter-spacing: .18em;
-            text-transform: uppercase;
-            margin-bottom: 12px;
-            font-weight: 700;
-        }
-
-        .nc-no {
-            color: var(--red);
-        }
-
-        .nc-yes {
-            color: var(--green);
-        }
-
-        .nc-items {
-            list-style: none;
-        }
-
-        .nc-item {
-            font-size: 12.5px;
-            color: var(--text-2);
-            padding: 3px 0;
-            display: flex;
-            align-items: flex-start;
-            gap: 8px;
-            line-height: 1.55;
-        }
-
-            .nc-item::before {
-                flex-shrink: 0;
-                margin-top: 2px;
-                font-size: 10px;
-            }
-
-        .nc-no .nc-item::before {
-            content: "✕";
-            color: var(--red);
-        }
-
-        .nc-yes .nc-item::before {
-            content: "✓";
-            color: var(--green);
-        }
-
-        /* ── PATH ROW ── */
-        .path-row {
-            display: flex;
-            gap: 0;
-            overflow-x: auto;
-        }
-
-        .path-step {
-            flex: 1;
-            min-width: 130px;
-            padding: 16px 18px;
-            background: var(--raised);
-            border: 1px solid var(--border);
-            border-right: none;
-            position: relative;
-        }
-
-            .path-step:last-child {
-                border-right: 1px solid var(--border);
-            }
-
-            .path-step::after {
-                content: "→";
-                position: absolute;
-                right: -10px;
-                top: 50%;
-                transform: translateY(-50%);
+            .nav-link {
                 font-family: "JetBrains Mono", monospace;
-                font-size: 12px;
+                font-size: 9.5px;
+                letter-spacing: .1em;
                 color: var(--text-3);
-                z-index: 2;
+                text-decoration: none;
+                text-transform: uppercase;
+                padding: 0 14px;
+                border-left: 1px solid var(--border);
+                height: 46px;
+                display: flex;
+                align-items: center;
+                transition: all .2s;
             }
 
-            .path-step:last-child::after {
-                display: none;
-            }
+                .nav-link:hover {
+                    color: var(--text);
+                    background: rgba(255,255,255,.02);
+                }
 
-        .path-num {
-            font-family: "JetBrains Mono", monospace;
-            font-size: 9px;
-            letter-spacing: .2em;
-            color: var(--text-3);
-            margin-bottom: 6px;
-        }
-
-        .path-name {
-            font-family: "Noto Serif SC", serif;
-            font-size: 13px;
-            font-weight: 700;
-            color: var(--text);
-            margin-bottom: 4px;
-        }
-
-        .path-hint {
-            font-size: 11.5px;
-            color: var(--text-3);
-            line-height: 1.55;
-        }
-
-        /* ── QUICK CHECKLIST ── */
-        .check-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 8px;
-        }
-
-        .check-col {
-            background: var(--raised);
-            border: 1px solid var(--border);
-            padding: 18px 20px;
-        }
-
-        .check-col-title {
-            font-family: "JetBrains Mono", monospace;
-            font-size: 9px;
-            letter-spacing: .2em;
-            text-transform: uppercase;
-            margin-bottom: 12px;
-            font-weight: 700;
-        }
-
-        .cct-bad {
-            color: var(--red);
-        }
-
-        .cct-good {
-            color: var(--green);
-        }
-
-        .check-item {
-            display: flex;
-            align-items: flex-start;
-            gap: 8px;
-            padding: 4px 0;
-            font-size: 12.5px;
-            color: var(--text-2);
-            line-height: 1.6;
-        }
-
-        .ci-icon {
-            flex-shrink: 0;
-            font-size: 10px;
-            margin-top: 2px;
-        }
-
-        .ci-bad {
-            color: var(--red);
-        }
-
-        .ci-good {
-            color: var(--green);
-        }
-
-        /* ── RULE LIST ── */
-        .rule-list {
-            list-style: none;
-        }
-
-        .rule-item {
-            display: flex;
-            gap: 12px;
-            padding: 12px 0;
-            border-bottom: 1px solid var(--border);
-            align-items: flex-start;
-        }
-
-            .rule-item:last-child {
-                border-bottom: none;
-            }
-
-        .ri-icon {
-            width: 22px;
-            height: 22px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 11px;
-            border: 1px solid;
-            flex-shrink: 0;
-            margin-top: 1px;
-        }
-
-        .ri-must {
-            color: var(--red);
-            border-color: rgba(255,80,80,.3);
-            background: rgba(255,80,80,.07);
-        }
-
-        .ri-ok {
-            color: var(--green);
-            border-color: rgba(80,216,150,.3);
-            background: rgba(80,216,150,.07);
-        }
-
-        .ri-info {
-            color: var(--blue);
-            border-color: rgba(122,184,240,.3);
-            background: rgba(122,184,240,.07);
-        }
-
-        .ri-warn {
-            color: var(--gold);
-            border-color: var(--gold-b);
-            background: rgba(232,192,96,.07);
-        }
-
-        .ri-content {
-            flex: 1;
-            color: var(--text-2);
-            line-height: 1.7;
-            font-size: 13px;
-        }
-
-            .ri-content strong {
-                color: var(--text);
-                font-weight: 600;
-            }
-
-            .ri-content em {
-                color: var(--text-3);
-                font-style: italic;
-                font-size: 12px;
-            }
-
-        /* ── TIP ROWS ── */
-        .tip-rows {
-        }
-
-        .tip-row {
-            display: flex;
-            gap: 12px;
-            padding: 11px 0;
-            border-bottom: 1px solid var(--border);
-            align-items: flex-start;
-        }
-
-            .tip-row:last-child {
-                border-bottom: none;
-            }
-
-        .tip-dot {
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            flex-shrink: 0;
-            margin-top: 6px;
-        }
-
-        .tip-text {
-            flex: 1;
-            color: var(--text-2);
-            line-height: 1.7;
-            font-size: 13px;
-        }
-
-            .tip-text strong {
-                color: var(--text);
-                font-weight: 600;
-            }
-
-        /* ── PROJECT PLAN PLACEHOLDER ── */
-        .plan-placeholder {
-            border: 1px dashed rgba(201,168,76,.2);
-            padding: 48px 32px;
-            text-align: center;
-            background: rgba(201,168,76,.015);
-            position: relative;
-            overflow: hidden;
-        }
-
-            .plan-placeholder::before {
-                content: "";
-                position: absolute;
-                inset: 0;
-                background-image: linear-gradient(rgba(201,168,76,.04) 1px, transparent 1px), linear-gradient(90deg, rgba(201,168,76,.04) 1px, transparent 1px);
-                background-size: 24px 24px;
-                pointer-events: none;
-            }
-
-        .plan-placeholder-inner {
-            position: relative;
-            z-index: 1;
-        }
-
-        .plan-placeholder-symbol {
-            font-family: "Noto Serif SC", serif;
-            font-size: 48px;
-            font-weight: 900;
-            color: rgba(201,168,76,.12);
-            margin-bottom: 16px;
-            display: block;
-        }
-
-        .plan-placeholder-label {
-            font-family: "JetBrains Mono", monospace;
-            font-size: 10px;
-            letter-spacing: .3em;
-            text-transform: uppercase;
-            color: rgba(201,168,76,.4);
-            margin-bottom: 10px;
-        }
-
-        .plan-placeholder-text {
-            font-size: 13px;
-            color: var(--text-3);
-            line-height: 1.8;
-        }
-
-        /* ── FOOTER ── */
-        .footer {
-            background: var(--deep);
-            border-top: 1px solid var(--border);
-            padding: 56px 32px 48px;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-            .footer::before {
-                content: "";
-                position: absolute;
+            /* ── QQ BANNER — fixed, always on top ── */
+            .qq-banner {
+                position: fixed;
                 top: 0;
                 left: 0;
                 right: 0;
+                z-index: 400;
+                height: 36px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background: rgba(4,2,12,.97);
+                backdrop-filter: blur(20px);
+                border-bottom: 1px solid rgba(180,120,255,.18);
+                overflow: hidden;
+            }
+
+                /* sweeping shimmer line */
+                .qq-banner::before {
+                    content: "";
+                    position: absolute;
+                    inset: 0;
+                    background: linear-gradient(90deg, transparent 0%, rgba(180,80,255,.06) 30%, rgba(232,184,80,.06) 50%, rgba(180,80,255,.06) 70%, transparent 100%);
+                    animation: qqShimmer 6s ease-in-out infinite;
+                    pointer-events: none;
+                }
+
+            @keyframes qqShimmer {
+                0%, 100% {
+                    opacity: .4;
+                    transform: translateX(-20%);
+                }
+
+                50% {
+                    opacity: 1;
+                    transform: translateX(20%);
+                }
+            }
+
+            /* bottom accent line */
+            .qq-banner::after {
+                content: "";
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                height: 1px;
+                background: linear-gradient(90deg, transparent, rgba(180,80,255,.3) 20%, rgba(232,184,80,.4) 50%, rgba(180,80,255,.3) 80%, transparent);
+                animation: qqLine 4s ease-in-out infinite alternate;
+            }
+
+            @keyframes qqLine {
+                0% {
+                    opacity: .4;
+                }
+
+                100% {
+                    opacity: 1;
+                }
+            }
+
+            .qq-banner a {
+                position: relative;
+                z-index: 1;
+                display: inline-flex;
+                align-items: center;
+                gap: 10px;
+                text-decoration: none;
+                color: var(--text-2);
+                font-family: "JetBrains Mono", monospace;
+                font-size: 11px;
+                letter-spacing: .14em;
+                transition: all .25s;
+            }
+
+                .qq-banner a:hover {
+                    color: var(--text);
+                }
+
+                    .qq-banner a:hover .qq-num {
+                        text-shadow: 0 0 12px rgba(232,184,80,.6);
+                    }
+
+            .qq-gem {
+                width: 7px;
+                height: 7px;
+                background: var(--gold);
+                transform: rotate(45deg);
+                opacity: .6;
+                box-shadow: 0 0 8px rgba(232,184,80,.5);
+                animation: gemPulse 3s ease-in-out infinite;
+                flex-shrink: 0;
+            }
+
+            .qq-label {
+                color: var(--text-3);
+                font-size: 10px;
+                letter-spacing: .18em;
+            }
+
+            .qq-divider {
+                width: 1px;
+                height: 14px;
+                background: rgba(180,120,255,.25);
+                flex-shrink: 0;
+            }
+
+            .qq-num {
+                color: var(--gold);
+                font-weight: 700;
+                font-size: 13px;
+                letter-spacing: .1em;
+                transition: text-shadow .25s;
+            }
+
+            .qq-arrow {
+                color: rgba(180,120,255,.5);
+                font-size: 10px;
+                animation: arrowBounce 2s ease-in-out infinite;
+            }
+
+            @keyframes arrowBounce {
+                0%, 100% {
+                    transform: translateX(0);
+                    opacity: .5;
+                }
+
+                50% {
+                    transform: translateX(4px);
+                    opacity: 1;
+                }
+            }
+
+            /* ── HERO ── */
+            .hero {
+                position: relative;
+                min-height: 60vh;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                text-align: center;
+                overflow: hidden;
+                padding: 80px 24px 72px;
+            }
+
+            .hero-glows {
+                position: absolute;
+                inset: 0;
+                pointer-events: none;
+            }
+
+            .hg {
+                position: absolute;
+                border-radius: 50%;
+                filter: blur(80px);
+            }
+
+            .hg1 {
+                width: 500px;
+                height: 240px;
+                top: 40%;
+                left: 50%;
+                transform: translate(-50%,-50%);
+                background: radial-gradient(ellipse, rgba(120,60,200,.08), transparent 70%);
+                animation: breathe 9s ease-in-out infinite;
+            }
+
+            .hg2 {
+                width: 260px;
+                height: 260px;
+                top: 60%;
+                left: 8%;
+                background: radial-gradient(ellipse, rgba(232,184,80,.06), transparent 70%);
+                animation: breathe 7s ease-in-out infinite reverse;
+            }
+
+            .hg3 {
+                width: 240px;
+                height: 240px;
+                top: 25%;
+                right: 6%;
+                background: radial-gradient(ellipse, rgba(180,120,255,.06), transparent 70%);
+                animation: breathe 11s ease-in-out infinite;
+            }
+
+            @keyframes breathe {
+                0%, 100% {
+                    opacity: .5;
+                }
+
+                50% {
+                    opacity: 1;
+                }
+            }
+
+            .hero-content {
+                position: relative;
+                z-index: 2;
+                max-width: 760px;
+            }
+
+            .hero-pre {
+                font-family: "JetBrains Mono", monospace;
+                font-size: 9.5px;
+                letter-spacing: .4em;
+                color: var(--gold);
+                opacity: .6;
+                text-transform: uppercase;
+                margin-bottom: 24px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 16px;
+            }
+
+                .hero-pre::before {
+                    content: "";
+                    width: 36px;
+                    height: 1px;
+                    background: linear-gradient(90deg, transparent, var(--gold-b));
+                }
+
+                .hero-pre::after {
+                    content: "";
+                    width: 36px;
+                    height: 1px;
+                    background: linear-gradient(90deg, var(--gold-b), transparent);
+                }
+
+            .hero-title {
+                font-family: "Noto Serif SC", serif;
+                font-size: clamp(42px, 8vw, 88px);
+                font-weight: 900;
+                line-height: .9;
+                letter-spacing: .14em;
+                margin-bottom: 8px;
+                display: inline-block;
+                background: linear-gradient(90deg, #e8b850, #c090ff, #50e8d0, #e8b850, #c090ff, #e8b850);
+                background-size: 400% 100%;
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
+                animation: titleShift 6s ease-in-out infinite;
+            }
+
+            @keyframes titleShift {
+                0%, 100% {
+                    background-position: 0% 50%;
+                }
+
+                50% {
+                    background-position: 100% 50%;
+                }
+            }
+
+            .hero-sub {
+                font-family: "JetBrains Mono", monospace;
+                font-size: 10px;
+                letter-spacing: .4em;
+                color: var(--text-3);
+                margin-bottom: 28px;
+                text-transform: uppercase;
+            }
+
+            .hero-divider {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                margin: 0 auto 28px;
+                max-width: 280px;
+            }
+
+            .hdl {
+                flex: 1;
                 height: 1px;
                 background: linear-gradient(90deg, transparent, var(--gold-b), transparent);
             }
 
-            .footer::after {
-                content: "";
-                position: absolute;
-                inset: 0;
-                background: radial-gradient(ellipse 60% 50% at 50% 100%, rgba(201,168,76,.03), transparent);
-                pointer-events: none;
+            .hdg {
+                width: 8px;
+                height: 8px;
+                background: var(--gold);
+                transform: rotate(45deg);
+                opacity: .5;
+                animation: gemPulse 3s ease-in-out infinite;
+                box-shadow: 0 0 12px rgba(232,184,80,.4);
             }
 
-        .footer-inner {
-            max-width: 680px;
-            margin: 0 auto;
-            position: relative;
-            z-index: 1;
-        }
+            @keyframes gemPulse {
+                0%, 100% {
+                    box-shadow: 0 0 6px rgba(232,184,80,.3);
+                    opacity: .5;
+                }
 
-        .footer-title {
-            font-family: "Noto Serif SC", serif;
-            font-size: 18px;
-            font-weight: 700;
-            color: var(--text);
-            margin-bottom: 8px;
-            letter-spacing: .04em;
-        }
-
-        .footer-ctas {
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-            flex-wrap: wrap;
-            margin-bottom: 28px;
-            margin-top: 20px;
-        }
-
-        .footer-cta {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 12px 28px;
-            text-decoration: none;
-            font-family: "JetBrains Mono", monospace;
-            font-size: 10.5px;
-            letter-spacing: .15em;
-            text-transform: uppercase;
-            border: 1px solid;
-            transition: all .3s;
-        }
-
-            .footer-cta:hover {
-                transform: translateY(-2px);
+                50% {
+                    box-shadow: 0 0 24px rgba(232,184,80,.7);
+                    opacity: .9;
+                }
             }
 
-        .footer-cta-gold {
-            background: rgba(201,168,76,.06);
-            border-color: var(--gold-b);
-            color: var(--gold);
-        }
-
-            .footer-cta-gold:hover {
-                border-color: var(--gold);
-                box-shadow: 0 4px 24px rgba(201,168,76,.15);
+            .hero-desc {
+                font-size: 15px;
+                color: var(--text-2);
+                line-height: 2;
+                margin-bottom: 36px;
+                max-width: 540px;
+                margin-left: auto;
+                margin-right: auto;
             }
 
-        .footer-cta-teal {
-            background: rgba(45,212,191,.05);
-            border-color: rgba(45,212,191,.28);
-            color: var(--teal);
-        }
+                .hero-desc em {
+                    font-style: normal;
+                    font-weight: 500;
+                }
 
-            .footer-cta-teal:hover {
-                border-color: var(--teal);
-                box-shadow: 0 4px 24px rgba(45,212,191,.14);
+                    .hero-desc em.eg {
+                        color: var(--gold);
+                    }
+
+                    .hero-desc em.ec {
+                        color: var(--teal);
+                    }
+
+                    .hero-desc em.ep {
+                        color: var(--purple);
+                    }
+
+            .hero-tags {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 8px;
+                justify-content: center;
             }
 
-        .footer-meta {
-            font-family: "JetBrains Mono", monospace;
-            font-size: 10px;
-            color: var(--text-3);
-            letter-spacing: .15em;
-            margin-top: 24px;
-        }
-
-        /* ── REVEAL ── */
-        .reveal {
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity .7s ease, transform .7s ease;
-        }
-
-            .reveal.in {
-                opacity: 1;
-                transform: translateY(0);
+            .hero-tag {
+                padding: 5px 18px;
+                font-family: "JetBrains Mono", monospace;
+                font-size: 10px;
+                letter-spacing: .12em;
+                text-transform: uppercase;
+                border: 1px solid;
+                display: inline-flex;
+                align-items: center;
+                gap: 6px;
+                transition: all .25s;
             }
 
-        /* ── RESPONSIVE ── */
-        @media (max-width: 768px) {
+            .ht-gold {
+                background: rgba(232,184,80,.06);
+                border-color: var(--gold-b);
+                color: var(--gold);
+            }
+
+            .ht-blue {
+                background: rgba(122,184,240,.06);
+                border-color: rgba(122,184,240,.28);
+                color: var(--blue);
+            }
+
+            .ht-teal {
+                background: rgba(80,232,208,.06);
+                border-color: rgba(80,232,208,.28);
+                color: var(--teal);
+            }
+
+            .ht-purple {
+                background: rgba(200,160,255,.06);
+                border-color: rgba(200,160,255,.28);
+                color: var(--purple);
+            }
+
+            /* ── SECTION WRAPPER ── */
+            .sec {
+                position: relative;
+                z-index: 1;
+                max-width: 1060px;
+                margin: 0 auto;
+                padding: 72px 32px;
+            }
+
+            .sec-header {
+                text-align: center;
+                margin-bottom: 48px;
+            }
+
+            .sec-label {
+                font-family: "JetBrains Mono", monospace;
+                font-size: 9px;
+                letter-spacing: .3em;
+                text-transform: uppercase;
+                color: var(--text-3);
+                margin-bottom: 12px;
+            }
+
+            .sec-title {
+                font-family: "Noto Serif SC", serif;
+                font-size: clamp(22px, 4vw, 36px);
+                font-weight: 700;
+                color: var(--text);
+                line-height: 1.25;
+                margin-bottom: 8px;
+            }
+
+                .sec-title em {
+                    font-style: normal;
+                    background: linear-gradient(90deg, var(--gold), var(--purple));
+                    -webkit-background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                    background-clip: text;
+                }
+
+            .sec-div {
+                width: 48px;
+                height: 1px;
+                background: linear-gradient(90deg, transparent, var(--gold-b), transparent);
+                margin: 12px auto 0;
+            }
+
+            /* Zone alternating backgrounds */
+            .zone-a {
+                position: relative;
+                background: linear-gradient(180deg, rgba(8,4,18,.8), rgba(5,2,14,.9), rgba(8,4,18,.8));
+                border-top: 1px solid var(--border);
+            }
+
+            .zone-b {
+                position: relative;
+                background: linear-gradient(180deg, rgba(6,3,16,.8), rgba(4,2,12,.9), rgba(6,3,16,.8));
+                border-top: 1px solid var(--border);
+            }
+
+            .zone-c {
+                position: relative;
+                border-top: 1px solid var(--border);
+                background: linear-gradient(180deg, rgba(8,4,18,.8), rgba(4,2,12,.9), rgba(8,4,18,.8));
+            }
+
+            /* reveal animation */
+            .reveal {
+                opacity: 0;
+                transform: translateY(20px);
+                transition: opacity .6s ease, transform .6s ease;
+            }
+
+                .reveal.in {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+
+            /* ── CONTRIB CARDS ── */
             .contrib-grid {
-                grid-template-columns: 1fr 1fr;
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 8px;
             }
 
-            .steps-grid {
-                grid-template-columns: 1fr;
+            .contrib-card {
+                position: relative;
+                overflow: hidden;
+                border: 1px solid var(--border);
+                transition: transform .3s cubic-bezier(.16,1,.3,1), box-shadow .3s;
             }
 
-            .naming-grid {
-                grid-template-columns: 1fr;
+                .contrib-card:hover {
+                    transform: translateY(-4px);
+                }
+
+            .contrib-top-bar {
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                height: 2px;
             }
 
-            .check-grid {
-                grid-template-columns: 1fr;
+                .contrib-top-bar::after {
+                    content: "";
+                    position: absolute;
+                    inset: 0;
+                    background: linear-gradient(90deg, transparent, rgba(255,255,255,.5), transparent);
+                    animation: barSweep 3s ease-in-out infinite;
+                }
+
+            @keyframes barSweep {
+                0%, 100% {
+                    transform: translateX(-100%);
+                }
+
+                50% {
+                    transform: translateX(100%);
+                }
             }
 
-            .path-row {
-                flex-direction: column;
+            .contrib-header {
+                padding: 16px 18px 12px;
+                border-bottom: 1px solid var(--border);
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            }
+
+            .contrib-icon {
+                width: 30px;
+                height: 30px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 16px;
+                flex-shrink: 0;
+                border: 1px solid;
+            }
+
+            .contrib-name {
+                font-family: "Noto Serif SC", serif;
+                font-size: 15px;
+                font-weight: 700;
+                color: var(--text);
+            }
+
+            .contrib-badge {
+                margin-left: auto;
+                font-family: "JetBrains Mono", monospace;
+                font-size: 8.5px;
+                letter-spacing: .15em;
+                padding: 2px 8px;
+                border: 1px solid;
+                text-transform: uppercase;
+            }
+
+            .contrib-body {
+                padding: 14px 18px 16px;
+            }
+
+            .contrib-desc {
+                font-size: 12.5px;
+                color: var(--text-2);
+                line-height: 1.7;
+                margin-bottom: 10px;
+            }
+
+            .contrib-tags {
+                display: flex;
+                flex-wrap: wrap;
                 gap: 4px;
             }
 
-            .path-step {
-                border-right: 1px solid var(--border) !important;
+            .contrib-ex {
+                font-size: 10.5px;
+                padding: 2px 8px;
+                background: rgba(255,255,255,.03);
+                border: 1px solid var(--border);
+                color: var(--text-3);
+                font-family: "JetBrains Mono", monospace;
             }
+
+            .ct-setting {
+                background: rgba(122,184,240,.02);
+            }
+
+                .ct-setting .contrib-top-bar {
+                    background: linear-gradient(90deg, #1040a0, #5090e0, #1040a0);
+                }
+
+                .ct-setting:hover {
+                    box-shadow: 0 10px 40px rgba(80,144,224,.12);
+                }
+
+                .ct-setting .contrib-icon, .ct-setting .contrib-badge {
+                    color: var(--blue);
+                    border-color: rgba(122,184,240,.3);
+                    background: rgba(122,184,240,.06);
+                }
+
+            .ct-new {
+                background: rgba(200,160,255,.02);
+            }
+
+                .ct-new .contrib-top-bar {
+                    background: linear-gradient(90deg, #300860, #9040d0, #300860);
+                }
+
+                .ct-new:hover {
+                    box-shadow: 0 10px 40px rgba(160,80,220,.12);
+                }
+
+                .ct-new .contrib-icon, .ct-new .contrib-badge {
+                    color: var(--purple);
+                    border-color: rgba(200,160,255,.3);
+                    background: rgba(200,160,255,.06);
+                }
+
+            .ct-story {
+                background: rgba(80,232,208,.02);
+            }
+
+                .ct-story .contrib-top-bar {
+                    background: linear-gradient(90deg, #104040, #30c8a0, #104040);
+                }
+
+                .ct-story:hover {
+                    box-shadow: 0 10px 40px rgba(50,200,160,.12);
+                }
+
+                .ct-story .contrib-icon, .ct-story .contrib-badge {
+                    color: var(--teal);
+                    border-color: rgba(80,232,208,.3);
+                    background: rgba(80,232,208,.06);
+                }
+
+            .ct-art {
+                background: rgba(244,114,182,.02);
+            }
+
+                .ct-art .contrib-top-bar {
+                    background: linear-gradient(90deg, #600840, #d050a0, #600840);
+                }
+
+                .ct-art:hover {
+                    box-shadow: 0 10px 40px rgba(200,80,160,.12);
+                }
+
+                .ct-art .contrib-icon, .ct-art .contrib-badge {
+                    color: var(--pink);
+                    border-color: rgba(244,114,182,.3);
+                    background: rgba(244,114,182,.06);
+                }
+
+            .ct-research {
+                background: rgba(232,184,80,.02);
+            }
+
+                .ct-research .contrib-top-bar {
+                    background: linear-gradient(90deg, #604010, #d09040, #604010);
+                }
+
+                .ct-research:hover {
+                    box-shadow: 0 10px 40px rgba(200,150,60,.12);
+                }
+
+                .ct-research .contrib-icon, .ct-research .contrib-badge {
+                    color: var(--gold);
+                    border-color: var(--gold-b);
+                    background: rgba(232,184,80,.06);
+                }
+
+            .ct-other {
+                background: rgba(255,255,255,.01);
+            }
+
+                .ct-other .contrib-top-bar {
+                    background: linear-gradient(90deg, #303030, #707070, #303030);
+                }
+
+                .ct-other:hover {
+                    box-shadow: 0 10px 40px rgba(100,100,100,.08);
+                }
+
+                .ct-other .contrib-icon, .ct-other .contrib-badge {
+                    color: var(--text-2);
+                    border-color: var(--border);
+                    background: rgba(255,255,255,.04);
+                }
+
+            /* ── WANT LIST ── */
+            .want-list {
+                display: flex;
+                flex-direction: column;
+            }
+
+            .want-item {
+                display: flex;
+                gap: 18px;
+                padding: 18px 0;
+                border-bottom: 1px solid var(--border);
+                align-items: flex-start;
+            }
+
+                .want-item:first-child {
+                    padding-top: 0;
+                }
+
+                .want-item:last-child {
+                    border-bottom: none;
+                    padding-bottom: 0;
+                }
+
+            .want-icon {
+                width: 36px;
+                height: 36px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 16px;
+                flex-shrink: 0;
+                border: 1px solid;
+            }
+
+            .want-content {
+                flex: 1;
+            }
+
+            .want-title {
+                font-family: "Noto Serif SC", serif;
+                font-size: 14px;
+                font-weight: 700;
+                color: var(--text);
+                margin-bottom: 5px;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+            }
+
+            .want-desc {
+                font-size: 12.5px;
+                color: var(--text-2);
+                line-height: 1.75;
+            }
+
+            .want-tag {
+                font-family: "JetBrains Mono", monospace;
+                font-size: 8.5px;
+                letter-spacing: .15em;
+                padding: 2px 8px;
+                border: 1px solid;
+                text-transform: uppercase;
+            }
+
+            .wt-hot {
+                color: #ff8080;
+                border-color: rgba(255,100,100,.35);
+                background: rgba(255,100,100,.07);
+            }
+
+            .wt-open {
+                color: var(--green);
+                border-color: rgba(80,216,150,.35);
+                background: rgba(80,216,150,.07);
+            }
+
+            /* ── STEPS ── */
+            .steps-grid {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 8px;
+            }
+
+            .step-card {
+                background: var(--raised);
+                border: 1px solid var(--border);
+                padding: 20px 22px;
+                position: relative;
+                overflow: hidden;
+                transition: border-color .2s;
+            }
+
+                .step-card:hover {
+                    border-color: var(--border-m);
+                }
+
+            .step-num {
+                font-family: "JetBrains Mono", monospace;
+                font-size: 48px;
+                font-weight: 700;
+                color: rgba(255,255,255,.04);
+                position: absolute;
+                right: 12px;
+                top: 8px;
+                line-height: 1;
+                pointer-events: none;
+                user-select: none;
+            }
+
+            .step-label {
+                font-family: "JetBrains Mono", monospace;
+                font-size: 9px;
+                letter-spacing: .22em;
+                color: var(--text-3);
+                text-transform: uppercase;
+                margin-bottom: 10px;
+            }
+
+            .step-title {
+                font-family: "Noto Serif SC", serif;
+                font-size: 15px;
+                font-weight: 700;
+                color: var(--text);
+                margin-bottom: 8px;
+            }
+
+            .step-desc {
+                font-size: 12.5px;
+                color: var(--text-2);
+                line-height: 1.7;
+            }
+
+            /* ── CHANNEL TABLE ── */
+            .channel-table {
+                width: 100%;
+                border-collapse: collapse;
+            }
+
+                .channel-table th {
+                    padding: 10px 16px;
+                    text-align: left;
+                    font-family: "JetBrains Mono", monospace;
+                    font-size: 9px;
+                    letter-spacing: .2em;
+                    text-transform: uppercase;
+                    color: var(--text-3);
+                    border-bottom: 1px solid var(--border);
+                }
+
+                .channel-table td {
+                    padding: 12px 16px;
+                    border-bottom: 1px solid var(--border);
+                    color: var(--text-2);
+                    vertical-align: top;
+                    line-height: 1.65;
+                    font-size: 13px;
+                }
+
+                .channel-table tr:last-child td {
+                    border-bottom: none;
+                }
+
+            .td-name {
+                font-family: "Noto Serif SC", serif;
+                font-weight: 700;
+                color: var(--text);
+            }
+
+            .channel-table a {
+                color: var(--gold);
+                text-decoration: none;
+            }
+
+                .channel-table a:hover {
+                    text-decoration: underline;
+                }
+
+            /* ── ALERTS ── */
+            .alert {
+                padding: 12px 16px;
+                border-left: 3px solid;
+                margin-bottom: 12px;
+                font-size: 13px;
+                line-height: 1.7;
+                background: var(--raised);
+            }
+
+            .alert-title {
+                font-family: "JetBrains Mono", monospace;
+                font-size: 9px;
+                letter-spacing: .2em;
+                text-transform: uppercase;
+                margin-bottom: 6px;
+                opacity: .65;
+            }
+
+            .alert-gold {
+                border-color: var(--gold);
+                color: rgba(232,184,80,.8);
+            }
+
+                .alert-gold .alert-title {
+                    color: var(--gold);
+                }
+
+            .alert-teal {
+                border-color: var(--teal);
+                color: rgba(80,232,208,.8);
+            }
+
+                .alert-teal .alert-title {
+                    color: var(--teal);
+                }
+
+            .alert-purple {
+                border-color: var(--purple);
+                color: rgba(200,160,255,.8);
+            }
+
+                .alert-purple .alert-title {
+                    color: var(--purple);
+                }
+
+            .alert-red {
+                border-color: var(--red);
+                color: rgba(255,100,100,.8);
+            }
+
+                .alert-red .alert-title {
+                    color: var(--red);
+                }
+
+            .alert strong {
+                color: var(--text);
+                font-weight: 600;
+            }
+
+            /* ── NAMING GRID ── */
+            .naming-grid {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 8px;
+            }
+
+            .naming-card {
+                border: 1px solid var(--border);
+                padding: 16px 18px;
+                background: var(--raised);
+            }
+
+            .nc-label {
+                font-family: "JetBrains Mono", monospace;
+                font-size: 9px;
+                letter-spacing: .18em;
+                text-transform: uppercase;
+                margin-bottom: 12px;
+                font-weight: 700;
+            }
+
+            .nc-no {
+                color: var(--red);
+            }
+
+            .nc-yes {
+                color: var(--green);
+            }
+
+            .nc-items {
+                list-style: none;
+            }
+
+            .nc-item {
+                font-size: 12.5px;
+                color: var(--text-2);
+                padding: 3px 0;
+                display: flex;
+                align-items: flex-start;
+                gap: 8px;
+                line-height: 1.55;
+            }
+
+                .nc-item::before {
+                    flex-shrink: 0;
+                    margin-top: 2px;
+                    font-size: 10px;
+                }
+
+            .nc-no .nc-item::before {
+                content: "✕";
+                color: var(--red);
+            }
+
+            .nc-yes .nc-item::before {
+                content: "✓";
+                color: var(--green);
+            }
+
+            /* ── PATH ROW ── */
+            .path-row {
+                display: flex;
+                gap: 0;
+                overflow-x: auto;
+            }
+
+            .path-step {
+                flex: 1;
+                min-width: 130px;
+                padding: 16px 18px;
+                background: var(--raised);
+                border: 1px solid var(--border);
+                border-right: none;
+                position: relative;
+            }
+
+                .path-step:last-child {
+                    border-right: 1px solid var(--border);
+                }
 
                 .path-step::after {
+                    content: "→";
+                    position: absolute;
+                    right: -10px;
+                    top: 50%;
+                    transform: translateY(-50%);
+                    font-family: "JetBrains Mono", monospace;
+                    font-size: 12px;
+                    color: var(--text-3);
+                    z-index: 2;
+                }
+
+                .path-step:last-child::after {
                     display: none;
                 }
-        }
 
-        @media (max-width: 520px) {
-            .contrib-grid {
-                grid-template-columns: 1fr;
+            .path-num {
+                font-family: "JetBrains Mono", monospace;
+                font-size: 9px;
+                letter-spacing: .2em;
+                color: var(--text-3);
+                margin-bottom: 6px;
             }
 
-            .sec {
-                padding: 56px 20px;
+            .path-name {
+                font-family: "Noto Serif SC", serif;
+                font-size: 13px;
+                font-weight: 700;
+                color: var(--text);
+                margin-bottom: 4px;
             }
-        }
+
+            .path-hint {
+                font-size: 11.5px;
+                color: var(--text-3);
+                line-height: 1.55;
+            }
+
+            /* ── CHECK GRID ── */
+            .check-grid {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 8px;
+            }
+
+            .check-col {
+                background: var(--raised);
+                border: 1px solid var(--border);
+                padding: 18px 20px;
+            }
+
+            .check-col-title {
+                font-family: "JetBrains Mono", monospace;
+                font-size: 9px;
+                letter-spacing: .2em;
+                text-transform: uppercase;
+                margin-bottom: 12px;
+                font-weight: 700;
+            }
+
+            .cct-bad {
+                color: var(--red);
+            }
+
+            .cct-good {
+                color: var(--green);
+            }
+
+            .check-item {
+                display: flex;
+                align-items: flex-start;
+                gap: 8px;
+                padding: 4px 0;
+                font-size: 12.5px;
+                color: var(--text-2);
+                line-height: 1.6;
+            }
+
+            .ci-icon {
+                flex-shrink: 0;
+                font-size: 10px;
+                margin-top: 2px;
+            }
+
+            .ci-bad {
+                color: var(--red);
+            }
+
+            .ci-good {
+                color: var(--green);
+            }
+
+            /* ── RULE LIST ── */
+            .rule-list {
+                list-style: none;
+            }
+
+            .rule-item {
+                display: flex;
+                gap: 12px;
+                padding: 12px 0;
+                border-bottom: 1px solid var(--border);
+                align-items: flex-start;
+            }
+
+                .rule-item:last-child {
+                    border-bottom: none;
+                }
+
+            .ri-icon {
+                width: 22px;
+                height: 22px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 11px;
+                border: 1px solid;
+                flex-shrink: 0;
+                margin-top: 1px;
+            }
+
+            .ri-must {
+                color: var(--red);
+                border-color: rgba(255,80,80,.3);
+                background: rgba(255,80,80,.07);
+            }
+
+            .ri-ok {
+                color: var(--green);
+                border-color: rgba(80,216,150,.3);
+                background: rgba(80,216,150,.07);
+            }
+
+            .ri-info {
+                color: var(--blue);
+                border-color: rgba(122,184,240,.3);
+                background: rgba(122,184,240,.07);
+            }
+
+            .ri-warn {
+                color: var(--gold);
+                border-color: var(--gold-b);
+                background: rgba(232,184,80,.07);
+            }
+
+            .ri-content {
+                flex: 1;
+                color: var(--text-2);
+                line-height: 1.7;
+                font-size: 13px;
+            }
+
+                .ri-content strong {
+                    color: var(--text);
+                    font-weight: 600;
+                }
+
+                .ri-content em {
+                    color: var(--text-3);
+                    font-style: italic;
+                    font-size: 12px;
+                }
+
+            /* ── TIP ROWS ── */
+            .tip-row {
+                display: flex;
+                gap: 12px;
+                padding: 11px 0;
+                border-bottom: 1px solid var(--border);
+                align-items: flex-start;
+            }
+
+                .tip-row:last-child {
+                    border-bottom: none;
+                }
+
+            .tip-dot {
+                width: 6px;
+                height: 6px;
+                border-radius: 50%;
+                flex-shrink: 0;
+                margin-top: 6px;
+            }
+
+            .tip-text {
+                flex: 1;
+                color: var(--text-2);
+                line-height: 1.7;
+                font-size: 13px;
+            }
+
+                .tip-text strong {
+                    color: var(--text);
+                    font-weight: 600;
+                }
+
+            /* ── STATUS TAGS ── */
+            .stag {
+                display: inline-flex;
+                align-items: center;
+                gap: 5px;
+                font-family: "JetBrains Mono", monospace;
+                font-size: 8.5px;
+                letter-spacing: .12em;
+                text-transform: uppercase;
+                padding: 3px 10px;
+                border: 1px solid;
+            }
+
+                .stag::before {
+                    content: "";
+                    width: 5px;
+                    height: 5px;
+                    border-radius: 50%;
+                    flex-shrink: 0;
+                }
+
+            .stag-done {
+                color: var(--green);
+                border-color: rgba(80,216,153,.3);
+                background: rgba(80,216,153,.06);
+            }
+
+                .stag-done::before {
+                    background: var(--green);
+                    box-shadow: 0 0 6px rgba(80,216,153,.6);
+                }
+
+            .stag-now {
+                color: var(--gold);
+                border-color: var(--gold-b);
+                background: rgba(232,184,80,.06);
+            }
+
+                .stag-now::before {
+                    background: var(--gold);
+                    box-shadow: 0 0 6px rgba(232,184,80,.6);
+                    animation: dotPulse 1.8s ease-in-out infinite;
+                }
+
+            .stag-near {
+                color: var(--blue);
+                border-color: rgba(122,184,240,.3);
+                background: rgba(122,184,240,.06);
+            }
+
+                .stag-near::before {
+                    background: var(--blue);
+                }
+
+            .stag-far {
+                color: var(--text-3);
+                border-color: var(--border);
+            }
+
+                .stag-far::before {
+                    background: var(--text-3);
+                }
+
+            @keyframes dotPulse {
+                0%, 100% {
+                    opacity: .5;
+                }
+
+                50% {
+                    opacity: 1;
+                }
+            }
+
+            /* ── CHIP ── */
+            .chip {
+                display: inline-flex;
+                align-items: center;
+                font-family: "JetBrains Mono", monospace;
+                font-size: 9.5px;
+                padding: 2px 10px;
+                border: 1px solid rgba(200,160,255,.2);
+                background: rgba(200,160,255,.04);
+                color: var(--purple);
+                letter-spacing: .1em;
+                margin: 2px;
+            }
+
+            /* ── LT CARDS ── */
+            .lt-grid {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 8px;
+                margin-bottom: 24px;
+            }
+
+            .lt-card {
+                background: var(--raised);
+                border: 1px solid var(--border);
+                padding: 20px 22px;
+                transition: border-color .2s;
+            }
+
+                .lt-card:hover {
+                    border-color: var(--border-m);
+                }
+
+            .lt-label {
+                font-family: "JetBrains Mono", monospace;
+                font-size: 9px;
+                letter-spacing: .2em;
+                color: var(--text-3);
+                text-transform: uppercase;
+                margin-bottom: 8px;
+            }
+
+            .lt-title {
+                font-family: "Noto Serif SC", serif;
+                font-size: 16px;
+                font-weight: 700;
+                color: var(--text);
+                margin-bottom: 10px;
+            }
+
+            .lt-desc {
+                font-size: 12.5px;
+                color: var(--text-2);
+                line-height: 1.7;
+                margin-bottom: 14px;
+            }
+
+            .lt-progress {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+            }
+
+            .lt-plabel {
+                font-family: "JetBrains Mono", monospace;
+                font-size: 9px;
+                color: var(--text-3);
+                white-space: nowrap;
+            }
+
+            .lt-bar {
+                flex: 1;
+                height: 3px;
+                background: rgba(255,255,255,.06);
+            }
+
+            .lt-fill {
+                height: 100%;
+                transition: width .8s ease;
+            }
+
+            .plan-note {
+                background: var(--raised);
+                border: 1px solid var(--border);
+                border-left: 3px solid var(--purple);
+                padding: 14px 18px;
+                font-size: 13px;
+                color: var(--text-2);
+                line-height: 1.75;
+            }
+
+                .plan-note strong {
+                    color: var(--text);
+                }
+
+            /* ── FOOTER ── */
+            .footer {
+                border-top: 1px solid var(--border);
+                padding: 48px 24px;
+                text-align: center;
+                background: linear-gradient(180deg, rgba(4,2,12,.8), rgba(6,3,16,1));
+            }
+
+            .footer-inner {
+                max-width: 600px;
+                margin: 0 auto;
+            }
+
+            .footer-title {
+                font-family: "Noto Serif SC", serif;
+                font-size: 18px;
+                font-weight: 700;
+                color: var(--text);
+                letter-spacing: .06em;
+                margin-bottom: 16px;
+            }
+
+            .footer-ctas {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 10px;
+                justify-content: center;
+                margin: 24px 0 20px;
+            }
+
+            .footer-cta {
+                display: inline-flex;
+                align-items: center;
+                gap: 8px;
+                padding: 10px 24px;
+                font-family: "JetBrains Mono", monospace;
+                font-size: 11px;
+                letter-spacing: .12em;
+                text-decoration: none;
+                text-transform: uppercase;
+                border: 1px solid;
+                transition: all .25s;
+            }
+
+            .footer-cta-teal {
+                color: var(--teal);
+                border-color: rgba(80,232,208,.3);
+                background: rgba(80,232,208,.05);
+            }
+
+                .footer-cta-teal:hover {
+                    background: rgba(80,232,208,.12);
+                    box-shadow: 0 0 20px rgba(80,232,208,.15);
+                }
+
+            .footer-cta-gold {
+                color: var(--gold);
+                border-color: var(--gold-b);
+                background: rgba(232,184,80,.05);
+            }
+
+                .footer-cta-gold:hover {
+                    background: rgba(232,184,80,.12);
+                    box-shadow: 0 0 20px rgba(232,184,80,.2);
+                }
+
+            .footer-meta {
+                font-family: "JetBrains Mono", monospace;
+                font-size: 9px;
+                letter-spacing: .28em;
+                color: var(--text-3);
+                text-transform: uppercase;
+            }
+
+            /* scroll hint */
+            .scroll-hint {
+                position: absolute;
+                bottom: 32px;
+                left: 50%;
+                transform: translateX(-50%);
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 6px;
+                animation: sf 2s ease-in-out infinite;
+            }
+
+            @keyframes sf {
+                0%, 100% {
+                    transform: translateX(-50%) translateY(0);
+                    opacity: .3;
+                }
+
+                50% {
+                    transform: translateX(-50%) translateY(5px);
+                    opacity: .6;
+                }
+            }
+
+            .scroll-hint span {
+                font-size: 8.5px;
+                letter-spacing: .3em;
+                color: var(--text-3);
+                font-family: "JetBrains Mono", monospace;
+            }
+
+            .scroll-bar {
+                width: 1px;
+                height: 24px;
+                background: linear-gradient(180deg, var(--text-3), transparent);
+            }
+
+            /* responsive */
+            @media (max-width: 768px) {
+                .contrib-grid {
+                    grid-template-columns: 1fr 1fr;
+                }
+
+                .steps-grid, .check-grid, .naming-grid, .lt-grid {
+                    grid-template-columns: 1fr;
+                }
+
+                .sec {
+                    padding: 48px 20px;
+                }
+            }
+
+            @media (max-width: 500px) {
+                .contrib-grid {
+                    grid-template-columns: 1fr;
+                }
+            }
     </style>
 </head>
 <body>
 
-    <!-- NAV -->
-    <nav class="nav" id="nav">
-        <div class="nav-logo">解析世界 · 共创指南</div>
-        <div class="nav-links">
-            <a href="#contrib" class="nav-link">贡献类型</a>
-            <a href="#wants" class="nav-link">当前需求</a>
-            <a href="#steps" class="nav-link">参与流程</a>
-            <a href="#rules" class="nav-link">内容规范</a>
-            <a href="#plan" class="nav-link">项目规划</a>
-            <a href="https://qm.qq.com/q/aj2BRJ8pRm" class="nav-link" style="color:rgba(201,168,76,.75);" target="_blank">★ 加群</a>
+    <!-- ═══════════════ GUIDE CONTENT ═══════════════ -->
+    <div id="guide" style="padding-top:36px">
+
+        <!-- QQ群 banner — TOP PRIORITY -->
+        <div class="qq-banner">
+            <a href="https://qm.qq.com/q/aj2BRJ8pRm" target="_blank">
+                <span class="qq-gem"></span>
+                <span class="qq-label">加入共创群</span>
+                <span class="qq-divider"></span>
+                <span class="qq-num">QQ 608886521</span>
+                <span class="qq-divider"></span>
+                <span class="qq-label">解析世界 · The Parsed World</span>
+                <span class="qq-arrow">›</span>
+            </a>
         </div>
-    </nav>
 
-    <!-- HERO -->
-    <section class="hero">
-        <div class="hero-glows"><div class="hg hg1"></div><div class="hg hg2"></div><div class="hg hg3"></div></div>
-        <div class="hero-cracks"><div class="crack c1"></div><div class="crack c2"></div><div class="crack c3"></div><div class="crack c4"></div></div>
-        <div class="hero-content">
-            <p class="hero-pre">Open Worldbuilding · 共同创作</p>
-            <h1 class="hero-title">共创指南</h1>
-            <p class="hero-sub">Contributor's Manual · EC 174</p>
-            <div class="hero-divider"><div class="hdl"></div><div class="hdg"></div><div class="hdl"></div></div>
-            <p class="hero-desc">
-                这是一个<em class="eg">「一起种树」</em>的超宏大世界观。<br>
-                旨在通过<em class="ec">不同视角的碰撞</em>中自然长出来的东西。<br>
-                读过至少一份文档，有一个想法，就可以加入。
-            </p>
-            <div class="hero-tags">
-                <span class="hero-tag ht-gold">◈ 完全开放</span>
-                <span class="hero-tag ht-blue">◈ 无门槛参与</span>
-                <span class="hero-tag ht-teal">◈ 任意形式提交</span>
-                <span class="hero-tag ht-purple">◈ 可署名 · 可匿名</span>
+        <!-- NAV -->
+        <nav class="nav" id="nav">
+            <div class="nav-logo">解析世界 · The Parsed World</div>
+            <div class="nav-links">
+                <a href="#overview" class="nav-link">概览</a>
+                <a href="#types" class="nav-link">类型</a>
+                <a href="#rules" class="nav-link">规则</a>
+                <a href="#howto" class="nav-link">入门</a>
+                <a href="#detail" class="nav-link">详解</a>
+                <a href="#longterm" class="nav-link">规划</a>
             </div>
-        </div>
-        <div class="scroll-hint"><span>scroll</span><div class="scroll-bar"></div></div>
-    </section>
+        </nav>
 
-
-    <!-- ══════════ 贡献类型 ══════════ -->
-    <div id="contrib" class="zone-a">
-        <div class="sec">
-            <div class="sec-header reveal">
-                <div class="sec-label">Contribution Types · What You Can Make</div>
-                <div class="sec-title">可以贡献<em>什么</em></div>
-                <div class="sec-div"></div>
+        <!-- HERO -->
+        <div class="hero" id="overview">
+            <div class="hero-glows">
+                <div class="hg hg1"></div>
+                <div class="hg hg2"></div>
+                <div class="hg hg3"></div>
             </div>
-            <div class="contrib-grid reveal">
-
-                <div class="contrib-card ct-setting">
-                    <div class="contrib-top-bar"></div>
-                    <div class="contrib-header">
-                        <div class="contrib-icon">◫</div>
-                        <span class="contrib-name">设定补全</span>
-                        <span class="contrib-badge">SETTING</span>
-                    </div>
-                    <div class="contrib-body">
-                        <p class="contrib-desc">现有文档已有骨架，但细节留白——填充那些「知道存在但没写」的角落。</p>
-                        <div class="contrib-tags">
-                            <span class="contrib-ex">某边境小镇的风土</span>
-                            <span class="contrib-ex">某角色的早年经历</span>
-                            <span class="contrib-ex">某组织的内部文化</span>
-                            <span class="contrib-ex">某地的民间传说</span>
-                            <span class="contrib-ex">某事件的具体细节</span>
-                        </div>
-                    </div>
+            <div class="hero-content">
+                <div class="hero-pre">Open Worldbuilding · Contributor's Manual</div>
+                <div class="hero-title">共创指南</div>
+                <div class="hero-sub">The Parsed World · EC 174</div>
+                <div class="hero-divider"><div class="hdl"></div><div class="hdg"></div><div class="hdl"></div></div>
+                <p class="hero-desc">
+                    解析世界是一个<em class="eg">开放共创的奇幻宇宙</em>，已有骨架，欢迎所有人来种树。<br>
+                    你可以贡献<em class="ep">世界观设定</em>、<em class="ec">创意故事</em>、<em class="eg">角色设计</em>或<em class="ec">视觉艺术</em>，<br>
+                    无论一句话、一段文字还是一整套完整体系，都是有价值的贡献。
+                </p>
+                <div class="hero-tags">
+                    <span class="hero-tag ht-gold">◈ 奇幻世界观</span>
+                    <span class="hero-tag ht-purple">◈ 仙术 · 魔法 · 科技</span>
+                    <span class="hero-tag ht-teal">◈ 精密设计</span>
+                    <span class="hero-tag ht-blue">◈ 风格多样</span>
+                    <span class="hero-tag ht-gold">◈ 新项目开放</span>
                 </div>
-
-                <div class="contrib-card ct-new">
-                    <div class="contrib-top-bar"></div>
-                    <div class="contrib-header">
-                        <div class="contrib-icon">✦</div>
-                        <span class="contrib-name">新设定提案</span>
-                        <span class="contrib-badge">PROPOSAL</span>
-                    </div>
-                    <div class="contrib-body">
-                        <p class="contrib-desc">文档完全未提及的新内容——只要符合世界框架，都可以提案。</p>
-                        <div class="contrib-tags">
-                            <span class="contrib-ex">新的区域 / 岛屿</span>
-                            <span class="contrib-ex">新的种族 / 生物</span>
-                            <span class="contrib-ex">民间文化 / 技术</span>
-                            <span class="contrib-ex">新势力 / 帮派</span>
-                            <span class="contrib-ex">新的能力（魔法仙术）</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="contrib-card ct-story">
-                    <div class="contrib-top-bar"></div>
-                    <div class="contrib-header">
-                        <div class="contrib-icon">❧</div>
-                        <span class="contrib-name">故事 / 叙事</span>
-                        <span class="contrib-badge">STORY</span>
-                    </div>
-                    <div class="contrib-body">
-                        <p class="contrib-desc">发生在这个世界里的一切叙事。不一定是主线大人物，小人物的日常同样受欢迎。</p>
-                        <div class="contrib-tags">
-                            <span class="contrib-ex">士兵的家书</span>
-                            <span class="contrib-ex">庆典上的偶遇</span>
-                            <span class="contrib-ex">律者的巡逻日志</span>
-                            <span class="contrib-ex">民谣 · 书信</span>
-                            <span class="contrib-ex">主线推进也欢迎</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="contrib-card ct-art">
-                    <div class="contrib-top-bar"></div>
-                    <div class="contrib-header">
-                        <div class="contrib-icon">◈</div>
-                        <span class="contrib-name">美术 / 视觉</span>
-                        <span class="contrib-badge">ART</span>
-                    </div>
-                    <div class="contrib-body">
-                        <p class="contrib-desc">角色偏向二次元风格，背景/场景保持魔幻史诗写实渲染风格。</p>
-                        <div class="contrib-tags">
-                            <span class="contrib-ex">人物立绘</span>
-                            <span class="contrib-ex">场景概念图</span>
-                            <span class="contrib-ex">器物设计</span>
-                            <span class="contrib-ex">地图草图</span>
-                            <span class="contrib-ex">信息图 · 速写</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="contrib-card ct-research">
-                    <div class="contrib-top-bar"></div>
-                    <div class="contrib-header">
-                        <div class="contrib-icon">⊞</div>
-                        <span class="contrib-name">考据 / 整理</span>
-                        <span class="contrib-badge">RESEARCH</span>
-                    </div>
-                    <div class="contrib-body">
-                        <p class="contrib-desc">对现有设定进行交叉验证、时间线梳理、矛盾指出。考据党欢迎。</p>
-                        <div class="contrib-tags">
-                            <span class="contrib-ex">时间线梳理</span>
-                            <span class="contrib-ex">跨文档交叉验证</span>
-                            <span class="contrib-ex">年份矛盾指出</span>
-                            <span class="contrib-ex">设定一致性检查</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="contrib-card ct-other">
-                    <div class="contrib-top-bar"></div>
-                    <div class="contrib-header">
-                        <div class="contrib-icon">∞</div>
-                        <span class="contrib-name">其他一切</span>
-                        <span class="contrib-badge">OTHER</span>
-                    </div>
-                    <div class="contrib-body">
-                        <p class="contrib-desc">没有规定的但符合逻辑的——音乐、游戏、跑团规则、信息图……</p>
-                        <div class="contrib-tags">
-                            <span class="contrib-ex">翻译 / 转写</span>
-                            <span class="contrib-ex">跑团机制</span>
-                            <span class="contrib-ex">游戏机制</span>
-                        </div>
-                    </div>
-                </div>
-
+            </div>
+            <div class="scroll-hint">
+                <span>Scroll</span>
+                <div class="scroll-bar"></div>
             </div>
         </div>
-    </div>
 
+        <!-- SECTION: 可以贡献什么 -->
+        <div class="zone-a" id="types">
+            <div class="sec">
+                <div class="sec-header reveal">
+                    <div class="sec-label">Contribution Types · 贡献类型</div>
+                    <div class="sec-title">你可以<em>贡献什么</em></div>
+                    <div class="sec-div"></div>
+                </div>
 
-    <!-- ══════════ 当前需求 ══════════ -->
-    <div id="wants" class="zone-b">
-        <div class="sec">
-            <div class="sec-header reveal">
-                <div class="sec-label">Current Priorities · What We Need Most</div>
-                <div class="sec-title">当前最需要<em>填补的方向</em></div>
-                <div class="sec-div"></div>
-            </div>
-            <div style="background:var(--raised);border:1px solid var(--border);padding:4px 24px;" class="reveal">
-                <ul class="want-list">
-
-                    <li class="want-item">
-                        <div class="want-icon" style="background:rgba(80,216,150,.06);color:#50d899;border-color:rgba(80,216,150,.25);">✍</div>
-                        <div class="want-content">
-                            <div class="want-title">文风重构 <span class="want-tag wt-hot">急需</span></div>
-                            <div class="want-desc">使用有叙事感的语言重写现有偏「记录式」的学术风格文档——保留信息量，但让它读起来更像是有人在讲述。由于现有文档包含部分AI辅助润色，可读性有待提升。任何一份文档都可以作为起点。</div>
+                <div class="contrib-grid reveal">
+                    <div class="contrib-card ct-setting">
+                        <div class="contrib-top-bar"></div>
+                        <div class="contrib-header">
+                            <div class="contrib-icon">⚙</div>
+                            <div class="contrib-name">世界观设定</div>
+                            <div class="contrib-badge">Setting</div>
                         </div>
-                    </li>
-
-                    <li class="want-item">
-                        <div class="want-icon" style="background:rgba(122,184,240,.06);color:#7ab8f0;border-color:rgba(122,184,240,.25);">⊙</div>
-                        <div class="want-content">
-                            <div class="want-title">区域细节 <span class="want-tag wt-open">全面开放</span></div>
-                            <div class="want-desc">几乎每个区域都只有大概的骨架描述。可以是任何形式：某个地点的物品清单、某个机构的内部人际关系、某条街道的气味和声音、某个节日的人群状态。不需要宏大，越细越好。</div>
+                        <div class="contrib-body">
+                            <div class="contrib-desc">补充、深化或延伸已有的世界设定。可以是一段地形描写、一种生物、一道菜、一项风俗，任何让世界更立体的细节都算。</div>
+                            <div class="contrib-tags">
+                                <span class="contrib-ex">地形地貌</span>
+                                <span class="contrib-ex">生态物种</span>
+                                <span class="contrib-ex">文化风俗</span>
+                                <span class="contrib-ex">宗教信仰</span>
+                                <span class="contrib-ex">食物菜肴</span>
+                            </div>
                         </div>
-                    </li>
+                    </div>
 
-                    <li class="want-item">
-                        <div class="want-icon" style="background:rgba(232,192,96,.06);color:#e8c060;border-color:rgba(232,192,96,.25);">◐</div>
-                        <div class="want-content">
-                            <div class="want-title">民间视角 <span class="want-tag wt-open">全面开放</span></div>
-                            <div class="want-desc">各势力的普通人怎么过日子、怎么看待大人物、怎么传谣言。特别欢迎：草原采收工的一个采收季、灰隙居民的一天、北方战线普通士兵的家书、月轨城无触者如何看待魔法师——一切赋予世界温度的内容。</div>
+                    <div class="contrib-card ct-new">
+                        <div class="contrib-top-bar"></div>
+                        <div class="contrib-header">
+                            <div class="contrib-icon">✦</div>
+                            <div class="contrib-name">全新创作</div>
+                            <div class="contrib-badge">New Content</div>
                         </div>
-                    </li>
-
-                    <li class="want-item">
-                        <div class="want-icon" style="background:rgba(200,160,255,.06);color:#c8a0ff;border-color:rgba(200,160,255,.25);">◆</div>
-                        <div class="want-content">
-                            <div class="want-title">各自叙事 <span class="want-tag wt-hot">急需</span></div>
-                            <div class="want-desc">任何篇幅和题材的故事都欢迎，甚至是主线（推进时间线的内容）。世界等待你的笔来填满。</div>
+                        <div class="contrib-body">
+                            <div class="contrib-desc">提出全新元素，引入新角色、新组织、新地点、新能力体系，经审核后可成为世界正典的一部分。</div>
+                            <div class="contrib-tags">
+                                <span class="contrib-ex">原创角色</span>
+                                <span class="contrib-ex">新地点</span>
+                                <span class="contrib-ex">新组织</span>
+                                <span class="contrib-ex">新能力</span>
+                            </div>
                         </div>
-                    </li>
+                    </div>
 
-                    <li class="want-item" style="border-bottom:none;">
-                        <div class="want-icon" style="background:rgba(244,114,182,.06);color:#f472b6;border-color:rgba(244,114,182,.25);">✿</div>
-                        <div class="want-content">
-                            <div class="want-title">更多种族 / 生物 <span class="want-tag wt-open">参考框架已有</span></div>
-                            <div class="want-desc">类似已有的云絮灵、林雾鹿等，给世界加入更丰富的生态。魔法生物、动植物、奇异的地理现象都算。参考种族创建指南确保能量体系自洽即可。</div>
+                    <div class="contrib-card ct-story">
+                        <div class="contrib-top-bar"></div>
+                        <div class="contrib-header">
+                            <div class="contrib-icon">✍</div>
+                            <div class="contrib-name">叙事写作</div>
+                            <div class="contrib-badge">Narrative</div>
                         </div>
-                    </li>
+                        <div class="contrib-body">
+                            <div class="contrib-desc">短篇故事、角色日记、世界内文档（菜单、通知、日记）、支线剧情。哪怕100字的碎片也能给世界带来温度。</div>
+                            <div class="contrib-tags">
+                                <span class="contrib-ex">短篇故事</span>
+                                <span class="contrib-ex">角色传记</span>
+                                <span class="contrib-ex">世界内文书</span>
+                                <span class="contrib-ex">支线剧情</span>
+                            </div>
+                        </div>
+                    </div>
 
-                </ul>
+                    <div class="contrib-card ct-art">
+                        <div class="contrib-top-bar"></div>
+                        <div class="contrib-header">
+                            <div class="contrib-icon">🎨</div>
+                            <div class="contrib-name">视觉艺术</div>
+                            <div class="contrib-badge">Visual Art</div>
+                        </div>
+                        <div class="contrib-body">
+                            <div class="contrib-desc">角色设计、场景概念图、地图草稿、世界内物品设计图。AI绘画亦可，欢迎注明工具。</div>
+                            <div class="contrib-tags">
+                                <span class="contrib-ex">角色设计</span>
+                                <span class="contrib-ex">场景概念图</span>
+                                <span class="contrib-ex">地图草稿</span>
+                                <span class="contrib-ex">世界音乐</span>
+                                <span class="contrib-ex">现在即可开始</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="contrib-card ct-research">
+                        <div class="contrib-top-bar"></div>
+                        <div class="contrib-header">
+                            <div class="contrib-icon">◎</div>
+                            <div class="contrib-name">考据 · 研究</div>
+                            <div class="contrib-badge">Research</div>
+                        </div>
+                        <div class="contrib-body">
+                            <div class="contrib-desc">参考真实历史、文化、科学，为世界某个体系提供参考资料或逻辑依据。帮助让世界的运转更有说服力。</div>
+                            <div class="contrib-tags">
+                                <span class="contrib-ex">历史参考</span>
+                                <span class="contrib-ex">体系逻辑</span>
+                                <span class="contrib-ex">文化考据</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="contrib-card ct-other">
+                        <div class="contrib-top-bar"></div>
+                        <div class="contrib-header">
+                            <div class="contrib-icon">◇</div>
+                            <div class="contrib-name">其他贡献</div>
+                            <div class="contrib-badge">Other</div>
+                        </div>
+                        <div class="contrib-body">
+                            <div class="contrib-desc">校对与整理、提出问题和矛盾、提供技术支持（网站/工具/地图制作）、帮助宣传推广——一切让项目运转更好的行为。</div>
+                            <div class="contrib-tags">
+                                <span class="contrib-ex">校对整理</span>
+                                <span class="contrib-ex">矛盾指出</span>
+                                <span class="contrib-ex">技术支持</span>
+                                <span class="contrib-ex">宣传推广</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
 
-
-    <!-- ══════════ 参与流程 ══════════ -->
-    <div id="steps" class="zone-a">
-        <div class="sec">
-            <div class="sec-header reveal">
-                <div class="sec-label">How To Participate · Four Steps</div>
-                <div class="sec-title">参与方式 · <em>四步流程</em></div>
-                <div class="sec-div"></div>
-            </div>
-
-            <div class="steps-grid reveal" style="margin-bottom:20px;">
-                <div class="step-card">
-                    <div class="step-num">01</div>
-                    <div class="step-label">Step 01 · First</div>
-                    <div class="step-title">读一份文档</div>
-                    <div class="step-desc">推荐从《世界观概述》或《世界格局一览》开始，也可以直接看你感兴趣的区域或角色的文档。不需要读完所有。</div>
+        <!-- SECTION: 规则 -->
+        <div class="zone-b" id="rules">
+            <div class="sec">
+                <div class="sec-header reveal">
+                    <div class="sec-label">Rules & Standards · 规范守则</div>
+                    <div class="sec-title">创作<em>规则边界</em></div>
+                    <div class="sec-div"></div>
                 </div>
-                <div class="step-card">
-                    <div class="step-num">02</div>
-                    <div class="step-label">Step 02 · Then</div>
-                    <div class="step-title">产生一个想法</div>
-                    <div class="step-desc">任何想法，一个场景、一个角色、一个「如果……会怎样」都算。不需要完整，不需要成体系。</div>
+
+                <div class="alert alert-gold reveal">
+                    <div class="alert-title">核心原则</div>
+                    内容自洽优先。新加入的设定不得与已确认的世界观产生明显矛盾，如有冲突请先在群内讨论。世界的逻辑边界是真实的约束，请认真对待。
                 </div>
-                <div class="step-card">
-                    <div class="step-num">03</div>
-                    <div class="step-label">Step 03 · Next</div>
-                    <div class="step-title">以任意形式表达</div>
-                    <div class="step-desc">文字、图片、语音、表格、草图——任何能让别人理解你在说什么的形式都可以。推荐Markdown格式，但不强制。</div>
-                </div>
-                <div class="step-card">
-                    <div class="step-num">04</div>
-                    <div class="step-label">Step 04 · Finally</div>
-                    <div class="step-title">通过任意渠道提交</div>
-                    <div class="step-desc">见下方渠道表。不确定的想法可以先聊，欢迎随时来问。被采纳的内容按你意愿决定署名方式。</div>
-                </div>
-            </div>
 
-            <!-- 渠道表 -->
-            <div style="background:var(--raised);border:1px solid var(--border);margin-bottom:12px;" class="reveal">
-                <table class="channel-table">
-                    <thead>
-                        <tr>
-                            <th>渠道</th>
-                            <th>用途</th>
-                            <th>备注</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><span class="td-name"><a href="https://qm.qq.com/q/aj2BRJ8pRm">QQ群 608886521</a></span></td>
-                            <td>主要交流、提交、讨论</td>
-                            <td>首选渠道，随时可联系</td>
-                        </tr>
-                        <tr>
-                            <td><span class="td-name">在线文档共享</span></td>
-                            <td>协作编辑、多人共创</td>
-                            <td>后续建立共享空间</td>
-                        </tr>
-                        <tr>
-                            <td><span class="td-name">口头 / 私信</span></td>
-                            <td>不确定的想法，想先聊一聊</td>
-                            <td>欢迎随时来聊，没有门槛</td>
-                        </tr>
-                        <tr>
-                            <td><span class="td-name"><a href="https://www.matrees.cn/world/overview?worldId=2038155940993589248">Matrees 平台</a></span></td>
-                            <td>直接对世界观提交提案</td>
-                            <td>适合有把握的完整内容</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <div class="alert alert-teal reveal">
-                <div class="alert-title">署名说明</div>
-                可选择<strong>真名、笔名、网名</strong>任意一种署名，也可以匿名提交（注明「不署名」，文档附录只记录「来自匿名共创者」）。所有被采纳的内容均按意愿标注贡献者。
-            </div>
-        </div>
-    </div>
-
-
-    <!-- ══════════ 内容规范 ══════════ -->
-    <div id="rules" class="zone-c">
-        <div class="sec">
-            <div class="sec-header reveal">
-                <div class="sec-label">Content Guidelines · Rules & Norms</div>
-                <div class="sec-title">内容规范</div>
-                <div class="sec-div"></div>
-            </div>
-
-            <div style="background:var(--raised);border:1px solid var(--border);padding:4px 24px;margin-bottom:16px;" class="reveal">
-                <ul class="rule-list">
+                <ul class="rule-list reveal">
                     <li class="rule-item">
                         <div class="ri-icon ri-must">✕</div>
-                        <div class="ri-content"><strong>不推翻已确立的核心设定</strong>——可以有新的解释、扩展，但不要推翻已定的基础框架。<em>例：「仙酒不是由黄盈草酿造的」这类内容不可接受，除非你发现了真正的逻辑漏洞。</em></div>
+                        <div class="ri-content"><strong>禁止破坏性修改</strong>——不得单方面更改他人已确认的内容，也不得删除或覆盖已有正典设定。如有修改需求请在群内提出讨论。</div>
                     </li>
                     <li class="rule-item">
                         <div class="ri-icon ri-must">✕</div>
-                        <div class="ri-content"><strong>不创造碾压一切的人物 / 势力 / 武器</strong>——新内容不能破坏世界格局的内在平衡。强力设定可以有，但必须有对应的代价、限制和弱点。</div>
+                        <div class="ri-content"><strong>禁止无限度膨胀势力</strong>——原创角色可加入任意势力，但不应在没有讨论的前提下独自确立势力的最高权力结构或改变势力走向。</div>
                     </li>
                     <li class="rule-item">
-                        <div class="ri-icon ri-must">✕</div>
-                        <div class="ri-content"><strong>禁止 2 字以上音译式命名</strong>——所有名词基于简洁直白的中文意象，尽可能避免音译（2字音译可接受）。可以在中文名之后另起英文名。<em>例：晶能财团: Crystar ✓ / 「克里斯塔尔」✗</em></div>
-                    </li>
-                    <li class="rule-item">
-                        <div class="ri-icon ri-info">⊙</div>
-                        <div class="ri-content"><strong>能量体系自洽是核心中的核心</strong>——如果要创造新的魔法 / 仙术 / 科技，请先理解能量体系的基本规则（原素-生息-魔力三层结构，仙术消耗元气，魔法消耗生息）。所有新能力必须有代价。</div>
+                        <div class="ri-icon ri-warn">!</div>
+                        <div class="ri-content"><strong>新增重大设定需审核</strong>——影响世界平衡、引入全新超凡力量、改变主线走向的内容，需在群内讨论并获得群主确认后才可入典。<em>（轻量内容如生物、地形、文化细节无需额外审核）</em></div>
                     </li>
                     <li class="rule-item">
                         <div class="ri-icon ri-ok">✓</div>
-                        <div class="ri-content"><strong>基调可以灵活</strong>——主线偏严肃，但小故事可以轻松、幽默、甚至悲伤、无厘头。小型叙事的情绪范围完全开放。</div>
+                        <div class="ri-content"><strong>鼓励在灰色地带延伸</strong>——世界观文件中未明确的部分可以自由创作，只要整体氛围自洽。不确定时先问群，比写完了再改容易。</div>
                     </li>
                     <li class="rule-item">
                         <div class="ri-icon ri-ok">✓</div>
-                        <div class="ri-content"><strong>关于 AI 辅助</strong>——合理使用，不抵触。但所有AI生成的内容务必仔细检查，AI内容不能占大部分篇幅，仅可作为辅助。如果你不是使用AI的熟手，建议不使用（纠错比重写更麻烦）。</div>
+                        <div class="ri-content"><strong>AI辅助创作可接受</strong>——可使用AI辅助写作或绘图，但请注明，并保证内容经过你的审阅与调整，不要直接粘贴生成结果。</div>
                     </li>
                     <li class="rule-item">
-                        <div class="ri-icon ri-info">⊙</div>
-                        <div class="ri-content"><strong>文档格式建议</strong>——Markdown 优先，Doc 和 TXT 也可以。</div>
-                    </li>
-                    <li class="rule-item">
-                        <div class="ri-icon ri-info">⊙</div>
-                        <div class="ri-content"><strong>灰度设计建议</strong>——世界整体不是非黑即白的风格，而是一种结构化困境，最好使用一些灰度设计而非纯粹的恶人或善人，保证矛盾点和内部张力。</div>
+                        <div class="ri-icon ri-info">i</div>
+                        <div class="ri-content"><strong>作者保留署名权</strong>——所有入典内容均会记录贡献者署名。版权归原作者所有，项目不会将内容用于商业用途（游戏化等阶段另行协商）。</div>
                     </li>
                 </ul>
-            </div>
 
-            <!-- 命名规则 -->
-            <div class="sec-label" style="text-align:center;margin-bottom:16px;" class="reveal">Naming Convention · 命名规则详解</div>
-
-            <div class="alert alert-purple reveal" style="margin-bottom:12px;">
-                <div class="alert-title">核心原则</div>
-                所有名词基于<strong>简洁直白的中文意象</strong>，直接看名字就能感受到它是什么。音译外来词建议尽量避免。英文名可以在中文名之后另起，作为补充，或使用称号的形式，例如：强尼·银手。
-            </div>
-
-            <div class="naming-grid reveal">
-                <div class="naming-card">
-                    <div class="nc-label nc-no">✕ 不可以</div>
-                    <ul class="nc-items nc-no">
-                        <li class="nc-item">「克里斯塔尔财团」（音译）</li>
-                        <li class="nc-item">「瓦尔哈拉」（神话地名音译）</li>
-                        <li class="nc-item">「艾达玛」（虚构词音译）</li>
-                        <li class="nc-item">「雷格纳洛克事件」</li>
-                        <li class="nc-item">任何只靠音节拼凑的 2 字以上名字</li>
-                    </ul>
-                </div>
-                <div class="naming-card">
-                    <div class="nc-label nc-yes">✓ 可以这样做</div>
-                    <ul class="nc-items nc-yes">
-                        <li class="nc-item">「晶能财团」（功能直白）: Crystar</li>
-                        <li class="nc-item">「暮冬森林」（意象直白）</li>
-                        <li class="nc-item">「断云关」（地理＋意象）</li>
-                        <li class="nc-item">「北海港大撕裂」（事件描述）</li>
-                        <li class="nc-item">「露西」（2 字以内音译词）</li>
-                        <li class="nc-item">「布莱德·影刃」（音译＋中文称号）</li>
-                    </ul>
-                </div>
-            </div>
-
-            <!-- 入门路径 -->
-            <div class="sec-label" style="text-align:center;margin:28px 0 14px;" class="reveal">Recommended Reading Path · 推荐入门路径</div>
-
-            <div class="path-row reveal" style="margin-bottom:16px;">
-                <div class="path-step">
-                    <div class="path-num">STEP 01</div>
-                    <div class="path-name">世界观概述</div>
-                    <div class="path-hint">能量体系、世界结构、基本格局</div>
-                </div>
-                <div class="path-step">
-                    <div class="path-num">STEP 02</div>
-                    <div class="path-name">世界格局一览</div>
-                    <div class="path-hint">快速定位当前世界整体</div>
-                </div>
-                <div class="path-step">
-                    <div class="path-num">STEP 03</div>
-                    <div class="path-name">选择你感兴趣的</div>
-                    <div class="path-hint">某势力、某角色、某区域的完整设定</div>
-                </div>
-                <div class="path-step">
-                    <div class="path-num">STEP 04</div>
-                    <div class="path-name">开始贡献</div>
-                    <div class="path-hint">任意形式，通过任意渠道提交</div>
-                </div>
-            </div>
-
-            <!-- 快速自检 -->
-            <div class="sec-label" style="text-align:center;margin-bottom:14px;" class="reveal">Pre-Submission Checklist · 提交前快速自检</div>
-
-            <div class="check-grid reveal" style="margin-bottom:16px;">
-                <div class="check-col">
-                    <div class="check-col-title cct-bad">如果回答是「是」→ 需要修改</div>
-                    <div class="check-item"><span class="ci-icon ci-bad">✕</span><span>这个内容推翻了某个已确立的核心设定吗？</span></div>
-                    <div class="check-item"><span class="ci-icon ci-bad">✕</span><span>新角色 / 势力 / 能力是否无代价地碾压了现有一切？</span></div>
-                    <div class="check-item"><span class="ci-icon ci-bad">✕</span><span>名字里有 2 字以上音译词吗？</span></div>
-                    <div class="check-item"><span class="ci-icon ci-bad">✕</span><span>新的能力有没有代价和限制？</span></div>
-                    <div class="check-item"><span class="ci-icon ci-bad">✕</span><span>魔法 / 仙术的使用符合能量体系规则吗？</span></div>
-                </div>
-                <div class="check-col">
-                    <div class="check-col-title cct-good">如果回答是「是」→ 可以提交</div>
-                    <div class="check-item"><span class="ci-icon ci-good">✓</span><span>读过至少一份相关的世界观文档了吗？</span></div>
-                    <div class="check-item"><span class="ci-icon ci-good">✓</span><span>内容能放进现有的地图 / 势力格局里吗？</span></div>
-                    <div class="check-item"><span class="ci-icon ci-good">✓</span><span>名字看名字就能感受到它是什么吗？</span></div>
-                    <div class="check-item"><span class="ci-icon ci-good">✓</span><span>不确定的地方有标注出来让读者知道吗？</span></div>
-                    <div class="check-item"><span class="ci-icon ci-good">✓</span><span>如果是新能力，代价和限制都写清楚了吗？</span></div>
-                </div>
-            </div>
-
-            <!-- 几个不用担心 -->
-            <div style="background:var(--raised);border:1px solid var(--border);padding:4px 24px;" class="reveal">
-                <div class="tip-rows">
-                    <div class="tip-row">
-                        <div class="tip-dot" style="background:var(--green);"></div>
-                        <div class="tip-text"><strong>不用担心「不够好」。</strong>草图、碎片化的想法、「我觉得这里可以有个什么」都可以直接说出来，不需要整理成完整文档才提交。</div>
+                <div style="margin-top: 36px;">
+                    <div class="sec-header reveal">
+                        <div class="sec-label">Naming · 命名规范</div>
+                        <div class="sec-title">名称<em>怎么取</em></div>
+                        <div class="sec-div"></div>
                     </div>
-                    <div class="tip-row">
-                        <div class="tip-dot" style="background:var(--green);"></div>
-                        <div class="tip-text"><strong>不用担心「跟已有内容重复」。</strong>不同视角对同一个地方的解读可以共存，发现文档里有类似内容也可以来聊，说不定能合并得更丰富。</div>
+                    <div class="naming-grid reveal">
+                        <div class="naming-card nc-no">
+                            <div class="nc-label">✕ 避免</div>
+                            <ul class="nc-items">
+                                <li class="nc-item">直接搬用现有IP名称（如「索隆」「甘道夫」）</li>
+                                <li class="nc-item">与已有正典角色/地点完全相同的名字</li>
+                                <li class="nc-item">过于现代感/网感的名字（出戏）</li>
+                                <li class="nc-item">拼音缩写堆砌（如「ZXLM」类无意义缩写）</li>
+                            </ul>
+                        </div>
+                        <div class="naming-card nc-yes">
+                            <div class="nc-label">✓ 推荐</div>
+                            <ul class="nc-items">
+                                <li class="nc-item">符合势力/地区文化氛围的命名风格</li>
+                                <li class="nc-item">融合真实文化元素的创意改造</li>
+                                <li class="nc-item">与世界内语言体系有关联的名字</li>
+                                <li class="nc-item">不确定时在群里问，大家会给建议</li>
+                            </ul>
+                        </div>
                     </div>
-                    <div class="tip-row">
-                        <div class="tip-dot" style="background:var(--green);"></div>
-                        <div class="tip-text"><strong>不用担心「被否掉」。</strong>被提出修改意见不等于被拒绝。绝大多数内容都是在讨论中调整的，而不是直接全盘否定。</div>
+                </div>
+
+                <div style="margin-top: 36px;">
+                    <div class="sec-header reveal">
+                        <div class="sec-label">Quality · 质量基准</div>
+                        <div class="sec-title">什么是<em>有效贡献</em></div>
+                        <div class="sec-div"></div>
                     </div>
-                    <div class="tip-row" style="border-bottom:none;">
-                        <div class="tip-dot" style="background:var(--gold);"></div>
-                        <div class="tip-text"><strong>「不确定符不符合世界观」</strong>直接来聊就行，这是最欢迎的问法。带着问题来聊比自己反复查文档然后放弃效率高得多。</div>
+                    <div class="check-grid reveal">
+                        <div class="check-col">
+                            <div class="check-col-title cct-bad">✕ 不推荐这样做</div>
+                            <div class="check-item"><span class="ci-icon ci-bad">✕</span>内容与已有世界观设定明显冲突但未标注</div>
+                            <div class="check-item"><span class="ci-icon ci-bad">✕</span>完全未经修改的AI生成内容（即使有价值也要打磨）</div>
+                            <div class="check-item"><span class="ci-icon ci-bad">✕</span>只有概念没有任何具体细节（「这里有很多很酷的东西」）</div>
+                            <div class="check-item"><span class="ci-icon ci-bad">✕</span>单方面赋予角色超越世界设定上限的能力</div>
+                        </div>
+                        <div class="check-col">
+                            <div class="check-col-title cct-good">✓ 有效贡献的样子</div>
+                            <div class="check-item"><span class="ci-icon ci-good">✓</span>哪怕只有一两段文字，但有具体的情绪和细节</div>
+                            <div class="check-item"><span class="ci-icon ci-good">✓</span>注明来源和参考，方便后续扩展</div>
+                            <div class="check-item"><span class="ci-icon ci-good">✓</span>主动标注「待确认」「暂定」区分草稿与正典</div>
+                            <div class="check-item"><span class="ci-icon ci-good">✓</span>在矛盾处提出问题而不是自行强行填补</div>
+                        </div>
                     </div>
                 </div>
             </div>
-
         </div>
-    </div>
 
+        <!-- SECTION: 如何开始 -->
+        <div class="zone-a" id="howto">
+            <div class="sec">
+                <div class="sec-header reveal">
+                    <div class="sec-label">Getting Started · 入门流程</div>
+                    <div class="sec-title">怎样<em>开始共创</em></div>
+                    <div class="sec-div"></div>
+                </div>
 
-    <!-- ══════════ 项目规划（留白区） ══════════ -->
-    <div id="plan" class="zone-a">
-        <div class="sec">
-            <div class="sec-header reveal">
-                <div class="sec-label">Project Roadmap · 项目规划</div>
-                <div class="sec-title">当前<em>项目规划</em></div>
-                <div class="sec-div"></div>
-            </div>
+                <div class="path-row reveal">
+                    <div class="path-step">
+                        <div class="path-num">01</div>
+                        <div class="path-name">加入创作群</div>
+                        <div class="path-hint">QQ群 608886521，进群后阅读置顶公告和世界观文件目录。</div>
+                    </div>
+                    <div class="path-step">
+                        <div class="path-num">02</div>
+                        <div class="path-name">浏览已有设定</div>
+                        <div class="path-hint">前往 Matrees 解析世界主页，了解三大势力、能量体系、当前危机。</div>
+                    </div>
+                    <div class="path-step">
+                        <div class="path-num">03</div>
+                        <div class="path-name">找到感兴趣的方向</div>
+                        <div class="path-hint">不需要全部读完再动笔。挑一个最吸引你的角落开始探索。</div>
+                    </div>
+                    <div class="path-step">
+                        <div class="path-num">04</div>
+                        <div class="path-name">在群里说一句</div>
+                        <div class="path-hint">告诉大家你想做什么，避免重复劳动，也能提前收到有用建议。</div>
+                    </div>
+                    <div class="path-step">
+                        <div class="path-num">05</div>
+                        <div class="path-name">提交内容</div>
+                        <div class="path-hint">发群 → 群主审核 → 入典 or 讨论修改。没有固定格式，随意一些。</div>
+                    </div>
+                </div>
 
-            <div class="plan-placeholder reveal">
-                <div class="plan-placeholder-inner">
-                    <span class="plan-placeholder-symbol">◈</span>
-                    <div class="plan-placeholder-label">// This section is reserved · 此处留白</div>
-                    <div class="plan-placeholder-text">
-                        这一区块由项目主理人自定义填写。<br>
-                        可以放置：里程碑规划、当前进度、已完成事项、近期目标、征稿方向等任何内容。
+                <div style="margin-top: 40px;">
+                    <div class="sec-header reveal">
+                        <div class="sec-label">Channels · 内容提交渠道</div>
+                        <div class="sec-title">内容<em>发到哪里</em></div>
+                        <div class="sec-div"></div>
+                    </div>
+                    <table class="channel-table reveal">
+                        <thead>
+                            <tr>
+                                <th>渠道</th>
+                                <th>适合内容</th>
+                                <th>链接/说明</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="td-name">QQ创作群</td>
+                                <td>所有内容的第一站；草稿、讨论、提问</td>
+                                <td><a href="https://qm.qq.com/q/aj2BRJ8pRm" target="_blank">608886521 · 点击加入</a></td>
+                            </tr>
+                            <tr>
+                                <td class="td-name">Matrees 解析世界</td>
+                                <td>经过讨论后确认入典的正式内容</td>
+                                <td><a href="https://www.matrees.cn/world/overview?worldId=2038155940993589248" target="_blank">matrees.cn · 解析世界主页</a></td>
+                            </tr>
+                            <tr>
+                                <td class="td-name">群文件</td>
+                                <td>长文档、图稿、设计文件</td>
+                                <td>进群后直接上传至群文件，标注类型</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div style="margin-top: 40px;">
+                    <div class="sec-header reveal">
+                        <div class="sec-label">Tips · 创作建议</div>
+                        <div class="sec-title">有用的<em>小提示</em></div>
+                        <div class="sec-div"></div>
+                    </div>
+                    <div class="tip-rows reveal">
+                        <div class="tip-row">
+                            <div class="tip-dot" style="background:var(--gold)"></div>
+                            <div class="tip-text"><strong>从小处开始</strong>——一种植物的完整描述、一道菜的做法、一个小民俗，都比「我要设计整个能力体系」更容易推进，且同样有价值。</div>
+                        </div>
+                        <div class="tip-row">
+                            <div class="tip-dot" style="background:var(--purple)"></div>
+                            <div class="tip-text"><strong>允许留白</strong>——不需要把每个设定都填满到百科全书程度。一两段有情绪的描述，比十页干燥的说明更有感染力。</div>
+                        </div>
+                        <div class="tip-row">
+                            <div class="tip-dot" style="background:var(--teal)"></div>
+                            <div class="tip-text"><strong>矛盾和疑问也是贡献</strong>——发现世界观里的逻辑漏洞或自相矛盾，指出来本身就在帮助世界变得更自洽。</div>
+                        </div>
+                        <div class="tip-row">
+                            <div class="tip-dot" style="background:var(--blue)"></div>
+                            <div class="tip-text"><strong>不要等「准备好」</strong>——新项目阶段，任何时间点都是开始的好时机。设定会变，早期参与者影响力更大。</div>
+                        </div>
+                        <div class="tip-row">
+                            <div class="tip-dot" style="background:var(--pink)"></div>
+                            <div class="tip-text"><strong>叙事风格参考</strong>——整体氛围偏《魔兽世界》《英雄联盟宇宙》——不需要长篇大论，但要有具体的情绪和细节，避免干燥的设定堆砌。</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="margin-top: 40px;">
+                    <div class="sec-header reveal">
+                        <div class="sec-label">Flow · 创作流程</div>
+                        <div class="sec-title">内容的<em>生命周期</em></div>
+                        <div class="sec-div"></div>
+                    </div>
+                    <div class="steps-grid reveal">
+                        <div class="step-card">
+                            <div class="step-num">01</div>
+                            <div class="step-label">Step · 构思</div>
+                            <div class="step-title">自由创作，不设限</div>
+                            <div class="step-desc">可以是只言片语，也可以是完整文档。不需要格式，不需要完整，随时可以开始。</div>
+                        </div>
+                        <div class="step-card">
+                            <div class="step-num">02</div>
+                            <div class="step-label">Step · 反馈</div>
+                            <div class="step-title">发到群里讨论</div>
+                            <div class="step-desc">让其他创作者看到你在做什么。群内讨论可以帮助发现问题、避免冲突、找到协作方向。</div>
+                        </div>
+                        <div class="step-card">
+                            <div class="step-num">03</div>
+                            <div class="step-label">Step · 审核</div>
+                            <div class="step-title">群主确认是否入典</div>
+                            <div class="step-desc">轻量内容（生物/地形/文化细节）通常直接入典。影响重大的设定会进行讨论后决定。</div>
+                        </div>
+                        <div class="step-card">
+                            <div class="step-num">04</div>
+                            <div class="step-label">Step · 入典</div>
+                            <div class="step-title">成为世界正典的一部分</div>
+                            <div class="step-desc">内容上传至 Matrees，注明贡献者。你的创作正式成为解析世界的一部分，供所有创作者参考和延伸。</div>
+                        </div>
                     </div>
                 </div>
             </div>
-
         </div>
-    </div>
 
+        <!-- SECTION: 详细说明 -->
+        <div class="zone-c" id="detail">
+            <div class="sec">
+                <div class="sec-header reveal">
+                    <div class="sec-label">Focus Areas · 各方向详细说明</div>
+                    <div class="sec-title">具体<em>能做什么</em></div>
+                    <div class="sec-div"></div>
+                </div>
 
-    <!-- FOOTER -->
-    <footer class="footer">
-        <div class="footer-inner">
-            <div class="footer-title">解析世界 · 欢迎共创</div>
-            <p style="font-size:13px;color:var(--text-3);letter-spacing:.04em;line-height:1.8;">
-                新项目，欢迎来一起种树。
-            </p>
-            <div class="footer-ctas">
-                <a href="https://www.matrees.cn/world/overview?worldId=2038155940993589248" class="footer-cta footer-cta-teal" target="_blank">◈ Matrees · 解析世界</a>
-                <a href="https://qm.qq.com/q/aj2BRJ8pRm" class="footer-cta footer-cta-gold" target="_blank">★ 加入创作群 QQ608886521</a>
+                <div class="alert alert-gold reveal">
+                    <div class="alert-title">主线规划说明</div>
+                    主线框架复杂，推荐<strong>文笔最好的创作者主导</strong>。暂定大纲：<strong>三线叙事偏群像</strong>，包含一定主题深度。主线推进需与世界危机（平衡被打破、虫族裂隙）深度咬合。
+                </div>
+
+                <div class="alert alert-purple reveal">
+                    <div class="alert-title">宗教体系说明</div>
+                    宗教体系将与克苏鲁神话框架联系在一起，具体逻辑参考「世界观主体 — 角色 — 不可名状」中的描述。同时各势力的民间信仰中均已埋下对应的接入口，欢迎在上面延伸。
+                </div>
+
+                <div class="want-list reveal">
+                    <div class="want-item">
+                        <div class="want-icon" style="color:var(--gold);border-color:var(--gold-b);background:rgba(232,184,80,.06);">◎</div>
+                        <div class="want-content">
+                            <div class="want-title">生态系统 <span class="want-tag wt-hot">急需</span></div>
+                            <div class="want-desc">
+                                不需要百科全书式的体量。一种植物、一种动物、一道菜的完整描述都算有效贡献。<br>
+                                特别欢迎：各地区特有物种、食物与功效（吃了某种东西会有什么短暂效果）、各势力的日常饮食文化差异。
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="want-item">
+                        <div class="want-icon" style="color:var(--teal);border-color:rgba(80,232,208,.3);background:rgba(80,232,208,.06);">◎</div>
+                        <div class="want-content">
+                            <div class="want-title">地形地貌</div>
+                            <div class="want-desc">
+                                地形创作可以只有一两段文字，不需要完整文档。<br>
+                                参考方向：时间之海的扭曲礁石因时间扰动呈超自然几何结构；凝晶高原有大断崖；暮冬森林有镜湖；魔之地等。
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="want-item">
+                        <div class="want-icon" style="color:var(--purple);border-color:rgba(200,160,255,.3);background:rgba(200,160,255,.06);">◎</div>
+                        <div class="want-content">
+                            <div class="want-title">文化与信仰 <span class="want-tag wt-hot">急需</span></div>
+                            <div class="want-desc">
+                                <strong>极光机枢</strong>：底层环的嘻哈、摇滚、地下音乐场景；灰隙居民的街头涂鸦语言；蓝夜狂欢具体发生了什么。<br>
+                                <strong>月轨城</strong>：漏瓶物哀文化的具体表现；守恒派和探索派的学术争论方式；魔法师墓园的设计哲学（生息碑林）。<br>
+                                <strong>千源境</strong>：酒歌具体长什么样，活动场面；开剑礼仪式的具体流程；底层百姓怎么过节。<br>
+                                <strong>宗教体系</strong>：不可名状在民间信仰中以什么形态出现；各势力的死亡观在日常仪式中如何体现。
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="want-item">
+                        <div class="want-icon" style="color:var(--blue);border-color:rgba(122,184,240,.3);background:rgba(122,184,240,.06);">◎</div>
+                        <div class="want-content">
+                            <div class="want-title">能力体系</div>
+                            <div class="want-desc">
+                                框架重做优先于内容填充。框架确立后，欢迎按等级补充具体术式：<br>
+                                <strong>仙术</strong>：八系各需代表性术式。<br>
+                                <strong>魔法</strong>：原型、原素、派系、阵列、传说均需充实，特别欢迎有趣代价机制的奇怪术式（参考魔法创建模板）。<br>
+                                能力体系的等级划分会直接对应跑团规则，设计时请预留数值空间。
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="want-item">
+                        <div class="want-icon" style="color:var(--red);border-color:rgba(255,100,100,.3);background:rgba(255,100,100,.06);">◎</div>
+                        <div class="want-content">
+                            <div class="want-title">势力内部细节 <span class="want-tag wt-hot">急需</span></div>
+                            <div class="want-desc">
+                                推荐填充内部深度而非扩展宽度。优先级较高的缺口：<br>
+                                <strong>极光机枢</strong>：各财团私兵的具体建制（武器/战术/规模）；规序局执法的日常操作；底层工坊的工作场景。<br>
+                                <strong>千源境</strong>：酒务官体系；影刃的具体任务类型；铸剑会的评审流程。<br>
+                                <strong>月轨城</strong>：魔法学院的修炼课程体系；八塔塔守的日常工作。<br>
+                                <strong>其他区域</strong>：暮冬森林冰雪族猎手的捕猎活动；紫荆园的日常；云屿时望者的传承。
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="want-item" style="border-bottom:none;">
+                        <div class="want-icon" style="color:var(--green);border-color:rgba(80,216,150,.3);background:rgba(80,216,150,.06);">◎</div>
+                        <div class="want-content">
+                            <div class="want-title">背景故事 · 小文章 <span class="want-tag wt-open">开放</span></div>
+                            <div class="want-desc">
+                                理想情况下每个人物、每件物品都需要一小段背景故事（100~200字即可）。叙事风格可以参考《魔兽》《英雄联盟宇宙》——不需要长，但要有具体的情绪和细节。<br>
+                                另外欢迎撰写「世界里的文章」：一份千源境酒馆的菜单、一页月轨城研究院实习生的日记、一则极光机枢信息财团的内部通报、一段云屿的交易。这类碎片化内容能给世界带来无法被大型文档替代的温度。
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="footer-meta">Open Worldbuilding · EC 174 · Contributor's Manual</div>
         </div>
-    </footer>
+
+        <!-- SECTION: 长期规划 -->
+        <div class="zone-b" id="longterm">
+            <div class="sec">
+                <div class="sec-header reveal">
+                    <div class="sec-label">Long-term · 长期规划</div>
+                    <div class="sec-title">未来<em>往哪走</em></div>
+                    <div class="sec-div"></div>
+                </div>
+
+                <div class="lt-grid reveal">
+                    <div class="lt-card">
+                        <div class="lt-label">地图项目</div>
+                        <div class="lt-title">🗺 世界地图制作</div>
+                        <div class="lt-desc">定制或自制，以情况而定。需要在地形地貌与势力分布相对稳定后才能推进。有制图技能或相关资源的朋友欢迎提前联系群主。</div>
+                        <div class="lt-progress">
+                            <span class="lt-plabel">进度</span>
+                            <div class="lt-bar"><div class="lt-fill" style="width:0%;background:var(--blue);"></div></div>
+                            <span class="lt-plabel">0%</span>
+                        </div>
+                    </div>
+                    <div class="lt-card">
+                        <div class="lt-label">跑团规则 · 预计一年内</div>
+                        <div class="lt-title">🎲 TRPG 规则系统</div>
+                        <div class="lt-desc">基于世界观能量体系设计。仙术等级、魔法代价、虫族遭遇、世界汲取等机制将被系统化。有 TRPG 设计经验的创作者欢迎加入讨论。</div>
+                        <div class="lt-progress">
+                            <span class="lt-plabel">进度</span>
+                            <div class="lt-bar"><div class="lt-fill" style="width:0%;background:var(--gold);"></div></div>
+                            <span class="lt-plabel">0%</span>
+                        </div>
+                    </div>
+                    <div class="lt-card">
+                        <div class="lt-label">游戏化 · 两年后视情况</div>
+                        <div class="lt-title">🎮 游戏化探索</div>
+                        <div class="lt-desc">可能形态：简单 RPG 或卡牌游戏 或 解密游戏。视世界观成熟度与人员情况而定。有游戏开发经验的创作者可以保持关注，届时会在群内发起讨论。</div>
+                        <div class="lt-progress">
+                            <span class="lt-plabel">进度</span>
+                            <div class="lt-bar"><div class="lt-fill" style="width:0%;background:var(--text-3);"></div></div>
+                            <span class="lt-plabel">0%</span>
+                        </div>
+                    </div>
+                    <div class="lt-card">
+                        <div class="lt-label">主线故事 · 进行中</div>
+                        <div class="lt-title">📖 主线大纲确立中</div>
+                        <div class="lt-desc">三线叙事偏群像，包含主题深度。推荐文笔最好的朋友执笔主线框架。主线将与世界当前危机深度咬合。</div>
+                        <div class="lt-progress">
+                            <span class="lt-plabel">进度</span>
+                            <div class="lt-bar"><div class="lt-fill" style="width:20%;background:var(--teal);"></div></div>
+                            <span class="lt-plabel">20%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="plan-note reveal">
+                    <strong>关于宗教体系与不可名状</strong>——宗教设定将与克苏鲁神话框架联系在一起，具体逻辑参考「世界观主体 — 角色 — 不可名状」中的描述。各势力的民间信仰中已埋下对应的接入口，欢迎延伸。
+                </div>
+            </div>
+        </div>
+
+        <!-- FOOTER -->
+        <footer class="footer">
+            <div class="footer-inner">
+                <div class="footer-title">解析世界 · The Parsed World · 欢迎共创</div>
+                <p style="font-size:13px;color:var(--text-3);letter-spacing:.04em;line-height:1.8;">
+                    新项目，欢迎来一起种树。
+                </p>
+                <div class="footer-ctas">
+                    <a href="https://www.matrees.cn/world/overview?worldId=2038155940993589248" class="footer-cta footer-cta-teal" target="_blank">◈ Matrees · 解析世界</a>
+                    <a href="https://qm.qq.com/q/aj2BRJ8pRm" class="footer-cta footer-cta-gold" target="_blank">★ 加入创作群 QQ 608886521</a>
+                </div>
+                <div class="footer-meta">Open Worldbuilding · EC 174 · Contributor's Manual</div>
+            </div>
+        </footer>
+
+    </div><!-- /guide -->
 
     <script>
-    // NAV
-    const nav = document.getElementById("nav");
-    window.addEventListener("scroll", () => nav.classList.toggle("visible", window.scrollY > 80));
-
-    // REVEAL
-    const ro = new IntersectionObserver(entries => {
-        entries.forEach(e => {
-            if (e.isIntersecting) { setTimeout(() => e.target.classList.add("in"), 60); ro.unobserve(e.target); }
-        });
-    }, { threshold: .06, rootMargin: "0px 0px -20px 0px" });
-    document.querySelectorAll(".reveal").forEach(el => ro.observe(el));
+        // Guide scroll & reveal
+        (function () {
+            const nav = document.getElementById('nav');
+            window.addEventListener('scroll', () => {
+                nav.classList.toggle('visible', window.scrollY > 80);
+            });
+            const ro = new IntersectionObserver(entries => {
+                entries.forEach(e => {
+                    if (e.isIntersecting) {
+                        setTimeout(() => e.target.classList.add('in'), 60);
+                        ro.unobserve(e.target);
+                    }
+                });
+            }, { threshold: .06, rootMargin: '0px 0px -20px 0px' });
+            document.querySelectorAll('.reveal').forEach(el => ro.observe(el));
+        })();
     </script>
 
 </body>
