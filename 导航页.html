@@ -137,81 +137,284 @@
         /* GLITCH EFFECT — fires 3 times per 10s cycle */
         /* Glitch windows at ~30%, ~63%, ~96% of 10s = t=3s,6.3s,9.6s each ~0.4s wide */
         @keyframes glitch1 {
-            0%,27%,33%,60%,66%,93%,100% { clip-path:none;transform:none;opacity:1;filter:none }
-            28%  { clip-path:polygon(0 15%,100% 15%,100% 30%,0 30%);transform:translate(-3px,0);opacity:.9;filter:hue-rotate(90deg) }
-            29%  { clip-path:polygon(0 55%,100% 55%,100% 70%,0 70%);transform:translate(3px,0);filter:hue-rotate(-30deg) }
-            30%  { clip-path:polygon(0 5%,100% 5%,100% 12%,0 12%);transform:translate(-2px,0);filter:hue-rotate(60deg) }
-            31%  { clip-path:none;transform:none;filter:none }
-            61%  { clip-path:polygon(0 20%,100% 20%,100% 38%,0 38%);transform:translate(3px,0);opacity:.9;filter:hue-rotate(-90deg) }
-            62%  { clip-path:polygon(0 60%,100% 60%,100% 75%,0 75%);transform:translate(-3px,0);filter:hue-rotate(40deg) }
-            63%  { clip-path:polygon(0 8%,100% 8%,100% 16%,0 16%);transform:translate(2px,0);filter:hue-rotate(-60deg) }
-            64%  { clip-path:none;transform:none;filter:none }
-            94%  { clip-path:polygon(0 40%,100% 40%,100% 55%,0 55%);transform:translate(-3px,0);opacity:.9;filter:hue-rotate(120deg) }
-            95%  { clip-path:polygon(0 10%,100% 10%,100% 22%,0 22%);transform:translate(3px,0);filter:hue-rotate(-45deg) }
-            96%  { clip-path:polygon(0 70%,100% 70%,100% 82%,0 82%);transform:translate(-2px,0);filter:hue-rotate(80deg) }
-            97%  { clip-path:none;transform:none;filter:none }
+            0%,27%,33%,60%,66%,93%,100% {
+                clip-path: none;
+                transform: none;
+                opacity: 1;
+                filter: none
+            }
+
+            28% {
+                clip-path: polygon(0 15%,100% 15%,100% 30%,0 30%);
+                transform: translate(-3px,0);
+                opacity: .9;
+                filter: hue-rotate(90deg)
+            }
+
+            29% {
+                clip-path: polygon(0 55%,100% 55%,100% 70%,0 70%);
+                transform: translate(3px,0);
+                filter: hue-rotate(-30deg)
+            }
+
+            30% {
+                clip-path: polygon(0 5%,100% 5%,100% 12%,0 12%);
+                transform: translate(-2px,0);
+                filter: hue-rotate(60deg)
+            }
+
+            31% {
+                clip-path: none;
+                transform: none;
+                filter: none
+            }
+
+            61% {
+                clip-path: polygon(0 20%,100% 20%,100% 38%,0 38%);
+                transform: translate(3px,0);
+                opacity: .9;
+                filter: hue-rotate(-90deg)
+            }
+
+            62% {
+                clip-path: polygon(0 60%,100% 60%,100% 75%,0 75%);
+                transform: translate(-3px,0);
+                filter: hue-rotate(40deg)
+            }
+
+            63% {
+                clip-path: polygon(0 8%,100% 8%,100% 16%,0 16%);
+                transform: translate(2px,0);
+                filter: hue-rotate(-60deg)
+            }
+
+            64% {
+                clip-path: none;
+                transform: none;
+                filter: none
+            }
+
+            94% {
+                clip-path: polygon(0 40%,100% 40%,100% 55%,0 55%);
+                transform: translate(-3px,0);
+                opacity: .9;
+                filter: hue-rotate(120deg)
+            }
+
+            95% {
+                clip-path: polygon(0 10%,100% 10%,100% 22%,0 22%);
+                transform: translate(3px,0);
+                filter: hue-rotate(-45deg)
+            }
+
+            96% {
+                clip-path: polygon(0 70%,100% 70%,100% 82%,0 82%);
+                transform: translate(-2px,0);
+                filter: hue-rotate(80deg)
+            }
+
+            97% {
+                clip-path: none;
+                transform: none;
+                filter: none
+            }
         }
 
         @keyframes glitch2 {
-            0%,25%,32%,58%,65%,91%,100% { opacity:0;transform:none }
-            26% { opacity:.7;transform:translate(4px,0);clip-path:polygon(0 40%,100% 40%,100% 55%,0 55%);filter:hue-rotate(180deg) brightness(1.4) }
-            27% { opacity:.5;transform:translate(-4px,0);clip-path:polygon(0 70%,100% 70%,100% 85%,0 85%);filter:hue-rotate(-90deg) }
-            28% { opacity:0 }
-            59% { opacity:.7;transform:translate(-4px,0);clip-path:polygon(0 25%,100% 25%,100% 42%,0 42%);filter:hue-rotate(200deg) brightness(1.3) }
-            60% { opacity:.5;transform:translate(4px,0);clip-path:polygon(0 60%,100% 60%,100% 78%,0 78%);filter:hue-rotate(-120deg) }
-            61% { opacity:0 }
-            92% { opacity:.7;transform:translate(4px,0);clip-path:polygon(0 15%,100% 15%,100% 32%,0 32%);filter:hue-rotate(160deg) brightness(1.5) }
-            93% { opacity:.5;transform:translate(-4px,0);clip-path:polygon(0 65%,100% 65%,100% 80%,0 80%);filter:hue-rotate(-80deg) }
-            94% { opacity:0 }
+            0%,25%,32%,58%,65%,91%,100% {
+                opacity: 0;
+                transform: none
+            }
+
+            26% {
+                opacity: .7;
+                transform: translate(4px,0);
+                clip-path: polygon(0 40%,100% 40%,100% 55%,0 55%);
+                filter: hue-rotate(180deg) brightness(1.4)
+            }
+
+            27% {
+                opacity: .5;
+                transform: translate(-4px,0);
+                clip-path: polygon(0 70%,100% 70%,100% 85%,0 85%);
+                filter: hue-rotate(-90deg)
+            }
+
+            28% {
+                opacity: 0
+            }
+
+            59% {
+                opacity: .7;
+                transform: translate(-4px,0);
+                clip-path: polygon(0 25%,100% 25%,100% 42%,0 42%);
+                filter: hue-rotate(200deg) brightness(1.3)
+            }
+
+            60% {
+                opacity: .5;
+                transform: translate(4px,0);
+                clip-path: polygon(0 60%,100% 60%,100% 78%,0 78%);
+                filter: hue-rotate(-120deg)
+            }
+
+            61% {
+                opacity: 0
+            }
+
+            92% {
+                opacity: .7;
+                transform: translate(4px,0);
+                clip-path: polygon(0 15%,100% 15%,100% 32%,0 32%);
+                filter: hue-rotate(160deg) brightness(1.5)
+            }
+
+            93% {
+                opacity: .5;
+                transform: translate(-4px,0);
+                clip-path: polygon(0 65%,100% 65%,100% 80%,0 80%);
+                filter: hue-rotate(-80deg)
+            }
+
+            94% {
+                opacity: 0
+            }
         }
 
         @keyframes glitch3 {
-            0%,27%,34%,60%,67%,92%,100% { opacity:0 }
-            28% { opacity:.4;transform:translate(0,2px);filter:hue-rotate(270deg) saturate(3) }
-            29% { opacity:0 }
-            61% { opacity:.4;transform:translate(0,-2px);filter:hue-rotate(300deg) saturate(4) }
-            62% { opacity:0 }
-            93% { opacity:.4;transform:translate(0,2px);filter:hue-rotate(240deg) saturate(3.5) }
-            94% { opacity:0 }
+            0%,27%,34%,60%,67%,92%,100% {
+                opacity: 0
+            }
+
+            28% {
+                opacity: .4;
+                transform: translate(0,2px);
+                filter: hue-rotate(270deg) saturate(3)
+            }
+
+            29% {
+                opacity: 0
+            }
+
+            61% {
+                opacity: .4;
+                transform: translate(0,-2px);
+                filter: hue-rotate(300deg) saturate(4)
+            }
+
+            62% {
+                opacity: 0
+            }
+
+            93% {
+                opacity: .4;
+                transform: translate(0,2px);
+                filter: hue-rotate(240deg) saturate(3.5)
+            }
+
+            94% {
+                opacity: 0
+            }
         }
 
         @keyframes orbSpin {
-            0%   { transform: translate(-50%,-50%) rotate(0deg) scale(1); }
-            50%  { transform: translate(-50%,-50%) rotate(180deg) scale(1.03); }
-            100% { transform: translate(-50%,-50%) rotate(360deg) scale(1); }
+            0% {
+                transform: translate(-50%,-50%) rotate(0deg) scale(1);
+            }
+
+            50% {
+                transform: translate(-50%,-50%) rotate(180deg) scale(1.03);
+            }
+
+            100% {
+                transform: translate(-50%,-50%) rotate(360deg) scale(1);
+            }
         }
 
         @keyframes magicAurora {
-            0%,100% { opacity:.18; transform:translate(-50%,-50%) scale(1) rotate(0deg); }
-            33%     { opacity:.28; transform:translate(-50%,-50%) scale(1.08) rotate(120deg); }
-            66%     { opacity:.22; transform:translate(-50%,-50%) scale(.95) rotate(240deg); }
+            0%,100% {
+                opacity: .18;
+                transform: translate(-50%,-50%) scale(1) rotate(0deg);
+            }
+
+            33% {
+                opacity: .28;
+                transform: translate(-50%,-50%) scale(1.08) rotate(120deg);
+            }
+
+            66% {
+                opacity: .22;
+                transform: translate(-50%,-50%) scale(.95) rotate(240deg);
+            }
         }
 
         @keyframes magicRune {
-            0%   { opacity:0; transform:translate(-50%,-50%) rotate(0deg) scale(.8); }
-            10%  { opacity:.25; }
-            50%  { opacity:.15; transform:translate(-50%,-50%) rotate(180deg) scale(1.1); }
-            90%  { opacity:.25; }
-            100% { opacity:0; transform:translate(-50%,-50%) rotate(360deg) scale(.8); }
+            0% {
+                opacity: 0;
+                transform: translate(-50%,-50%) rotate(0deg) scale(.8);
+            }
+
+            10% {
+                opacity: .25;
+            }
+
+            50% {
+                opacity: .15;
+                transform: translate(-50%,-50%) rotate(180deg) scale(1.1);
+            }
+
+            90% {
+                opacity: .25;
+            }
+
+            100% {
+                opacity: 0;
+                transform: translate(-50%,-50%) rotate(360deg) scale(.8);
+            }
         }
 
         @keyframes magicShoot {
-            0%   { opacity:0; transform:scaleX(0) translateX(0); }
-            20%  { opacity:.8; }
-            80%  { opacity:.5; }
-            100% { opacity:0; transform:scaleX(1) translateX(0); }
+            0% {
+                opacity: 0;
+                transform: scaleX(0) translateX(0);
+            }
+
+            20% {
+                opacity: .8;
+            }
+
+            80% {
+                opacity: .5;
+            }
+
+            100% {
+                opacity: 0;
+                transform: scaleX(1) translateX(0);
+            }
         }
 
         @keyframes energyWave {
-            0%   { transform:translate(-50%,-50%) scale(0.5); opacity:.5; }
-            100% { transform:translate(-50%,-50%) scale(2.5); opacity:0; }
+            0% {
+                transform: translate(-50%,-50%) scale(0.5);
+                opacity: .5;
+            }
+
+            100% {
+                transform: translate(-50%,-50%) scale(2.5);
+                opacity: 0;
+            }
         }
 
         /* Magic aurora/rune-ring helpers no longer needed — geometry is in SVG */
 
         @keyframes titleFloat {
-            0%,100% { transform: translateX(-50%) translateY(0) }
-            50%      { transform: translateX(-50%) translateY(-6px) }
+            0%,100% {
+                transform: translateX(-50%) translateY(0)
+            }
+
+            50% {
+                transform: translateX(-50%) translateY(-6px)
+            }
         }
 
         @keyframes shimmerGold {
@@ -1228,7 +1431,6 @@
         </defs>
 
         <!-- cx=700 cy=450 is the magic circle center -->
-
         <!-- ═══ OUTER FRAME ═══ -->
         <!-- Outer dashed rect -->
         <rect x="30" y="18" width="1340" height="864" fill="none"
@@ -1245,143 +1447,143 @@
         </g>
         <!-- Cardinal diamonds on frame -->
         <g fill="none" stroke="rgba(232,184,80,.3)" stroke-width="1" filter="url(#glow-gold)">
-            <rect x="690" y="7"  width="20" height="20" transform="rotate(45 700 17)" />
+            <rect x="690" y="7" width="20" height="20" transform="rotate(45 700 17)" />
             <rect x="690" y="873" width="20" height="20" transform="rotate(45 700 883)" />
-            <rect x="17"  y="440" width="20" height="20" transform="rotate(45 27 450)" />
+            <rect x="17" y="440" width="20" height="20" transform="rotate(45 27 450)" />
             <rect x="1363" y="440" width="20" height="20" transform="rotate(45 1373 450)" />
         </g>
 
         <!-- ═══ MAGIC CIRCLE — concentric rings ═══ -->
         <!-- Outermost slow orbit ring -->
         <circle cx="700" cy="450" r="420" fill="none" stroke="rgba(180,80,255,.05)" stroke-width="1" stroke-dasharray="2 10">
-            <animateTransform attributeName="transform" type="rotate" from="0 700 450" to="360 700 450" dur="180s" repeatCount="indefinite"/>
+            <animateTransform attributeName="transform" type="rotate" from="0 700 450" to="360 700 450" dur="180s" repeatCount="indefinite" />
         </circle>
         <!-- Main outer ring -->
         <circle cx="700" cy="450" r="370" fill="none" stroke="rgba(232,184,80,.07)" stroke-width="1">
-            <animateTransform attributeName="transform" type="rotate" from="0 700 450" to="-360 700 450" dur="120s" repeatCount="indefinite"/>
+            <animateTransform attributeName="transform" type="rotate" from="0 700 450" to="-360 700 450" dur="120s" repeatCount="indefinite" />
         </circle>
         <!-- Rune track ring (dashed) -->
         <circle cx="700" cy="450" r="340" fill="none" stroke="rgba(180,100,255,.06)" stroke-width="1" stroke-dasharray="4 12">
-            <animateTransform attributeName="transform" type="rotate" from="0 700 450" to="360 700 450" dur="80s" repeatCount="indefinite"/>
+            <animateTransform attributeName="transform" type="rotate" from="0 700 450" to="360 700 450" dur="80s" repeatCount="indefinite" />
         </circle>
         <!-- Mid ring -->
         <circle cx="700" cy="450" r="290" fill="none" stroke="rgba(232,184,80,.06)" stroke-width="1" stroke-dasharray="6 8">
-            <animateTransform attributeName="transform" type="rotate" from="0 700 450" to="-360 700 450" dur="60s" repeatCount="indefinite"/>
+            <animateTransform attributeName="transform" type="rotate" from="0 700 450" to="-360 700 450" dur="60s" repeatCount="indefinite" />
         </circle>
         <!-- Inner rune ring -->
         <circle cx="700" cy="450" r="240" fill="none" stroke="rgba(180,100,255,.07)" stroke-width="1">
-            <animateTransform attributeName="transform" type="rotate" from="0 700 450" to="360 700 450" dur="45s" repeatCount="indefinite"/>
+            <animateTransform attributeName="transform" type="rotate" from="0 700 450" to="360 700 450" dur="45s" repeatCount="indefinite" />
         </circle>
         <!-- Core ring -->
         <circle cx="700" cy="450" r="180" fill="none" stroke="rgba(232,184,80,.07)" stroke-width="1" stroke-dasharray="3 9">
-            <animateTransform attributeName="transform" type="rotate" from="0 700 450" to="-360 700 450" dur="30s" repeatCount="indefinite"/>
+            <animateTransform attributeName="transform" type="rotate" from="0 700 450" to="-360 700 450" dur="30s" repeatCount="indefinite" />
         </circle>
         <!-- Innermost accent ring -->
         <circle cx="700" cy="450" r="120" fill="none" stroke="rgba(180,100,255,.07)" stroke-width="1">
-            <animateTransform attributeName="transform" type="rotate" from="0 700 450" to="360 700 450" dur="20s" repeatCount="indefinite"/>
+            <animateTransform attributeName="transform" type="rotate" from="0 700 450" to="360 700 450" dur="20s" repeatCount="indefinite" />
         </circle>
 
         <!-- ═══ HEXAGRAM (Star of David / 六芒星) ═══ -->
         <!-- Triangle 1 pointing up -->
         <polygon points="700,90 990,540 410,540"
                  fill="none" stroke="rgba(232,184,80,.06)" stroke-width="1">
-            <animateTransform attributeName="transform" type="rotate" from="0 700 450" to="360 700 450" dur="90s" repeatCount="indefinite"/>
+            <animateTransform attributeName="transform" type="rotate" from="0 700 450" to="360 700 450" dur="90s" repeatCount="indefinite" />
         </polygon>
         <!-- Triangle 2 pointing down -->
         <polygon points="700,810 410,360 990,360"
                  fill="none" stroke="rgba(180,100,255,.05)" stroke-width="1">
-            <animateTransform attributeName="transform" type="rotate" from="0 700 450" to="-360 700 450" dur="90s" repeatCount="indefinite"/>
+            <animateTransform attributeName="transform" type="rotate" from="0 700 450" to="-360 700 450" dur="90s" repeatCount="indefinite" />
         </polygon>
 
         <!-- ═══ OCTAGRAM (八芒星) — two squares rotated 45° ═══ -->
         <rect x="490" y="240" width="420" height="420" fill="none"
               stroke="rgba(232,184,80,.05)" stroke-width="1">
-            <animateTransform attributeName="transform" type="rotate" from="0 700 450" to="360 700 450" dur="70s" repeatCount="indefinite"/>
+            <animateTransform attributeName="transform" type="rotate" from="0 700 450" to="360 700 450" dur="70s" repeatCount="indefinite" />
         </rect>
         <rect x="490" y="240" width="420" height="420" fill="none"
               stroke="rgba(180,80,255,.04)" stroke-width="1">
-            <animateTransform attributeName="transform" type="rotate" from="45 700 450" to="405 700 450" dur="70s" repeatCount="indefinite"/>
+            <animateTransform attributeName="transform" type="rotate" from="45 700 450" to="405 700 450" dur="70s" repeatCount="indefinite" />
         </rect>
 
         <!-- ═══ 12-POINTED STAR spokes (dodecagram lines) ═══ -->
         <!-- These are 6 lines at 30° intervals through the centre, very faint -->
         <g stroke="rgba(180,100,255,.04)" stroke-width="1">
             <line x1="700" y1="80" x2="700" y2="820">
-                <animateTransform attributeName="transform" type="rotate" from="0 700 450" to="360 700 450" dur="150s" repeatCount="indefinite"/>
+                <animateTransform attributeName="transform" type="rotate" from="0 700 450" to="360 700 450" dur="150s" repeatCount="indefinite" />
             </line>
             <line x1="700" y1="80" x2="700" y2="820">
-                <animateTransform attributeName="transform" type="rotate" from="30 700 450" to="390 700 450" dur="150s" repeatCount="indefinite"/>
+                <animateTransform attributeName="transform" type="rotate" from="30 700 450" to="390 700 450" dur="150s" repeatCount="indefinite" />
             </line>
             <line x1="700" y1="80" x2="700" y2="820">
-                <animateTransform attributeName="transform" type="rotate" from="60 700 450" to="420 700 450" dur="150s" repeatCount="indefinite"/>
+                <animateTransform attributeName="transform" type="rotate" from="60 700 450" to="420 700 450" dur="150s" repeatCount="indefinite" />
             </line>
             <line x1="700" y1="80" x2="700" y2="820">
-                <animateTransform attributeName="transform" type="rotate" from="90 700 450" to="450 700 450" dur="150s" repeatCount="indefinite"/>
+                <animateTransform attributeName="transform" type="rotate" from="90 700 450" to="450 700 450" dur="150s" repeatCount="indefinite" />
             </line>
             <line x1="700" y1="80" x2="700" y2="820">
-                <animateTransform attributeName="transform" type="rotate" from="120 700 450" to="480 700 450" dur="150s" repeatCount="indefinite"/>
+                <animateTransform attributeName="transform" type="rotate" from="120 700 450" to="480 700 450" dur="150s" repeatCount="indefinite" />
             </line>
             <line x1="700" y1="80" x2="700" y2="820">
-                <animateTransform attributeName="transform" type="rotate" from="150 700 450" to="510 700 450" dur="150s" repeatCount="indefinite"/>
+                <animateTransform attributeName="transform" type="rotate" from="150 700 450" to="510 700 450" dur="150s" repeatCount="indefinite" />
             </line>
         </g>
 
         <!-- ═══ RUNE NODE DOTS on the 290r ring (12 nodes) ═══ -->
         <g fill="rgba(232,184,80,.22)" filter="url(#glow-soft)">
             <!-- 12 equally spaced anchor points at r=290 -->
-            <circle cx="700"   cy="160"  r="2.5"><animate attributeName="opacity" values=".15;.55;.15" dur="5s" repeatCount="indefinite" begin="0s"/></circle>
-            <circle cx="845"   cy="195"  r="2"><animate attributeName="opacity" values=".15;.5;.15" dur="7s" repeatCount="indefinite" begin=".5s"/></circle>
-            <circle cx="952"   cy="305"  r="2.5"><animate attributeName="opacity" values=".15;.55;.15" dur="6s" repeatCount="indefinite" begin="1s"/></circle>
-            <circle cx="990"   cy="450"  r="2"><animate attributeName="opacity" values=".15;.5;.15" dur="8s" repeatCount="indefinite" begin="1.5s"/></circle>
-            <circle cx="952"   cy="595"  r="2.5"><animate attributeName="opacity" values=".15;.55;.15" dur="5.5s" repeatCount="indefinite" begin="2s"/></circle>
-            <circle cx="845"   cy="705"  r="2"><animate attributeName="opacity" values=".15;.5;.15" dur="9s" repeatCount="indefinite" begin="2.5s"/></circle>
-            <circle cx="700"   cy="740"  r="2.5"><animate attributeName="opacity" values=".15;.55;.15" dur="6.5s" repeatCount="indefinite" begin="3s"/></circle>
-            <circle cx="555"   cy="705"  r="2"><animate attributeName="opacity" values=".15;.5;.15" dur="7.5s" repeatCount="indefinite" begin="3.5s"/></circle>
-            <circle cx="448"   cy="595"  r="2.5"><animate attributeName="opacity" values=".15;.55;.15" dur="5s" repeatCount="indefinite" begin="4s"/></circle>
-            <circle cx="410"   cy="450"  r="2"><animate attributeName="opacity" values=".15;.5;.15" dur="8.5s" repeatCount="indefinite" begin="0.8s"/></circle>
-            <circle cx="448"   cy="305"  r="2.5"><animate attributeName="opacity" values=".15;.55;.15" dur="6s" repeatCount="indefinite" begin="1.8s"/></circle>
-            <circle cx="555"   cy="195"  r="2"><animate attributeName="opacity" values=".15;.5;.15" dur="7s" repeatCount="indefinite" begin="2.8s"/></circle>
+            <circle cx="700" cy="160" r="2.5"><animate attributeName="opacity" values=".15;.55;.15" dur="5s" repeatCount="indefinite" begin="0s" /></circle>
+            <circle cx="845" cy="195" r="2"><animate attributeName="opacity" values=".15;.5;.15" dur="7s" repeatCount="indefinite" begin=".5s" /></circle>
+            <circle cx="952" cy="305" r="2.5"><animate attributeName="opacity" values=".15;.55;.15" dur="6s" repeatCount="indefinite" begin="1s" /></circle>
+            <circle cx="990" cy="450" r="2"><animate attributeName="opacity" values=".15;.5;.15" dur="8s" repeatCount="indefinite" begin="1.5s" /></circle>
+            <circle cx="952" cy="595" r="2.5"><animate attributeName="opacity" values=".15;.55;.15" dur="5.5s" repeatCount="indefinite" begin="2s" /></circle>
+            <circle cx="845" cy="705" r="2"><animate attributeName="opacity" values=".15;.5;.15" dur="9s" repeatCount="indefinite" begin="2.5s" /></circle>
+            <circle cx="700" cy="740" r="2.5"><animate attributeName="opacity" values=".15;.55;.15" dur="6.5s" repeatCount="indefinite" begin="3s" /></circle>
+            <circle cx="555" cy="705" r="2"><animate attributeName="opacity" values=".15;.5;.15" dur="7.5s" repeatCount="indefinite" begin="3.5s" /></circle>
+            <circle cx="448" cy="595" r="2.5"><animate attributeName="opacity" values=".15;.55;.15" dur="5s" repeatCount="indefinite" begin="4s" /></circle>
+            <circle cx="410" cy="450" r="2"><animate attributeName="opacity" values=".15;.5;.15" dur="8.5s" repeatCount="indefinite" begin="0.8s" /></circle>
+            <circle cx="448" cy="305" r="2.5"><animate attributeName="opacity" values=".15;.55;.15" dur="6s" repeatCount="indefinite" begin="1.8s" /></circle>
+            <circle cx="555" cy="195" r="2"><animate attributeName="opacity" values=".15;.5;.15" dur="7s" repeatCount="indefinite" begin="2.8s" /></circle>
         </g>
 
         <!-- ═══ RUNE NODE DOTS on 180r ring (6 nodes, purple) ═══ -->
         <g fill="rgba(180,100,255,.25)" filter="url(#glow-soft)">
-            <circle cx="700" cy="270" r="2.5"><animate attributeName="opacity" values=".2;.6;.2" dur="4s" repeatCount="indefinite" begin="0s"/></circle>
-            <circle cx="856" cy="360" r="2"><animate attributeName="opacity" values=".2;.6;.2" dur="5s" repeatCount="indefinite" begin=".7s"/></circle>
-            <circle cx="856" cy="540" r="2.5"><animate attributeName="opacity" values=".2;.6;.2" dur="4.5s" repeatCount="indefinite" begin="1.4s"/></circle>
-            <circle cx="700" cy="630" r="2"><animate attributeName="opacity" values=".2;.6;.2" dur="6s" repeatCount="indefinite" begin="2.1s"/></circle>
-            <circle cx="544" cy="540" r="2.5"><animate attributeName="opacity" values=".2;.6;.2" dur="4s" repeatCount="indefinite" begin="2.8s"/></circle>
-            <circle cx="544" cy="360" r="2"><animate attributeName="opacity" values=".2;.6;.2" dur="5.5s" repeatCount="indefinite" begin="3.5s"/></circle>
+            <circle cx="700" cy="270" r="2.5"><animate attributeName="opacity" values=".2;.6;.2" dur="4s" repeatCount="indefinite" begin="0s" /></circle>
+            <circle cx="856" cy="360" r="2"><animate attributeName="opacity" values=".2;.6;.2" dur="5s" repeatCount="indefinite" begin=".7s" /></circle>
+            <circle cx="856" cy="540" r="2.5"><animate attributeName="opacity" values=".2;.6;.2" dur="4.5s" repeatCount="indefinite" begin="1.4s" /></circle>
+            <circle cx="700" cy="630" r="2"><animate attributeName="opacity" values=".2;.6;.2" dur="6s" repeatCount="indefinite" begin="2.1s" /></circle>
+            <circle cx="544" cy="540" r="2.5"><animate attributeName="opacity" values=".2;.6;.2" dur="4s" repeatCount="indefinite" begin="2.8s" /></circle>
+            <circle cx="544" cy="360" r="2"><animate attributeName="opacity" values=".2;.6;.2" dur="5.5s" repeatCount="indefinite" begin="3.5s" /></circle>
         </g>
 
         <!-- ═══ PENTAGRAM (五芒星) inner ═══ -->
         <!-- sin/cos based 5-point star at r=240, very faint -->
         <polygon points="700,210 772,443 561,300 839,300 628,443"
                  fill="none" stroke="rgba(232,184,80,.045)" stroke-width="1">
-            <animateTransform attributeName="transform" type="rotate" from="0 700 450" to="-360 700 450" dur="100s" repeatCount="indefinite"/>
+            <animateTransform attributeName="transform" type="rotate" from="0 700 450" to="-360 700 450" dur="100s" repeatCount="indefinite" />
         </polygon>
 
         <!-- ═══ OUTER FLOWING SEGMENTS (side data lines) ═══ -->
         <line x1="30" y1="200" x2="220" y2="200" stroke="rgba(232,184,80,.13)" stroke-width="1" stroke-dasharray="6 4">
-            <animate attributeName="opacity" values=".08;.35;.08" dur="7s" repeatCount="indefinite"/>
+            <animate attributeName="opacity" values=".08;.35;.08" dur="7s" repeatCount="indefinite" />
         </line>
         <line x1="30" y1="700" x2="220" y2="700" stroke="rgba(232,184,80,.1)" stroke-width="1" stroke-dasharray="4 6">
-            <animate attributeName="opacity" values=".08;.3;.08" dur="9s" repeatCount="indefinite" begin="2s"/>
+            <animate attributeName="opacity" values=".08;.3;.08" dur="9s" repeatCount="indefinite" begin="2s" />
         </line>
         <line x1="1370" y1="300" x2="1180" y2="300" stroke="rgba(180,120,255,.13)" stroke-width="1" stroke-dasharray="6 4">
-            <animate attributeName="opacity" values=".08;.35;.08" dur="8s" repeatCount="indefinite" begin="1s"/>
+            <animate attributeName="opacity" values=".08;.35;.08" dur="8s" repeatCount="indefinite" begin="1s" />
         </line>
         <line x1="1370" y1="600" x2="1180" y2="600" stroke="rgba(180,120,255,.1)" stroke-width="1" stroke-dasharray="4 6">
-            <animate attributeName="opacity" values=".08;.28;.08" dur="6s" repeatCount="indefinite" begin="3s"/>
+            <animate attributeName="opacity" values=".08;.28;.08" dur="6s" repeatCount="indefinite" begin="3s" />
         </line>
         <!-- Side node dots -->
-        <circle cx="30"   cy="200" r="3" fill="rgba(232,184,80,.35)" filter="url(#glow-gold)"><animate attributeName="opacity" values=".2;.8;.2" dur="7s" repeatCount="indefinite"/></circle>
-        <circle cx="30"   cy="700" r="2" fill="rgba(232,184,80,.3)"><animate attributeName="opacity" values=".2;.7;.2" dur="9s" repeatCount="indefinite" begin="2s"/></circle>
-        <circle cx="1370" cy="300" r="3" fill="rgba(180,120,255,.4)" filter="url(#glow-purple)"><animate attributeName="opacity" values=".2;.9;.2" dur="8s" repeatCount="indefinite" begin="1s"/></circle>
-        <circle cx="1370" cy="600" r="2" fill="rgba(180,120,255,.3)"><animate attributeName="opacity" values=".2;.65;.2" dur="6s" repeatCount="indefinite" begin="3s"/></circle>
+        <circle cx="30" cy="200" r="3" fill="rgba(232,184,80,.35)" filter="url(#glow-gold)"><animate attributeName="opacity" values=".2;.8;.2" dur="7s" repeatCount="indefinite" /></circle>
+        <circle cx="30" cy="700" r="2" fill="rgba(232,184,80,.3)"><animate attributeName="opacity" values=".2;.7;.2" dur="9s" repeatCount="indefinite" begin="2s" /></circle>
+        <circle cx="1370" cy="300" r="3" fill="rgba(180,120,255,.4)" filter="url(#glow-purple)"><animate attributeName="opacity" values=".2;.9;.2" dur="8s" repeatCount="indefinite" begin="1s" /></circle>
+        <circle cx="1370" cy="600" r="2" fill="rgba(180,120,255,.3)"><animate attributeName="opacity" values=".2;.65;.2" dur="6s" repeatCount="indefinite" begin="3s" /></circle>
 
         <!-- ═══ DIAGONAL CROSS (very faint) ═══ -->
-        <line x1="0" y1="0" x2="1400" y2="900" stroke="rgba(180,80,255,.022)" stroke-width="1"/>
-        <line x1="1400" y1="0" x2="0" y2="900" stroke="rgba(180,80,255,.022)" stroke-width="1"/>
+        <line x1="0" y1="0" x2="1400" y2="900" stroke="rgba(180,80,255,.022)" stroke-width="1" />
+        <line x1="1400" y1="0" x2="0" y2="900" stroke="rgba(180,80,255,.022)" stroke-width="1" />
 
         <!-- ═══ DATA TEXT ═══ -->
         <g opacity="0.06" font-family="monospace" font-size="9" fill="rgba(200,160,255,1)">
@@ -1444,113 +1646,113 @@
             <svg class="magic-circle-svg" viewBox="-280 -280 560 560" xmlns="http://www.w3.org/2000/svg">
                 <defs>
                     <filter id="mc-glow-gold">
-                        <feGaussianBlur stdDeviation="2.5" result="b"/>
-                        <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+                        <feGaussianBlur stdDeviation="2.5" result="b" />
+                        <feMerge><feMergeNode in="b" /><feMergeNode in="SourceGraphic" /></feMerge>
                     </filter>
                     <filter id="mc-glow-purple">
-                        <feGaussianBlur stdDeviation="2" result="b"/>
-                        <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+                        <feGaussianBlur stdDeviation="2" result="b" />
+                        <feMerge><feMergeNode in="b" /><feMergeNode in="SourceGraphic" /></feMerge>
                     </filter>
                 </defs>
 
                 <!-- Outermost slow ring -->
                 <circle r="268" fill="none" stroke="rgba(180,100,255,.18)" stroke-width="1" stroke-dasharray="3 14">
-                    <animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="40s" repeatCount="indefinite"/>
+                    <animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="40s" repeatCount="indefinite" />
                 </circle>
 
                 <!-- Rune track ring with bright nodes -->
                 <g>
-                    <animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="10s" repeatCount="indefinite"/>
-                    <circle r="248" fill="none" stroke="rgba(232,184,80,.22)" stroke-width="1" stroke-dasharray="5 9"/>
+                    <animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="10s" repeatCount="indefinite" />
+                    <circle r="248" fill="none" stroke="rgba(232,184,80,.22)" stroke-width="1" stroke-dasharray="5 9" />
                     <!-- 8 rune nodes on this ring -->
-                    <circle cx="248"  cy="0"    r="3.5" fill="rgba(232,184,80,.7)" filter="url(#mc-glow-gold)"/>
-                    <circle cx="175"  cy="175"  r="2.5" fill="rgba(232,184,80,.5)"/>
-                    <circle cx="0"    cy="248"  r="3.5" fill="rgba(232,184,80,.7)" filter="url(#mc-glow-gold)"/>
-                    <circle cx="-175" cy="175"  r="2.5" fill="rgba(232,184,80,.5)"/>
-                    <circle cx="-248" cy="0"    r="3.5" fill="rgba(232,184,80,.7)" filter="url(#mc-glow-gold)"/>
-                    <circle cx="-175" cy="-175" r="2.5" fill="rgba(232,184,80,.5)"/>
-                    <circle cx="0"    cy="-248" r="3.5" fill="rgba(232,184,80,.7)" filter="url(#mc-glow-gold)"/>
-                    <circle cx="175"  cy="-175" r="2.5" fill="rgba(232,184,80,.5)"/>
+                    <circle cx="248" cy="0" r="3.5" fill="rgba(232,184,80,.7)" filter="url(#mc-glow-gold)" />
+                    <circle cx="175" cy="175" r="2.5" fill="rgba(232,184,80,.5)" />
+                    <circle cx="0" cy="248" r="3.5" fill="rgba(232,184,80,.7)" filter="url(#mc-glow-gold)" />
+                    <circle cx="-175" cy="175" r="2.5" fill="rgba(232,184,80,.5)" />
+                    <circle cx="-248" cy="0" r="3.5" fill="rgba(232,184,80,.7)" filter="url(#mc-glow-gold)" />
+                    <circle cx="-175" cy="-175" r="2.5" fill="rgba(232,184,80,.5)" />
+                    <circle cx="0" cy="-248" r="3.5" fill="rgba(232,184,80,.7)" filter="url(#mc-glow-gold)" />
+                    <circle cx="175" cy="-175" r="2.5" fill="rgba(232,184,80,.5)" />
                     <!-- tick marks between nodes -->
-                    <line x1="248" y1="-6"  x2="248" y2="6"  stroke="rgba(232,184,80,.5)" stroke-width="1" transform="rotate(22.5)"/>
-                    <line x1="248" y1="-6"  x2="248" y2="6"  stroke="rgba(232,184,80,.5)" stroke-width="1" transform="rotate(67.5)"/>
-                    <line x1="248" y1="-6"  x2="248" y2="6"  stroke="rgba(232,184,80,.5)" stroke-width="1" transform="rotate(112.5)"/>
-                    <line x1="248" y1="-6"  x2="248" y2="6"  stroke="rgba(232,184,80,.5)" stroke-width="1" transform="rotate(157.5)"/>
-                    <line x1="248" y1="-6"  x2="248" y2="6"  stroke="rgba(232,184,80,.5)" stroke-width="1" transform="rotate(202.5)"/>
-                    <line x1="248" y1="-6"  x2="248" y2="6"  stroke="rgba(232,184,80,.5)" stroke-width="1" transform="rotate(247.5)"/>
-                    <line x1="248" y1="-6"  x2="248" y2="6"  stroke="rgba(232,184,80,.5)" stroke-width="1" transform="rotate(292.5)"/>
-                    <line x1="248" y1="-6"  x2="248" y2="6"  stroke="rgba(232,184,80,.5)" stroke-width="1" transform="rotate(337.5)"/>
+                    <line x1="248" y1="-6" x2="248" y2="6" stroke="rgba(232,184,80,.5)" stroke-width="1" transform="rotate(22.5)" />
+                    <line x1="248" y1="-6" x2="248" y2="6" stroke="rgba(232,184,80,.5)" stroke-width="1" transform="rotate(67.5)" />
+                    <line x1="248" y1="-6" x2="248" y2="6" stroke="rgba(232,184,80,.5)" stroke-width="1" transform="rotate(112.5)" />
+                    <line x1="248" y1="-6" x2="248" y2="6" stroke="rgba(232,184,80,.5)" stroke-width="1" transform="rotate(157.5)" />
+                    <line x1="248" y1="-6" x2="248" y2="6" stroke="rgba(232,184,80,.5)" stroke-width="1" transform="rotate(202.5)" />
+                    <line x1="248" y1="-6" x2="248" y2="6" stroke="rgba(232,184,80,.5)" stroke-width="1" transform="rotate(247.5)" />
+                    <line x1="248" y1="-6" x2="248" y2="6" stroke="rgba(232,184,80,.5)" stroke-width="1" transform="rotate(292.5)" />
+                    <line x1="248" y1="-6" x2="248" y2="6" stroke="rgba(232,184,80,.5)" stroke-width="1" transform="rotate(337.5)" />
                 </g>
 
                 <!-- Octagram outer (two squares, slow counter-rotation) -->
                 <g>
-                    <animateTransform attributeName="transform" type="rotate" from="0" to="-360" dur="25s" repeatCount="indefinite"/>
+                    <animateTransform attributeName="transform" type="rotate" from="0" to="-360" dur="25s" repeatCount="indefinite" />
                     <polygon points="0,-230 133,-133 230,0 133,133 0,230 -133,133 -230,0 -133,-133"
-                             fill="none" stroke="rgba(180,100,255,.2)" stroke-width="1"/>
+                             fill="none" stroke="rgba(180,100,255,.2)" stroke-width="1" />
                     <!-- diamond accents at octagram tips -->
-                    <polygon points="0,-230 -7,-222 0,-214 7,-222" fill="rgba(180,100,255,.45)" filter="url(#mc-glow-purple)"/>
-                    <polygon points="230,0 222,-7 214,0 222,7" fill="rgba(180,100,255,.45)" filter="url(#mc-glow-purple)"/>
-                    <polygon points="0,230 -7,222 0,214 7,222" fill="rgba(180,100,255,.45)" filter="url(#mc-glow-purple)"/>
-                    <polygon points="-230,0 -222,-7 -214,0 -222,7" fill="rgba(180,100,255,.45)" filter="url(#mc-glow-purple)"/>
+                    <polygon points="0,-230 -7,-222 0,-214 7,-222" fill="rgba(180,100,255,.45)" filter="url(#mc-glow-purple)" />
+                    <polygon points="230,0 222,-7 214,0 222,7" fill="rgba(180,100,255,.45)" filter="url(#mc-glow-purple)" />
+                    <polygon points="0,230 -7,222 0,214 7,222" fill="rgba(180,100,255,.45)" filter="url(#mc-glow-purple)" />
+                    <polygon points="-230,0 -222,-7 -214,0 -222,7" fill="rgba(180,100,255,.45)" filter="url(#mc-glow-purple)" />
                 </g>
 
                 <!-- Hexagram (Star of David) — medium speed -->
                 <g>
-                    <animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="10s" repeatCount="indefinite"/>
+                    <animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="10s" repeatCount="indefinite" />
                     <!-- Triangle up -->
                     <polygon points="0,-210 182,105 -182,105"
-                             fill="none" stroke="rgba(232,184,80,.18)" stroke-width="1"/>
+                             fill="none" stroke="rgba(232,184,80,.18)" stroke-width="1" />
                     <!-- Triangle down -->
                     <polygon points="0,210 182,-105 -182,-105"
-                             fill="none" stroke="rgba(232,184,80,.18)" stroke-width="1"/>
+                             fill="none" stroke="rgba(232,184,80,.18)" stroke-width="1" />
                     <!-- 6 node dots at hexagram tips -->
-                    <circle cx="0"    cy="-210" r="4" fill="rgba(232,184,80,.6)" filter="url(#mc-glow-gold)"/>
-                    <circle cx="182"  cy="105"  r="4" fill="rgba(232,184,80,.6)" filter="url(#mc-glow-gold)"/>
-                    <circle cx="-182" cy="105"  r="4" fill="rgba(232,184,80,.6)" filter="url(#mc-glow-gold)"/>
-                    <circle cx="0"    cy="210"  r="4" fill="rgba(232,184,80,.6)" filter="url(#mc-glow-gold)"/>
-                    <circle cx="182"  cy="-105" r="4" fill="rgba(232,184,80,.6)" filter="url(#mc-glow-gold)"/>
-                    <circle cx="-182" cy="-105" r="4" fill="rgba(232,184,80,.6)" filter="url(#mc-glow-gold)"/>
+                    <circle cx="0" cy="-210" r="4" fill="rgba(232,184,80,.6)" filter="url(#mc-glow-gold)" />
+                    <circle cx="182" cy="105" r="4" fill="rgba(232,184,80,.6)" filter="url(#mc-glow-gold)" />
+                    <circle cx="-182" cy="105" r="4" fill="rgba(232,184,80,.6)" filter="url(#mc-glow-gold)" />
+                    <circle cx="0" cy="210" r="4" fill="rgba(232,184,80,.6)" filter="url(#mc-glow-gold)" />
+                    <circle cx="182" cy="-105" r="4" fill="rgba(232,184,80,.6)" filter="url(#mc-glow-gold)" />
+                    <circle cx="-182" cy="-105" r="4" fill="rgba(232,184,80,.6)" filter="url(#mc-glow-gold)" />
                 </g>
 
                 <!-- Inner rune ring — fast reverse -->
                 <g>
-                    <animateTransform attributeName="transform" type="rotate" from="0" to="-360" dur="7s" repeatCount="indefinite"/>
-                    <circle r="195" fill="none" stroke="rgba(180,100,255,.25)" stroke-width="1" stroke-dasharray="4 8"/>
+                    <animateTransform attributeName="transform" type="rotate" from="0" to="-360" dur="7s" repeatCount="indefinite" />
+                    <circle r="195" fill="none" stroke="rgba(180,100,255,.25)" stroke-width="1" stroke-dasharray="4 8" />
                     <!-- 12 small rune marks -->
-                    <line x1="189" y1="-5" x2="201" y2="5" stroke="rgba(180,100,255,.5)" stroke-width="1"/>
-                    <line x1="189" y1="-5" x2="201" y2="5" stroke="rgba(180,100,255,.5)" stroke-width="1" transform="rotate(30)"/>
-                    <line x1="189" y1="-5" x2="201" y2="5" stroke="rgba(180,100,255,.5)" stroke-width="1" transform="rotate(60)"/>
-                    <line x1="189" y1="-5" x2="201" y2="5" stroke="rgba(180,100,255,.5)" stroke-width="1" transform="rotate(90)"/>
-                    <line x1="189" y1="-5" x2="201" y2="5" stroke="rgba(180,100,255,.5)" stroke-width="1" transform="rotate(120)"/>
-                    <line x1="189" y1="-5" x2="201" y2="5" stroke="rgba(180,100,255,.5)" stroke-width="1" transform="rotate(150)"/>
-                    <line x1="189" y1="-5" x2="201" y2="5" stroke="rgba(180,100,255,.5)" stroke-width="1" transform="rotate(180)"/>
-                    <line x1="189" y1="-5" x2="201" y2="5" stroke="rgba(180,100,255,.5)" stroke-width="1" transform="rotate(210)"/>
-                    <line x1="189" y1="-5" x2="201" y2="5" stroke="rgba(180,100,255,.5)" stroke-width="1" transform="rotate(240)"/>
-                    <line x1="189" y1="-5" x2="201" y2="5" stroke="rgba(180,100,255,.5)" stroke-width="1" transform="rotate(270)"/>
-                    <line x1="189" y1="-5" x2="201" y2="5" stroke="rgba(180,100,255,.5)" stroke-width="1" transform="rotate(300)"/>
-                    <line x1="189" y1="-5" x2="201" y2="5" stroke="rgba(180,100,255,.5)" stroke-width="1" transform="rotate(330)"/>
+                    <line x1="189" y1="-5" x2="201" y2="5" stroke="rgba(180,100,255,.5)" stroke-width="1" />
+                    <line x1="189" y1="-5" x2="201" y2="5" stroke="rgba(180,100,255,.5)" stroke-width="1" transform="rotate(30)" />
+                    <line x1="189" y1="-5" x2="201" y2="5" stroke="rgba(180,100,255,.5)" stroke-width="1" transform="rotate(60)" />
+                    <line x1="189" y1="-5" x2="201" y2="5" stroke="rgba(180,100,255,.5)" stroke-width="1" transform="rotate(90)" />
+                    <line x1="189" y1="-5" x2="201" y2="5" stroke="rgba(180,100,255,.5)" stroke-width="1" transform="rotate(120)" />
+                    <line x1="189" y1="-5" x2="201" y2="5" stroke="rgba(180,100,255,.5)" stroke-width="1" transform="rotate(150)" />
+                    <line x1="189" y1="-5" x2="201" y2="5" stroke="rgba(180,100,255,.5)" stroke-width="1" transform="rotate(180)" />
+                    <line x1="189" y1="-5" x2="201" y2="5" stroke="rgba(180,100,255,.5)" stroke-width="1" transform="rotate(210)" />
+                    <line x1="189" y1="-5" x2="201" y2="5" stroke="rgba(180,100,255,.5)" stroke-width="1" transform="rotate(240)" />
+                    <line x1="189" y1="-5" x2="201" y2="5" stroke="rgba(180,100,255,.5)" stroke-width="1" transform="rotate(270)" />
+                    <line x1="189" y1="-5" x2="201" y2="5" stroke="rgba(180,100,255,.5)" stroke-width="1" transform="rotate(300)" />
+                    <line x1="189" y1="-5" x2="201" y2="5" stroke="rgba(180,100,255,.5)" stroke-width="1" transform="rotate(330)" />
                 </g>
 
                 <!-- Pentagram inner — slow reverse -->
                 <g>
-                    <animateTransform attributeName="transform" type="rotate" from="0" to="-360" dur="18s" repeatCount="indefinite"/>
+                    <animateTransform attributeName="transform" type="rotate" from="0" to="-360" dur="18s" repeatCount="indefinite" />
                     <polygon points="0,-170 161,-55 100,145 -100,145 -161,-55"
-                             fill="none" stroke="rgba(232,184,80,.14)" stroke-width="1"/>
-                    <circle cx="0"   cy="-170" r="3" fill="rgba(232,184,80,.4)"/>
-                    <circle cx="161" cy="-55"  r="3" fill="rgba(232,184,80,.4)"/>
-                    <circle cx="100" cy="145"  r="3" fill="rgba(232,184,80,.4)"/>
-                    <circle cx="-100" cy="145" r="3" fill="rgba(232,184,80,.4)"/>
-                    <circle cx="-161" cy="-55" r="3" fill="rgba(232,184,80,.4)"/>
+                             fill="none" stroke="rgba(232,184,80,.14)" stroke-width="1" />
+                    <circle cx="0" cy="-170" r="3" fill="rgba(232,184,80,.4)" />
+                    <circle cx="161" cy="-55" r="3" fill="rgba(232,184,80,.4)" />
+                    <circle cx="100" cy="145" r="3" fill="rgba(232,184,80,.4)" />
+                    <circle cx="-100" cy="145" r="3" fill="rgba(232,184,80,.4)" />
+                    <circle cx="-161" cy="-55" r="3" fill="rgba(232,184,80,.4)" />
                 </g>
 
                 <!-- Innermost spinning dot-ring — fastest -->
                 <g>
-                    <animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="4s" repeatCount="indefinite"/>
-                    <circle r="145" fill="none" stroke="rgba(232,184,80,.12)" stroke-width="1" stroke-dasharray="2 20"/>
-                    <circle cx="145" cy="0"    r="4" fill="rgba(232,184,80,.55)" filter="url(#mc-glow-gold)"/>
-                    <circle cx="-145" cy="0"   r="4" fill="rgba(232,184,80,.55)" filter="url(#mc-glow-gold)"/>
-                    <circle cx="0"   cy="145"  r="4" fill="rgba(180,100,255,.55)" filter="url(#mc-glow-purple)"/>
-                    <circle cx="0"   cy="-145" r="4" fill="rgba(180,100,255,.55)" filter="url(#mc-glow-purple)"/>
+                    <animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="4s" repeatCount="indefinite" />
+                    <circle r="145" fill="none" stroke="rgba(232,184,80,.12)" stroke-width="1" stroke-dasharray="2 20" />
+                    <circle cx="145" cy="0" r="4" fill="rgba(232,184,80,.55)" filter="url(#mc-glow-gold)" />
+                    <circle cx="-145" cy="0" r="4" fill="rgba(232,184,80,.55)" filter="url(#mc-glow-gold)" />
+                    <circle cx="0" cy="145" r="4" fill="rgba(180,100,255,.55)" filter="url(#mc-glow-purple)" />
+                    <circle cx="0" cy="-145" r="4" fill="rgba(180,100,255,.55)" filter="url(#mc-glow-purple)" />
                 </g>
             </svg>
 
@@ -1689,24 +1891,24 @@
         document.body.appendChild(introCanvas);
         const ic = introCanvas.getContext('2d');
         function resizeIntro() {
-            introCanvas.width  = window.innerWidth;
+            introCanvas.width = window.innerWidth;
             introCanvas.height = window.innerHeight;
         }
         resizeIntro();
         window.addEventListener('resize', resizeIntro);
 
-        const cx = () => introCanvas.width  / 2;
+        const cx = () => introCanvas.width / 2;
         const cy = () => introCanvas.height / 2;
 
         // ── easing ──────────────────────────────────────────────
-        const easeOut  = t => 1 - (1-t)**3;
-        const easeIn   = t => t**3;
-        const easeInOut= t => t<.5 ? 4*t**3 : 1-(-2*t+2)**3/2;
-        const clamp01  = t => Math.max(0, Math.min(1, t));
-        const norm     = (t,a,b) => clamp01((t-a)/(b-a));
+        const easeOut = t => 1 - (1 - t) ** 3;
+        const easeIn = t => t ** 3;
+        const easeInOut = t => t < .5 ? 4 * t ** 3 : 1 - (-2 * t + 2) ** 3 / 2;
+        const clamp01 = t => Math.max(0, Math.min(1, t));
+        const norm = (t, a, b) => clamp01((t - a) / (b - a));
 
         // ── draw helpers ─────────────────────────────────────────
-        function arc(ctx, x,y,r, start,end, color, lw=1, dash=[]) {
+        function arc(ctx, x, y, r, start, end, color, lw = 1, dash = []) {
             ctx.save();
             ctx.strokeStyle = color;
             ctx.lineWidth = lw;
@@ -1716,36 +1918,36 @@
             ctx.stroke();
             ctx.restore();
         }
-        function glowDot(ctx, x,y, r, color, alpha) {
+        function glowDot(ctx, x, y, r, color, alpha) {
             ctx.save();
-            const g = ctx.createRadialGradient(x,y,0,x,y,r*5);
-            g.addColorStop(0, color.replace('A', `,${alpha})`).replace('rgb(','rgba('));
+            const g = ctx.createRadialGradient(x, y, 0, x, y, r * 5);
+            g.addColorStop(0, color.replace('A', `,${alpha})`).replace('rgb(', 'rgba('));
             g.addColorStop(1, 'rgba(0,0,0,0)');
-            ctx.beginPath(); ctx.arc(x,y,r*5,0,Math.PI*2);
+            ctx.beginPath(); ctx.arc(x, y, r * 5, 0, Math.PI * 2);
             ctx.fillStyle = g; ctx.fill();
-            ctx.beginPath(); ctx.arc(x,y,r,0,Math.PI*2);
+            ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2);
             ctx.fillStyle = color; ctx.globalAlpha = alpha; ctx.fill();
             ctx.restore();
         }
         // draw a regular polygon (star outline) given n vertices at radius r
-        function ngon(ctx, x,y,r,n,offset=0) {
+        function ngon(ctx, x, y, r, n, offset = 0) {
             ctx.beginPath();
-            for (let i=0;i<n;i++) {
-                const a = offset + (Math.PI*2/n)*i - Math.PI/2;
-                i===0 ? ctx.moveTo(x+Math.cos(a)*r, y+Math.sin(a)*r)
-                      : ctx.lineTo(x+Math.cos(a)*r, y+Math.sin(a)*r);
+            for (let i = 0; i < n; i++) {
+                const a = offset + (Math.PI * 2 / n) * i - Math.PI / 2;
+                i === 0 ? ctx.moveTo(x + Math.cos(a) * r, y + Math.sin(a) * r)
+                    : ctx.lineTo(x + Math.cos(a) * r, y + Math.sin(a) * r);
             }
             ctx.closePath();
         }
         // draw a hexagram (two overlapping triangles)
-        function hexagram(ctx, x,y,r, rot=0) {
-            for (let t=0;t<2;t++) {
-                const off = rot + t*Math.PI/3;
+        function hexagram(ctx, x, y, r, rot = 0) {
+            for (let t = 0; t < 2; t++) {
+                const off = rot + t * Math.PI / 3;
                 ctx.beginPath();
-                for (let i=0;i<3;i++) {
-                    const a = off + (Math.PI*2/3)*i - Math.PI/2;
-                    i===0 ? ctx.moveTo(x+Math.cos(a)*r, y+Math.sin(a)*r)
-                          : ctx.lineTo(x+Math.cos(a)*r, y+Math.sin(a)*r);
+                for (let i = 0; i < 3; i++) {
+                    const a = off + (Math.PI * 2 / 3) * i - Math.PI / 2;
+                    i === 0 ? ctx.moveTo(x + Math.cos(a) * r, y + Math.sin(a) * r)
+                        : ctx.lineTo(x + Math.cos(a) * r, y + Math.sin(a) * r);
                 }
                 ctx.closePath();
             }
@@ -1753,12 +1955,12 @@
 
         // ── timing ───────────────────────────────────────────────
         const T = {
-            spark:    [0.0, 1.5],
-            rings:    [1.5, 5.5],
-            star:     [5.5, 9.5],
-            charge:   [9.5, 11.0],
-            bloom:    [11.0, 11.8],
-            done:     11.8,
+            spark: [0.0, 0.6],
+            rings: [0.6, 2.2],
+            star: [2.2, 3.8],
+            charge: [3.8, 4.5],
+            bloom: [4.5, 5.0],
+            done: 5.0,
         };
 
         let startTime = null;
@@ -1775,24 +1977,24 @@
             // ── BLOOM: radial wipe from center ──────────────────
             if (t >= T.bloom[0]) {
                 const bp = norm(t, T.bloom[0], T.bloom[1]);
-                const maxR = Math.sqrt(W*W+H*H)*0.6;
+                const maxR = Math.sqrt(W * W + H * H) * 0.6;
                 const bloomR = easeOut(bp) * maxR;
 
                 // re-draw last magic circle frame faded out
                 const fade = 1 - easeIn(bp);
-                ic.clearRect(0,0,W,H);
+                ic.clearRect(0, 0, W, H);
                 ic.fillStyle = `rgba(4,1,11,${fade < 0.01 ? 0 : 1})`;
-                ic.fillRect(0,0,W,H);
+                ic.fillRect(0, 0, W, H);
 
                 // giant radial burst
-                const g2 = ic.createRadialGradient(ox,oy,0,ox,oy,bloomR);
-                g2.addColorStop(0,   `rgba(255,220,120,${0.95 * (1-bp)})`);
-                g2.addColorStop(0.08,`rgba(232,184,80,${0.7  * (1-bp)})`);
-                g2.addColorStop(0.25,`rgba(180,100,255,${0.5 * (1-bp)})`);
-                g2.addColorStop(0.5, `rgba(120,50,200,${0.2 * (1-bp)})`);
-                g2.addColorStop(1,   'rgba(4,1,11,0)');
+                const g2 = ic.createRadialGradient(ox, oy, 0, ox, oy, bloomR);
+                g2.addColorStop(0, `rgba(255,220,120,${0.95 * (1 - bp)})`);
+                g2.addColorStop(0.08, `rgba(232,184,80,${0.7 * (1 - bp)})`);
+                g2.addColorStop(0.25, `rgba(180,100,255,${0.5 * (1 - bp)})`);
+                g2.addColorStop(0.5, `rgba(120,50,200,${0.2 * (1 - bp)})`);
+                g2.addColorStop(1, 'rgba(4,1,11,0)');
                 ic.save();
-                ic.beginPath(); ic.arc(ox,oy,bloomR,0,Math.PI*2);
+                ic.beginPath(); ic.arc(ox, oy, bloomR, 0, Math.PI * 2);
                 ic.fillStyle = g2; ic.fill();
                 ic.restore();
 
@@ -1800,15 +2002,15 @@
                 const sw = norm(bp, 0, 0.6);
                 if (sw < 1) {
                     ic.save();
-                    ic.strokeStyle = `rgba(232,184,80,${(1-sw)*0.9})`;
-                    ic.lineWidth = 3*(1-sw)+1;
-                    ic.beginPath(); ic.arc(ox,oy, easeOut(sw)*maxR*0.85, 0, Math.PI*2);
+                    ic.strokeStyle = `rgba(232,184,80,${(1 - sw) * 0.9})`;
+                    ic.lineWidth = 3 * (1 - sw) + 1;
+                    ic.beginPath(); ic.arc(ox, oy, easeOut(sw) * maxR * 0.85, 0, Math.PI * 2);
                     ic.stroke();
                     ic.restore();
                 }
 
                 if (bp >= 1) {
-                    ic.clearRect(0,0,W,H);
+                    ic.clearRect(0, 0, W, H);
                     introCanvas.style.opacity = '0';
                     introCanvas.style.transition = 'opacity 0.6s ease';
                     setTimeout(() => {
@@ -1825,12 +2027,12 @@
                 return;
             }
 
-            ic.clearRect(0,0,W,H);
+            ic.clearRect(0, 0, W, H);
             // dark background
             ic.fillStyle = '#04010b';
-            ic.fillRect(0,0,W,H);
+            ic.fillRect(0, 0, W, H);
 
-            const BASE_R  = Math.min(W,H) * 0.22;   // ~portal radius
+            const BASE_R = Math.min(W, H) * 0.22;   // ~portal radius
             const ROT_SPD = Math.PI * 2 / 10;        // 10s per revolution
 
             // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -1838,16 +2040,16 @@
             // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
             if (t < T.spark[1]) {
                 const p = norm(t, 0, T.spark[1]);
-                const pulse = 0.6 + 0.4*Math.sin(t*8);
+                const pulse = 0.6 + 0.4 * Math.sin(t * 8);
                 const r = easeOut(p) * 6 * pulse;
-                const glo = ic.createRadialGradient(ox,oy,0,ox,oy,r*18);
-                glo.addColorStop(0,   `rgba(232,184,80,${0.9*easeOut(p)})`);
-                glo.addColorStop(0.15,`rgba(180,100,255,${0.5*easeOut(p)})`);
-                glo.addColorStop(1,   'rgba(4,1,11,0)');
-                ic.save(); ic.beginPath(); ic.arc(ox,oy,r*18,0,Math.PI*2);
+                const glo = ic.createRadialGradient(ox, oy, 0, ox, oy, r * 18);
+                glo.addColorStop(0, `rgba(232,184,80,${0.9 * easeOut(p)})`);
+                glo.addColorStop(0.15, `rgba(180,100,255,${0.5 * easeOut(p)})`);
+                glo.addColorStop(1, 'rgba(4,1,11,0)');
+                ic.save(); ic.beginPath(); ic.arc(ox, oy, r * 18, 0, Math.PI * 2);
                 ic.fillStyle = glo; ic.fill(); ic.restore();
-                ic.save(); ic.beginPath(); ic.arc(ox,oy,r,0,Math.PI*2);
-                ic.fillStyle = `rgba(255,220,120,${0.95*easeOut(p)})`; ic.fill(); ic.restore();
+                ic.save(); ic.beginPath(); ic.arc(ox, oy, r, 0, Math.PI * 2);
+                ic.fillStyle = `rgba(255,220,120,${0.95 * easeOut(p)})`; ic.fill(); ic.restore();
             }
 
             // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -1856,24 +2058,24 @@
             if (t >= T.rings[0]) {
                 const rp = norm(t, T.rings[0], T.rings[1]);
                 const fade = t >= T.star[0] ? 1 : easeOut(rp);
-                const rot  = t * ROT_SPD;
+                const rot = t * ROT_SPD;
 
                 // stagger 5 rings appearing one by one
                 const rings = [
-                    { r:BASE_R*1.12, dash:[4,10], color:[232,184,80],  speed:1,   delay:0.0 },
-                    { r:BASE_R*0.95, dash:[6,8],  color:[180,100,255], speed:-1.3,delay:0.18},
-                    { r:BASE_R*1.30, dash:[3,14], color:[180,100,255], speed:0.7, delay:0.35},
-                    { r:BASE_R*1.52, dash:[5,9],  color:[232,184,80],  speed:-0.8,delay:0.52},
-                    { r:BASE_R*1.72, dash:[2,18], color:[100,60,200],  speed:0.5, delay:0.68},
+                    { r: BASE_R * 1.12, dash: [4, 10], color: [232, 184, 80], speed: 1, delay: 0.0 },
+                    { r: BASE_R * 0.95, dash: [6, 8], color: [180, 100, 255], speed: -1.3, delay: 0.18 },
+                    { r: BASE_R * 1.30, dash: [3, 14], color: [180, 100, 255], speed: 0.7, delay: 0.35 },
+                    { r: BASE_R * 1.52, dash: [5, 9], color: [232, 184, 80], speed: -0.8, delay: 0.52 },
+                    { r: BASE_R * 1.72, dash: [2, 18], color: [100, 60, 200], speed: 0.5, delay: 0.68 },
                 ];
 
                 for (const rng of rings) {
                     const rFade = easeOut(clamp01((rp - rng.delay) / (1 - rng.delay)));
                     if (rFade <= 0) continue;
-                    const [r,g,b] = rng.color;
+                    const [r, g, b] = rng.color;
                     const alpha = rFade * fade * 0.55;
                     const drawAngle = rFade * Math.PI * 2;
-                    const startA = rot * rng.speed - Math.PI/2;
+                    const startA = rot * rng.speed - Math.PI / 2;
                     ic.save();
                     ic.strokeStyle = `rgba(${r},${g},${b},${alpha})`;
                     ic.lineWidth = 1;
@@ -1885,25 +2087,25 @@
 
                     // 8 rune node dots on outermost ring
                     if (rng.delay === 0.68 && rFade > 0.5) {
-                        for (let i=0;i<8;i++) {
-                            const a = startA + (Math.PI*2/8)*i;
-                            const nx = ox + Math.cos(a)*rng.r;
-                            const ny = oy + Math.sin(a)*rng.r;
+                        for (let i = 0; i < 8; i++) {
+                            const a = startA + (Math.PI * 2 / 8) * i;
+                            const nx = ox + Math.cos(a) * rng.r;
+                            const ny = oy + Math.sin(a) * rng.r;
                             ic.save();
-                            ic.beginPath(); ic.arc(nx,ny,2.5,0,Math.PI*2);
-                            ic.fillStyle = `rgba(${r},${g},${b},${(rFade-0.5)*2*0.7})`;
+                            ic.beginPath(); ic.arc(nx, ny, 2.5, 0, Math.PI * 2);
+                            ic.fillStyle = `rgba(${r},${g},${b},${(rFade - 0.5) * 2 * 0.7})`;
                             ic.fill(); ic.restore();
                         }
                     }
                 }
 
                 // inner glow pulse
-                const gloR = BASE_R * 0.5 * (0.8 + 0.2*Math.sin(t*4));
-                const cg = ic.createRadialGradient(ox,oy,0,ox,oy,gloR);
-                cg.addColorStop(0,   `rgba(120,50,200,${0.18*fade})`);
-                cg.addColorStop(0.5, `rgba(80,30,160,${0.08*fade})`);
-                cg.addColorStop(1,   'rgba(4,1,11,0)');
-                ic.save(); ic.beginPath(); ic.arc(ox,oy,gloR,0,Math.PI*2);
+                const gloR = BASE_R * 0.5 * (0.8 + 0.2 * Math.sin(t * 4));
+                const cg = ic.createRadialGradient(ox, oy, 0, ox, oy, gloR);
+                cg.addColorStop(0, `rgba(120,50,200,${0.18 * fade})`);
+                cg.addColorStop(0.5, `rgba(80,30,160,${0.08 * fade})`);
+                cg.addColorStop(1, 'rgba(4,1,11,0)');
+                ic.save(); ic.beginPath(); ic.arc(ox, oy, gloR, 0, Math.PI * 2);
                 ic.fillStyle = cg; ic.fill(); ic.restore();
             }
 
@@ -1911,45 +2113,45 @@
             // PHASE 3: Hexagram draws in (5.5 – 9.5s)
             // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
             if (t >= T.star[0]) {
-                const sp   = norm(t, T.star[0], T.star[1]);
-                const rot  = t * ROT_SPD;
-                const sR   = BASE_R * 1.1;
+                const sp = norm(t, T.star[0], T.star[1]);
+                const rot = t * ROT_SPD;
+                const sR = BASE_R * 1.1;
 
                 // draw each triangle edge progressively (3 edges each = 6 segments)
-                for (let tri=0; tri<2; tri++) {
+                for (let tri = 0; tri < 2; tri++) {
                     const triDelay = tri * 0.35;
                     const tp = clamp01((sp - triDelay) / (1 - triDelay));
                     if (tp <= 0) continue;
-                    const baseOff = rot + tri * Math.PI/3;
-                    const verts = Array.from({length:3}, (_,i) => {
-                        const a = baseOff + (Math.PI*2/3)*i - Math.PI/2;
-                        return [ox + Math.cos(a)*sR, oy + Math.sin(a)*sR];
+                    const baseOff = rot + tri * Math.PI / 3;
+                    const verts = Array.from({ length: 3 }, (_, i) => {
+                        const a = baseOff + (Math.PI * 2 / 3) * i - Math.PI / 2;
+                        return [ox + Math.cos(a) * sR, oy + Math.sin(a) * sR];
                     });
                     // draw progressively: 3 edges, each 1/3 of tp
-                    for (let edge=0; edge<3; edge++) {
-                        const edgeStart = edge/3, edgeEnd = (edge+1)/3;
+                    for (let edge = 0; edge < 3; edge++) {
+                        const edgeStart = edge / 3, edgeEnd = (edge + 1) / 3;
                         const ep = clamp01((tp - edgeStart) / (edgeEnd - edgeStart));
                         if (ep <= 0) continue;
-                        const [ax,ay] = verts[edge];
-                        const [bx,by] = verts[(edge+1)%3];
+                        const [ax, ay] = verts[edge];
+                        const [bx, by] = verts[(edge + 1) % 3];
                         ic.save();
                         ic.strokeStyle = `rgba(232,184,80,${0.65 * easeOut(tp)})`;
                         ic.lineWidth = 1.2;
                         ic.setLineDash([]);
                         ic.beginPath();
-                        ic.moveTo(ax,ay);
-                        ic.lineTo(ax+(bx-ax)*easeOut(ep), ay+(by-ay)*easeOut(ep));
+                        ic.moveTo(ax, ay);
+                        ic.lineTo(ax + (bx - ax) * easeOut(ep), ay + (by - ay) * easeOut(ep));
                         ic.stroke();
                         ic.restore();
                     }
                     // glow dots at vertices when fully drawn
                     if (tp > 0.95) {
-                        for (const [vx,vy] of verts) {
+                        for (const [vx, vy] of verts) {
                             ic.save();
-                            const gdot = ic.createRadialGradient(vx,vy,0,vx,vy,10);
-                            gdot.addColorStop(0, `rgba(232,184,80,${0.7*(tp-0.95)/0.05})`);
+                            const gdot = ic.createRadialGradient(vx, vy, 0, vx, vy, 10);
+                            gdot.addColorStop(0, `rgba(232,184,80,${0.7 * (tp - 0.95) / 0.05})`);
                             gdot.addColorStop(1, 'rgba(232,184,80,0)');
-                            ic.beginPath(); ic.arc(vx,vy,10,0,Math.PI*2);
+                            ic.beginPath(); ic.arc(vx, vy, 10, 0, Math.PI * 2);
                             ic.fillStyle = gdot; ic.fill();
                             ic.restore();
                         }
@@ -1958,21 +2160,21 @@
 
                 // rings stay visible
                 const rings = [
-                    { r:BASE_R*1.12, dash:[4,10], color:[232,184,80],  speed:1   },
-                    { r:BASE_R*0.95, dash:[6,8],  color:[180,100,255], speed:-1.3},
-                    { r:BASE_R*1.30, dash:[3,14], color:[180,100,255], speed:0.7 },
-                    { r:BASE_R*1.52, dash:[5,9],  color:[232,184,80],  speed:-0.8},
-                    { r:BASE_R*1.72, dash:[2,18], color:[100,60,200],  speed:0.5 },
+                    { r: BASE_R * 1.12, dash: [4, 10], color: [232, 184, 80], speed: 1 },
+                    { r: BASE_R * 0.95, dash: [6, 8], color: [180, 100, 255], speed: -1.3 },
+                    { r: BASE_R * 1.30, dash: [3, 14], color: [180, 100, 255], speed: 0.7 },
+                    { r: BASE_R * 1.52, dash: [5, 9], color: [232, 184, 80], speed: -0.8 },
+                    { r: BASE_R * 1.72, dash: [2, 18], color: [100, 60, 200], speed: 0.5 },
                 ];
                 const rot2 = t * ROT_SPD;
                 for (const rng of rings) {
-                    const [r,g,b] = rng.color;
+                    const [r, g, b] = rng.color;
                     ic.save();
                     ic.strokeStyle = `rgba(${r},${g},${b},0.45)`;
                     ic.lineWidth = 1;
                     ic.setLineDash(rng.dash);
                     ic.beginPath();
-                    ic.arc(ox, oy, rng.r, rot2*rng.speed - Math.PI/2, rot2*rng.speed + Math.PI*1.5);
+                    ic.arc(ox, oy, rng.r, rot2 * rng.speed - Math.PI / 2, rot2 * rng.speed + Math.PI * 1.5);
                     ic.stroke();
                     ic.restore();
                 }
@@ -1986,19 +2188,19 @@
                 const pulse = Math.sin(cp * Math.PI * 8) * 0.5 + 0.5;
                 const chargeR = BASE_R * 0.55 * (1 - cp * 0.4);
                 // build-up glow
-                const bg = ic.createRadialGradient(ox,oy,0,ox,oy,chargeR*(3+cp*5));
-                bg.addColorStop(0,   `rgba(255,220,100,${0.6*easeIn(cp)*pulse})`);
-                bg.addColorStop(0.2, `rgba(232,184,80,${0.4*easeIn(cp)})`);
-                bg.addColorStop(0.6, `rgba(180,100,255,${0.2*easeIn(cp)})`);
-                bg.addColorStop(1,   'rgba(4,1,11,0)');
+                const bg = ic.createRadialGradient(ox, oy, 0, ox, oy, chargeR * (3 + cp * 5));
+                bg.addColorStop(0, `rgba(255,220,100,${0.6 * easeIn(cp) * pulse})`);
+                bg.addColorStop(0.2, `rgba(232,184,80,${0.4 * easeIn(cp)})`);
+                bg.addColorStop(0.6, `rgba(180,100,255,${0.2 * easeIn(cp)})`);
+                bg.addColorStop(1, 'rgba(4,1,11,0)');
                 ic.save();
-                ic.beginPath(); ic.arc(ox,oy,chargeR*(3+cp*5),0,Math.PI*2);
+                ic.beginPath(); ic.arc(ox, oy, chargeR * (3 + cp * 5), 0, Math.PI * 2);
                 ic.fillStyle = bg; ic.fill();
                 ic.restore();
                 // bright core dot
                 ic.save();
-                ic.beginPath(); ic.arc(ox,oy,chargeR*(0.3+0.7*pulse),0,Math.PI*2);
-                ic.fillStyle = `rgba(255,240,180,${0.9*easeIn(cp)})`;
+                ic.beginPath(); ic.arc(ox, oy, chargeR * (0.3 + 0.7 * pulse), 0, Math.PI * 2);
+                ic.fillStyle = `rgba(255,240,180,${0.9 * easeIn(cp)})`;
                 ic.fill(); ic.restore();
             }
 
@@ -2009,13 +2211,13 @@
 
         // ─── COVER CLICK (after intro completes or skips) ───────
         const cover = document.getElementById('cover');
-        const hub   = document.getElementById('hub');
+        const hub = document.getElementById('hub');
 
         // hide cover content until bloom
-        const portalEl   = document.querySelector('.cover-portal');
-        const textEl     = document.querySelector('.cover-text');
-        const hintEl     = document.querySelector('.cover-hint');
-        const compassEl  = document.querySelector('.compass-wrap');
+        const portalEl = document.querySelector('.cover-portal');
+        const textEl = document.querySelector('.cover-text');
+        const hintEl = document.querySelector('.cover-hint');
+        const compassEl = document.querySelector('.compass-wrap');
         [portalEl, textEl, hintEl, compassEl].forEach(el => {
             if (el) { el.style.opacity = '0'; el.style.transition = 'opacity 1.2s ease'; }
         });
