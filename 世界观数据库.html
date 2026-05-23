@@ -1,0 +1,1115 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>解析世界 · 世界观数据库</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700;900&family=Noto+Sans+SC:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+    <style>
+        :root {
+            --void: #06030f;
+            --deep: #09050a;
+            --surface: #110a1c;
+            --raised: #17102a;
+            --raised-2: #1d1438;
+            --border: rgba(201,168,76,.10);
+            --border-m: rgba(201,168,76,.20);
+            --border-p: rgba(180,130,255,.18);
+            --text: #f0e8ff;
+            --text-2: #b8a8d8;
+            --text-3: #6a5890;
+            --gold: #e8c060;
+            --gold-b: rgba(232,192,96,.3);
+            --blue: #7ab8f0;
+            --teal: #50e8d0;
+            --purple: #c8a0ff;
+            --red: #ff6666;
+            --green: #50d899;
+        }
+        *,*::before,*::after { box-sizing: border-box; margin:0; padding:0; }
+        html, body { height:100%; }
+        body {
+            background: var(--void);
+            color: var(--text);
+            font-family: "Noto Sans SC", sans-serif;
+            font-size: 14px;
+            line-height: 1.7;
+            overflow: hidden;
+        }
+        body::before {
+            content:""; position:fixed; inset:0; pointer-events:none; z-index:0;
+            background:
+                radial-gradient(ellipse 120% 80% at 20% 30%, rgba(232,192,96,.06) 0%, transparent 55%),
+                radial-gradient(ellipse 100% 90% at 80% 70%, rgba(180,130,255,.07) 0%, transparent 55%),
+                linear-gradient(rgba(232,192,96,.018) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(180,130,255,.018) 1px, transparent 1px);
+            background-size: 100% 100%, 100% 100%, 52px 52px, 52px 52px;
+        }
+
+        /* ── Header ── */
+        .topbar {
+            position: relative; z-index: 5;
+            display: flex; align-items: center; gap: 16px;
+            padding: 14px 22px;
+            border-bottom: 1px solid var(--border);
+            background: linear-gradient(180deg, rgba(20,12,38,.85), rgba(10,5,18,.65));
+            backdrop-filter: blur(8px);
+        }
+        .brand {
+            display:flex; align-items:center; gap:10px;
+            font-family:"Noto Serif SC", serif;
+            letter-spacing:.18em;
+        }
+        .brand-gem {
+            width:10px; height:10px;
+            background: radial-gradient(circle, var(--gold), var(--gold-b));
+            transform: rotate(45deg);
+            box-shadow: 0 0 12px var(--gold-b);
+        }
+        .brand-text { color: var(--gold); font-weight:700; font-size: 15px; }
+        .brand-sub { color: var(--text-3); font-size: 11px; letter-spacing:.3em; margin-left:6px; }
+        .spacer { flex:1; }
+        .pill {
+            font-family:"JetBrains Mono", monospace;
+            font-size: 11px; padding: 6px 12px;
+            border:1px solid var(--border-m); border-radius: 999px;
+            color: var(--text-2); background: rgba(255,255,255,.02);
+            cursor: pointer; transition: .2s;
+        }
+        .pill:hover { color: var(--gold); border-color: var(--gold-b); background: rgba(232,192,96,.08); }
+        .pill.active { color: var(--gold); border-color: var(--gold-b); background: rgba(232,192,96,.12); }
+        .pill.danger:hover { color: var(--red); border-color: rgba(255,102,102,.4); background: rgba(255,102,102,.08); }
+        .link-back {
+            color: var(--text-3); text-decoration: none; font-size: 12px; letter-spacing:.2em;
+        }
+        .link-back:hover { color: var(--purple); }
+
+        /* ── Layout ── */
+        .layout {
+            position: relative; z-index: 2;
+            display: grid;
+            grid-template-columns: 320px 1fr;
+            height: calc(100vh - 53px);
+        }
+        .sidebar {
+            background: linear-gradient(180deg, rgba(17,10,28,.85), rgba(10,5,18,.85));
+            border-right: 1px solid var(--border);
+            display: flex; flex-direction: column;
+            overflow: hidden;
+        }
+        .sb-head {
+            padding: 14px 16px;
+            border-bottom: 1px solid var(--border);
+            display:flex; align-items:center; gap:10px;
+        }
+        .sb-head-title {
+            font-family:"Noto Serif SC", serif;
+            color: var(--purple);
+            letter-spacing: .12em;
+            font-size: 13px;
+        }
+        .sb-actions { display:flex; gap:6px; }
+        .icon-btn {
+            background: transparent; border:1px solid var(--border-m); color: var(--text-2);
+            font-size: 14px; line-height:1;
+            width: 26px; height: 26px;
+            display:inline-flex; align-items:center; justify-content:center;
+            cursor: pointer; border-radius: 4px; transition: .15s;
+            font-family:"JetBrains Mono", monospace;
+        }
+        .icon-btn:hover { color: var(--gold); border-color: var(--gold-b); }
+        .icon-btn:disabled { opacity:.25; cursor:not-allowed; }
+        .sb-tree {
+            flex:1; overflow-y:auto; padding: 8px 6px 16px;
+            font-size: 13px;
+        }
+        .sb-tree::-webkit-scrollbar { width: 8px; }
+        .sb-tree::-webkit-scrollbar-thumb { background: rgba(180,130,255,.15); border-radius: 4px; }
+
+        .tree-node { user-select:none; }
+        .tree-row {
+            display:flex; align-items:center; gap:6px;
+            padding: 4px 8px; border-radius: 4px;
+            cursor: pointer; color: var(--text-2);
+            border: 1px solid transparent;
+        }
+        .tree-row:hover { background: rgba(180,130,255,.08); color: var(--text); }
+        .tree-row.selected {
+            background: linear-gradient(90deg, rgba(232,192,96,.12), rgba(180,130,255,.05));
+            color: var(--gold);
+            border-color: var(--gold-b);
+        }
+        .tree-caret {
+            width: 14px; flex-shrink:0; text-align:center;
+            color: var(--text-3); font-family:"JetBrains Mono", monospace;
+            transition: transform .12s;
+        }
+        .tree-caret.open { transform: rotate(90deg); color: var(--purple); }
+        .tree-caret.empty { color: transparent; }
+        .tree-glyph {
+            flex-shrink:0; width: 14px; font-family:"JetBrains Mono", monospace;
+            color: var(--purple); font-size: 11px;
+        }
+        .tree-row.entry .tree-glyph { color: var(--blue); }
+        .tree-name {
+            flex:1; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+        }
+        .tree-row .row-tools {
+            display:none; gap:2px;
+        }
+        .tree-row:hover .row-tools { display:inline-flex; }
+        .row-tool {
+            background: transparent; border:none; color: var(--text-3);
+            font-size: 11px; cursor: pointer; padding: 0 4px;
+            font-family:"JetBrains Mono", monospace;
+        }
+        .row-tool:hover { color: var(--gold); }
+        .row-tool.del:hover { color: var(--red); }
+        .tree-children {
+            padding-left: 14px;
+            border-left: 1px dashed rgba(180,130,255,.08);
+            margin-left: 9px;
+        }
+        .tree-children.collapsed { display:none; }
+        .tree-empty {
+            text-align:center; color: var(--text-3);
+            padding: 32px 16px; font-size: 12px;
+            font-family:"JetBrains Mono", monospace;
+        }
+
+        /* ── Content ── */
+        .content {
+            overflow-y: auto;
+            padding: 36px clamp(28px, 5vw, 72px) 80px;
+            background:
+                radial-gradient(ellipse 70% 50% at 10% 0%, rgba(180,130,255,.05), transparent 60%),
+                radial-gradient(ellipse 70% 50% at 90% 100%, rgba(232,192,96,.04), transparent 60%);
+        }
+        .content::-webkit-scrollbar { width: 10px; }
+        .content::-webkit-scrollbar-thumb { background: rgba(180,130,255,.18); border-radius: 5px; }
+
+        .crumbs {
+            font-family:"JetBrains Mono", monospace;
+            font-size: 11px; color: var(--text-3);
+            letter-spacing: .15em; margin-bottom: 10px;
+        }
+        .crumbs span { color: var(--text-3); }
+        .crumbs span.last { color: var(--purple); }
+        .crumbs .sep { margin: 0 8px; color: rgba(180,130,255,.3); }
+
+        .entry-title {
+            font-family:"Noto Serif SC", serif;
+            font-weight: 900;
+            font-size: clamp(28px, 3.4vw, 42px);
+            color: var(--text);
+            letter-spacing: .04em;
+            margin-bottom: 4px;
+        }
+        .entry-meta {
+            color: var(--text-3); font-family:"JetBrains Mono", monospace;
+            font-size: 11px; letter-spacing: .2em;
+            margin-bottom: 18px;
+        }
+        .entry-desc {
+            color: var(--text-2);
+            padding: 14px 18px;
+            border-left: 2px solid var(--gold-b);
+            background: rgba(232,192,96,.04);
+            border-radius: 0 4px 4px 0;
+            margin-bottom: 26px;
+            white-space: pre-wrap;
+        }
+
+        .section-h {
+            font-family:"Noto Serif SC", serif;
+            color: var(--gold);
+            font-size: 15px; letter-spacing: .25em;
+            margin: 30px 0 14px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--border);
+            display:flex; align-items:center; gap:10px;
+        }
+        .section-h::before {
+            content:""; width:8px; height:8px;
+            background: var(--gold);
+            transform: rotate(45deg);
+            box-shadow: 0 0 8px var(--gold-b);
+        }
+
+        /* Attachments */
+        .att-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 14px;
+        }
+        .att-card {
+            position: relative;
+            border: 1px solid var(--border-m);
+            background: linear-gradient(180deg, rgba(23,16,42,.7), rgba(13,8,24,.7));
+            border-radius: 6px;
+            overflow: hidden;
+        }
+        .att-card img { width:100%; display:block; height: 160px; object-fit: cover; }
+        .att-card .att-info {
+            padding: 8px 10px;
+            font-size: 12px;
+            display:flex; justify-content:space-between; align-items:center;
+            gap: 8px;
+        }
+        .att-name { color: var(--text-2); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+        .att-kind {
+            font-family:"JetBrains Mono", monospace; font-size: 10px;
+            padding: 2px 6px; border-radius: 3px;
+            background: rgba(122,184,240,.15); color: var(--blue);
+        }
+        .att-del {
+            position:absolute; top:6px; right:6px;
+            background: rgba(0,0,0,.6); color: var(--red);
+            border: 1px solid rgba(255,102,102,.3);
+            width: 22px; height: 22px; border-radius: 50%;
+            cursor: pointer; display:none;
+            font-family:"JetBrains Mono", monospace; font-size: 12px;
+            align-items:center; justify-content:center;
+        }
+        .att-card:hover .att-del { display: inline-flex; }
+        .att-del:hover { background: rgba(255,102,102,.25); }
+
+        .doc-block {
+            margin-top: 18px;
+            border: 1px solid var(--border-m);
+            border-radius: 6px;
+            background: linear-gradient(180deg, rgba(17,10,28,.55), rgba(10,5,18,.6));
+        }
+        .doc-head {
+            padding: 10px 14px;
+            border-bottom: 1px solid var(--border);
+            display:flex; justify-content:space-between; align-items:center;
+            font-family:"JetBrains Mono", monospace;
+            font-size: 12px; color: var(--text-2);
+        }
+        .doc-head .doc-kind {
+            padding: 2px 8px;
+            border: 1px solid var(--border-m); border-radius: 3px;
+            font-size: 10px; letter-spacing: .15em;
+            color: var(--purple);
+        }
+        .doc-body {
+            padding: 18px 22px;
+            color: var(--text);
+            font-size: 14px;
+            overflow-x: auto;
+        }
+        .doc-body h1, .doc-body h2, .doc-body h3, .doc-body h4 {
+            font-family:"Noto Serif SC", serif;
+            color: var(--gold);
+            margin: 18px 0 8px;
+            letter-spacing: .04em;
+        }
+        .doc-body h1 { font-size: 24px; border-bottom: 1px solid var(--border); padding-bottom: 6px; }
+        .doc-body h2 { font-size: 20px; color: var(--purple); }
+        .doc-body h3 { font-size: 17px; color: var(--blue); }
+        .doc-body p { margin: 8px 0; color: var(--text-2); }
+        .doc-body a { color: var(--blue); }
+        .doc-body code {
+            background: rgba(180,130,255,.1);
+            padding: 1px 6px; border-radius: 3px;
+            font-family:"JetBrains Mono", monospace; font-size: 12px;
+            color: var(--teal);
+        }
+        .doc-body pre {
+            background: rgba(0,0,0,.4);
+            padding: 12px 14px; border-radius: 4px;
+            border: 1px solid var(--border);
+            overflow-x: auto; margin: 10px 0;
+        }
+        .doc-body pre code { background: transparent; padding: 0; color: var(--text); }
+        .doc-body blockquote {
+            border-left: 3px solid var(--purple);
+            padding: 4px 14px; margin: 10px 0;
+            color: var(--text-2);
+            background: rgba(180,130,255,.05);
+        }
+        .doc-body ul, .doc-body ol { padding-left: 22px; margin: 8px 0; color: var(--text-2); }
+        .doc-body table {
+            border-collapse: collapse; margin: 12px 0;
+            border: 1px solid var(--border-m);
+        }
+        .doc-body th, .doc-body td {
+            border: 1px solid var(--border); padding: 6px 12px;
+        }
+        .doc-body th { background: rgba(180,130,255,.08); color: var(--gold); }
+        .doc-body img { max-width: 100%; border-radius: 4px; }
+
+        /* Upload zones */
+        .upload-row {
+            display: flex; gap: 10px; align-items: center;
+            margin-top: 12px; flex-wrap: wrap;
+        }
+        .upload-btn {
+            position: relative; overflow: hidden;
+            display: inline-flex; align-items:center; gap: 8px;
+            padding: 8px 16px;
+            border: 1px dashed var(--border-m);
+            background: rgba(232,192,96,.04);
+            color: var(--gold);
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px; letter-spacing: .15em;
+        }
+        .upload-btn:hover { background: rgba(232,192,96,.10); border-color: var(--gold-b); }
+        .upload-btn input { position:absolute; inset:0; opacity:0; cursor:pointer; }
+
+        /* Empty / hint */
+        .placeholder {
+            display:flex; flex-direction:column; align-items:center; justify-content:center;
+            height: 70vh; color: var(--text-3); text-align:center; gap: 14px;
+        }
+        .placeholder .gem {
+            width: 14px; height: 14px;
+            background: var(--gold); transform: rotate(45deg);
+            box-shadow: 0 0 18px var(--gold-b);
+            animation: pulse 2.4s ease-in-out infinite;
+        }
+        @keyframes pulse { 50% { box-shadow: 0 0 28px var(--gold-b); opacity:.6; } }
+        .placeholder .ph-title {
+            font-family:"Noto Serif SC", serif; letter-spacing: .25em;
+            font-size: 18px; color: var(--text-2);
+        }
+        .placeholder .ph-sub {
+            font-family:"JetBrains Mono", monospace; font-size: 11px;
+            letter-spacing: .2em; max-width: 480px;
+        }
+
+        /* Modal */
+        .modal-mask {
+            position: fixed; inset: 0; background: rgba(4,1,11,.7);
+            backdrop-filter: blur(4px); z-index: 100;
+            display: none; align-items:center; justify-content:center;
+        }
+        .modal-mask.open { display:flex; }
+        .modal {
+            background: linear-gradient(180deg, var(--raised-2), var(--surface));
+            border: 1px solid var(--border-m);
+            border-radius: 8px;
+            padding: 22px 26px 18px;
+            min-width: 380px; max-width: 92vw;
+            box-shadow: 0 20px 60px rgba(0,0,0,.6);
+        }
+        .modal h3 {
+            font-family:"Noto Serif SC", serif; color: var(--gold);
+            letter-spacing: .15em; font-size: 16px; margin-bottom: 14px;
+            padding-bottom: 8px; border-bottom: 1px solid var(--border);
+        }
+        .modal label { display:block; color: var(--text-2); font-size: 12px; margin: 10px 0 4px; letter-spacing: .12em; }
+        .modal input, .modal textarea, .modal select {
+            width: 100%;
+            background: rgba(0,0,0,.35);
+            border: 1px solid var(--border-m);
+            color: var(--text);
+            padding: 8px 10px; border-radius: 4px;
+            font-family: inherit; font-size: 13px;
+            outline: none;
+        }
+        .modal input:focus, .modal textarea:focus, .modal select:focus { border-color: var(--gold-b); }
+        .modal textarea { resize: vertical; min-height: 80px; }
+        .modal .modal-foot {
+            display:flex; gap:8px; justify-content:flex-end; margin-top: 16px;
+        }
+        .btn {
+            padding: 7px 16px; font-size: 12px; letter-spacing: .15em;
+            border-radius: 4px; cursor: pointer;
+            background: transparent; border: 1px solid var(--border-m); color: var(--text-2);
+        }
+        .btn:hover { border-color: var(--gold-b); color: var(--gold); }
+        .btn.primary {
+            background: linear-gradient(180deg, rgba(232,192,96,.18), rgba(232,192,96,.06));
+            border-color: var(--gold-b); color: var(--gold);
+        }
+        .btn.primary:hover { background: linear-gradient(180deg, rgba(232,192,96,.3), rgba(232,192,96,.1)); }
+        .btn.danger { color: var(--red); border-color: rgba(255,102,102,.3); }
+        .btn.danger:hover { background: rgba(255,102,102,.1); border-color: var(--red); }
+
+        /* Toast */
+        .toast {
+            position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+            padding: 10px 18px;
+            background: rgba(20,12,38,.95);
+            border: 1px solid var(--border-m);
+            border-radius: 4px;
+            font-size: 12px; color: var(--text);
+            z-index: 200; opacity: 0; pointer-events: none;
+            transition: opacity .25s, transform .25s;
+        }
+        .toast.show { opacity:1; transform: translateX(-50%) translateY(-6px); }
+        .toast.error { border-color: rgba(255,102,102,.4); color: var(--red); }
+        .toast.ok { border-color: rgba(80,216,153,.4); color: var(--green); }
+
+        /* Read-only banner */
+        .ro-banner {
+            background: linear-gradient(90deg, rgba(180,130,255,.05), rgba(232,192,96,.05));
+            border-bottom: 1px solid var(--border);
+            padding: 6px 22px;
+            font-family:"JetBrains Mono", monospace;
+            font-size: 11px; letter-spacing: .2em;
+            color: var(--text-3); text-align: center;
+        }
+        .ro-banner a { color: var(--gold); text-decoration: none; }
+        .ro-banner a:hover { text-decoration: underline; }
+
+        body[data-mode="read"] .admin-only { display: none !important; }
+
+        @media (max-width: 720px) {
+            .layout { grid-template-columns: 1fr; }
+            .sidebar { display: none; }
+            body.sb-open .sidebar {
+                display: flex; position: fixed; inset: 53px 0 0; z-index: 50;
+            }
+        }
+    </style>
+</head>
+<body data-mode="read">
+
+<div class="topbar">
+    <div class="brand">
+        <span class="brand-gem"></span>
+        <span class="brand-text">解析世界</span>
+        <span class="brand-sub">LORE · DATABASE</span>
+    </div>
+    <div class="spacer"></div>
+    <a class="link-back" href="index.html">← 返回导航</a>
+    <button id="auth-btn" class="pill">管理登录</button>
+</div>
+
+<div id="ro-banner" class="ro-banner">
+    当前为只读浏览模式 · 设定可由编辑者通过 <a href="#" id="auth-link">管理登录</a> 进行新增 / 编辑
+</div>
+
+<div class="layout">
+    <aside class="sidebar">
+        <div class="sb-head">
+            <div class="sb-head-title">◈ 目录树</div>
+            <div class="spacer"></div>
+            <div class="sb-actions admin-only">
+                <button class="icon-btn" id="add-root-folder" title="新建根目录">+▾</button>
+                <button class="icon-btn" id="add-root-entry"  title="新建根条目">+◆</button>
+            </div>
+        </div>
+        <div class="sb-tree" id="tree">
+            <div class="tree-empty">载入中…</div>
+        </div>
+    </aside>
+
+    <main class="content" id="content">
+        <div class="placeholder">
+            <div class="gem"></div>
+            <div class="ph-title">解析世界 · 世界观数据库</div>
+            <div class="ph-sub">从左侧目录选择一个条目，查阅它的图像、设定与文档。<br>编辑者登录后即可上传 Markdown / LaTeX / Word / 图像，并维护多层级目录结构。</div>
+        </div>
+    </main>
+</div>
+
+<!-- Modals -->
+<div class="modal-mask" id="modal-mask">
+    <div class="modal" id="modal"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/marked@12.0.0/marked.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<script>
+/* ════════════════════════════════════════════════════════════════
+   The Parsed World · Lore Database — Client
+   ════════════════════════════════════════════════════════════════ */
+
+const API_BASE = (() => {
+    // Same-origin if served by node server; otherwise default to localhost:4174
+    if (location.protocol === 'http:' || location.protocol === 'https:') {
+        if (location.port && location.port !== '4174') {
+            // Served from another origin (e.g. opened directly or different dev server)
+            return localStorage.getItem('lore-api') || `${location.protocol}//${location.hostname}:4174`;
+        }
+        return '';
+    }
+    return localStorage.getItem('lore-api') || 'http://localhost:4174';
+})();
+
+const state = {
+    tree: [],
+    selectedId: null,
+    expanded: new Set(JSON.parse(localStorage.getItem('lore-expanded') || '[]')),
+    token: localStorage.getItem('lore-token') || '',
+    isAdmin: false,
+};
+
+const $ = (q, root=document) => root.querySelector(q);
+const $$ = (q, root=document) => [...root.querySelectorAll(q)];
+
+function toast(msg, kind='') {
+    const t = $('#toast');
+    t.textContent = msg;
+    t.className = 'toast show ' + kind;
+    clearTimeout(t._tm);
+    t._tm = setTimeout(() => t.className = 'toast', 2400);
+}
+
+async function api(path, opts = {}) {
+    const headers = Object.assign({}, opts.headers || {});
+    if (state.token) headers['X-Admin-Token'] = state.token;
+    if (opts.body && !(opts.body instanceof FormData) && !headers['Content-Type']) {
+        headers['Content-Type'] = 'application/json';
+        opts.body = JSON.stringify(opts.body);
+    }
+    const r = await fetch(API_BASE + path, { ...opts, headers });
+    if (!r.ok) {
+        const txt = await r.text().catch(() => '');
+        let msg = txt;
+        try { msg = JSON.parse(txt).error || msg; } catch {}
+        throw new Error(msg || `HTTP ${r.status}`);
+    }
+    return r.status === 204 ? null : r.json();
+}
+
+/* ── Auth ───────────────────────────────────────────────────────── */
+async function tryAuth(token) {
+    try {
+        const r = await api('/api/auth/check', { method: 'POST', body: { token } });
+        if (r.ok) {
+            state.token = token;
+            state.isAdmin = true;
+            localStorage.setItem('lore-token', token);
+            document.body.dataset.mode = 'edit';
+            $('#auth-btn').textContent = '退出管理';
+            $('#auth-btn').classList.add('active');
+            $('#ro-banner').style.display = 'none';
+            return true;
+        }
+    } catch (e) {}
+    return false;
+}
+
+function logout() {
+    state.token = '';
+    state.isAdmin = false;
+    localStorage.removeItem('lore-token');
+    document.body.dataset.mode = 'read';
+    $('#auth-btn').textContent = '管理登录';
+    $('#auth-btn').classList.remove('active');
+    $('#ro-banner').style.display = '';
+}
+
+$('#auth-btn').addEventListener('click', () => {
+    if (state.isAdmin) { logout(); return; }
+    openAuthModal();
+});
+$('#auth-link').addEventListener('click', e => { e.preventDefault(); openAuthModal(); });
+
+function openAuthModal() {
+    openModal({
+        title: '管理登录',
+        body: `
+            <label>管理员令牌 (ADMIN_TOKEN)</label>
+            <input id="m-token" type="password" placeholder="令牌字符串" autofocus>
+            <label style="color:var(--text-3); font-size:11px; margin-top:8px;">
+                令牌由后端 ADMIN_TOKEN 环境变量设置。读取浏览不需要登录。
+            </label>
+        `,
+        confirmText: '登录',
+        onConfirm: async () => {
+            const tok = $('#m-token').value.trim();
+            if (!tok) return false;
+            const ok = await tryAuth(tok);
+            if (ok) { toast('已登录，可以编辑了', 'ok'); return true; }
+            toast('令牌无效', 'error'); return false;
+        },
+    });
+}
+
+/* ── Modal helpers ─────────────────────────────────────────────── */
+function openModal({ title, body, confirmText='确定', cancelText='取消', onConfirm, danger=false }) {
+    const m = $('#modal');
+    m.innerHTML = `
+        <h3>${title}</h3>
+        <div class="modal-body">${body}</div>
+        <div class="modal-foot">
+            <button class="btn" data-act="cancel">${cancelText}</button>
+            <button class="btn ${danger ? 'danger' : 'primary'}" data-act="ok">${confirmText}</button>
+        </div>
+    `;
+    $('#modal-mask').classList.add('open');
+    const close = () => $('#modal-mask').classList.remove('open');
+    m.querySelector('[data-act="cancel"]').onclick = close;
+    m.querySelector('[data-act="ok"]').onclick = async () => {
+        const r = onConfirm ? await onConfirm() : true;
+        if (r !== false) close();
+    };
+    m.onkeydown = e => {
+        if (e.key === 'Escape') close();
+        if (e.key === 'Enter' && e.target.tagName !== 'TEXTAREA') {
+            m.querySelector('[data-act="ok"]').click();
+        }
+    };
+}
+
+/* ── Tree ──────────────────────────────────────────────────────── */
+async function loadTree() {
+    const { tree } = await api('/api/tree');
+    state.tree = tree;
+    renderTree();
+}
+
+function renderTree() {
+    const root = $('#tree');
+    root.innerHTML = '';
+    if (!state.tree.length) {
+        root.innerHTML = `<div class="tree-empty">
+            （空）${state.isAdmin ? '<br>使用右上角 +▾ / +◆ 新建' : ''}
+        </div>`;
+        return;
+    }
+    const frag = document.createDocumentFragment();
+    for (const n of state.tree) frag.appendChild(renderNode(n));
+    root.appendChild(frag);
+}
+
+function renderNode(n) {
+    const el = document.createElement('div');
+    el.className = 'tree-node';
+    el.dataset.id = n.id;
+
+    const row = document.createElement('div');
+    row.className = 'tree-row ' + n.type;
+    if (n.id === state.selectedId) row.classList.add('selected');
+
+    const isFolder = n.type === 'folder';
+    const hasKids = isFolder && n.children.length > 0;
+    const expanded = state.expanded.has(n.id);
+
+    row.innerHTML = `
+        <span class="tree-caret ${hasKids ? (expanded ? 'open' : '') : 'empty'}">${hasKids ? '▸' : '·'}</span>
+        <span class="tree-glyph">${isFolder ? '▾' : '◆'}</span>
+        <span class="tree-name" title="${escapeHtml(n.name)}">${escapeHtml(n.name)}</span>
+        <span class="row-tools admin-only">
+            ${isFolder ? `<button class="row-tool" data-act="add-folder" title="新建子目录">+▾</button>
+                          <button class="row-tool" data-act="add-entry"  title="新建子条目">+◆</button>` : ''}
+            <button class="row-tool" data-act="rename" title="重命名">✎</button>
+            <button class="row-tool" data-act="move"   title="移动">↪</button>
+            <button class="row-tool del" data-act="del" title="删除">×</button>
+        </span>
+    `;
+
+    row.addEventListener('click', e => {
+        if (e.target.closest('.row-tools')) return;
+        if (e.target.classList.contains('tree-caret') && hasKids) {
+            toggleExpand(n.id);
+            return;
+        }
+        if (isFolder && hasKids) toggleExpand(n.id);
+        selectNode(n.id);
+    });
+
+    row.querySelectorAll('.row-tool').forEach(b => {
+        b.addEventListener('click', e => {
+            e.stopPropagation();
+            handleNodeAction(b.dataset.act, n);
+        });
+    });
+
+    el.appendChild(row);
+
+    if (isFolder) {
+        const kidsBox = document.createElement('div');
+        kidsBox.className = 'tree-children' + (expanded ? '' : ' collapsed');
+        for (const k of n.children) kidsBox.appendChild(renderNode(k));
+        el.appendChild(kidsBox);
+    }
+    return el;
+}
+
+function toggleExpand(id) {
+    if (state.expanded.has(id)) state.expanded.delete(id);
+    else state.expanded.add(id);
+    localStorage.setItem('lore-expanded', JSON.stringify([...state.expanded]));
+    renderTree();
+}
+
+function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, c => ({
+        '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+    }[c]));
+}
+
+async function handleNodeAction(act, n) {
+    if (act === 'add-folder' || act === 'add-entry') {
+        const type = act === 'add-folder' ? 'folder' : 'entry';
+        promptNewNode(n.id, type);
+    } else if (act === 'rename') {
+        promptRename(n);
+    } else if (act === 'move') {
+        promptMove(n);
+    } else if (act === 'del') {
+        confirmDelete(n);
+    }
+}
+
+function promptNewNode(parentId, type) {
+    openModal({
+        title: type === 'folder' ? '新建子目录' : '新建子条目',
+        body: `
+            <label>名称</label>
+            <input id="m-name" autofocus placeholder="${type === 'folder' ? '例如：能量体系' : '例如：极星'}">
+            ${type === 'entry' ? `<label>简介（可选）</label><textarea id="m-desc" placeholder="一段概述…"></textarea>` : ''}
+        `,
+        confirmText: '创建',
+        onConfirm: async () => {
+            const name = $('#m-name').value.trim();
+            if (!name) return false;
+            const desc = type === 'entry' ? $('#m-desc').value : '';
+            try {
+                const { id } = await api('/api/nodes', {
+                    method: 'POST',
+                    body: { parent_id: parentId, name, type, description: desc },
+                });
+                if (parentId) state.expanded.add(parentId);
+                await loadTree();
+                selectNode(id);
+                toast('已创建', 'ok');
+            } catch (e) { toast(e.message, 'error'); return false; }
+        },
+    });
+}
+
+function promptRename(n) {
+    openModal({
+        title: '重命名',
+        body: `
+            <label>名称</label>
+            <input id="m-name" autofocus value="${escapeHtml(n.name)}">
+            ${n.type === 'entry' ? `<label>简介</label><textarea id="m-desc">${escapeHtml(n.description||'')}</textarea>` : ''}
+        `,
+        confirmText: '保存',
+        onConfirm: async () => {
+            const name = $('#m-name').value.trim();
+            if (!name) return false;
+            const body = { name };
+            if (n.type === 'entry') body.description = $('#m-desc').value;
+            try {
+                await api('/api/nodes/' + n.id, { method: 'PATCH', body });
+                await loadTree();
+                if (n.id === state.selectedId) await selectNode(n.id);
+                toast('已保存', 'ok');
+            } catch (e) { toast(e.message, 'error'); return false; }
+        },
+    });
+}
+
+function promptMove(n) {
+    // Collect all folders that aren't in n's subtree.
+    const forbid = collectSubtreeIds(n);
+    const options = ['<option value="">— 根目录 —</option>'];
+    walk(state.tree, (node, depth) => {
+        if (node.type !== 'folder') return;
+        if (forbid.has(node.id)) return;
+        options.push(`<option value="${node.id}">${'　'.repeat(depth)}▾ ${escapeHtml(node.name)}</option>`);
+    });
+    openModal({
+        title: `移动「${escapeHtml(n.name)}」`,
+        body: `
+            <label>目标父目录</label>
+            <select id="m-parent">${options.join('')}</select>
+        `,
+        confirmText: '移动',
+        onConfirm: async () => {
+            const v = $('#m-parent').value;
+            const parent_id = v === '' ? null : Number(v);
+            try {
+                await api('/api/nodes/' + n.id, { method: 'PATCH', body: { parent_id } });
+                await loadTree();
+                toast('已移动', 'ok');
+            } catch (e) { toast(e.message, 'error'); return false; }
+        },
+    });
+}
+
+function confirmDelete(n) {
+    openModal({
+        title: '删除',
+        body: `<p style="color:var(--text-2)">确定删除「<strong style="color:var(--red)">${escapeHtml(n.name)}</strong>」及其所有子节点与附件？此操作不可撤销。</p>`,
+        confirmText: '永久删除',
+        danger: true,
+        onConfirm: async () => {
+            try {
+                await api('/api/nodes/' + n.id, { method: 'DELETE' });
+                if (state.selectedId === n.id) state.selectedId = null;
+                await loadTree();
+                if (!state.selectedId) renderPlaceholder();
+                toast('已删除', 'ok');
+            } catch (e) { toast(e.message, 'error'); return false; }
+        },
+    });
+}
+
+function collectSubtreeIds(n) {
+    const out = new Set([n.id]);
+    const stack = [n];
+    while (stack.length) {
+        const x = stack.pop();
+        for (const k of (x.children || [])) { out.add(k.id); stack.push(k); }
+    }
+    return out;
+}
+
+function walk(nodes, fn, depth = 0) {
+    for (const n of nodes) {
+        fn(n, depth);
+        if (n.children && n.children.length) walk(n.children, fn, depth + 1);
+    }
+}
+
+function findNode(id, nodes = state.tree, trail = []) {
+    for (const n of nodes) {
+        const t = [...trail, n];
+        if (n.id === id) return { node: n, trail: t };
+        if (n.children && n.children.length) {
+            const r = findNode(id, n.children, t);
+            if (r) return r;
+        }
+    }
+    return null;
+}
+
+/* ── Selection & detail ───────────────────────────────────────── */
+async function selectNode(id) {
+    state.selectedId = id;
+    renderTree();
+    const found = findNode(id);
+    if (!found) return;
+    if (found.node.type === 'folder') {
+        renderFolderDetail(found);
+        return;
+    }
+    try {
+        const detail = await api('/api/nodes/' + id);
+        renderEntryDetail(found, detail);
+    } catch (e) {
+        toast(e.message, 'error');
+    }
+}
+
+function renderPlaceholder() {
+    $('#content').innerHTML = `
+        <div class="placeholder">
+            <div class="gem"></div>
+            <div class="ph-title">解析世界 · 世界观数据库</div>
+            <div class="ph-sub">从左侧目录选择一个条目，查阅它的图像、设定与文档。</div>
+        </div>`;
+}
+
+function crumbsHtml(trail) {
+    return trail.map((t, i) => {
+        const last = i === trail.length - 1;
+        return `<span class="${last?'last':''}">${escapeHtml(t.name)}</span>` +
+            (last ? '' : '<span class="sep">/</span>');
+    }).join('');
+}
+
+function renderFolderDetail({ node, trail }) {
+    const kids = node.children || [];
+    $('#content').innerHTML = `
+        <div class="crumbs">${crumbsHtml(trail)}</div>
+        <h1 class="entry-title">${escapeHtml(node.name)}</h1>
+        <div class="entry-meta">FOLDER · ${kids.length} 项</div>
+        ${node.description ? `<div class="entry-desc">${escapeHtml(node.description)}</div>` : ''}
+        <div class="section-h">目录内容</div>
+        ${kids.length === 0
+            ? `<p style="color:var(--text-3); font-size:13px;">（此目录暂无内容）</p>`
+            : `<div class="att-grid">${kids.map(k => `
+                <div class="att-card" style="cursor:pointer" onclick="selectNode(${k.id})">
+                    <div class="att-info" style="padding:18px 14px;">
+                        <span class="att-name" style="font-size:14px; color:var(--text);">
+                            ${k.type === 'folder' ? '▾' : '◆'} ${escapeHtml(k.name)}
+                        </span>
+                        <span class="att-kind">${k.type === 'folder' ? 'FOLDER' : 'ENTRY'}</span>
+                    </div>
+                </div>`).join('')}
+            </div>`
+        }
+    `;
+}
+
+function renderEntryDetail({ node, trail }, detail) {
+    const { node: full, attachments } = detail;
+    const images = attachments.filter(a => a.kind === 'image');
+    const docs = attachments.filter(a => a.kind !== 'image');
+
+    $('#content').innerHTML = `
+        <div class="crumbs">${crumbsHtml(trail)}</div>
+        <h1 class="entry-title">${escapeHtml(full.name)}</h1>
+        <div class="entry-meta">ENTRY · 更新于 ${new Date(full.updated_at).toLocaleString('zh-CN')}</div>
+        ${full.description ? `<div class="entry-desc">${escapeHtml(full.description)}</div>` : ''}
+
+        <div class="section-h">图像</div>
+        <div id="img-section">
+            ${images.length ? `<div class="att-grid">${images.map(a => `
+                <div class="att-card">
+                    <button class="att-del admin-only" data-att="${a.id}" title="删除">×</button>
+                    <img src="${API_BASE}/api/attachments/${a.id}/file" alt="${escapeHtml(a.original_name)}">
+                    <div class="att-info">
+                        <span class="att-name" title="${escapeHtml(a.original_name)}">${escapeHtml(a.original_name)}</span>
+                        <span class="att-kind">IMAGE</span>
+                    </div>
+                </div>`).join('')}</div>` : `<p style="color:var(--text-3); font-size:13px;">（无图像）</p>`}
+            <div class="upload-row admin-only">
+                <label class="upload-btn">＋ 上传图片
+                    <input type="file" accept="image/*" multiple data-upload="image">
+                </label>
+            </div>
+        </div>
+
+        <div class="section-h">文档</div>
+        <div id="doc-section">
+            ${docs.length ? docs.map(a => `
+                <div class="doc-block" data-att-block="${a.id}">
+                    <div class="doc-head">
+                        <span>${escapeHtml(a.original_name)}</span>
+                        <span style="display:flex; gap:8px; align-items:center;">
+                            <span class="doc-kind">${a.kind.toUpperCase()}</span>
+                            <a href="${API_BASE}/api/attachments/${a.id}/file" target="_blank"
+                               style="color:var(--text-3); text-decoration:none; font-size:11px;">下载</a>
+                            <button class="row-tool del admin-only" data-del-att="${a.id}" title="删除">×</button>
+                        </span>
+                    </div>
+                    <div class="doc-body" data-render="${a.id}" data-kind="${a.kind}">载入中…</div>
+                </div>`).join('') : `<p style="color:var(--text-3); font-size:13px;">（无文档）</p>`}
+            <div class="upload-row admin-only">
+                <label class="upload-btn">＋ 上传文档 (.md / .tex / .docx / .txt)
+                    <input type="file" accept=".md,.markdown,.tex,.latex,.docx,.doc,.txt" multiple data-upload="doc">
+                </label>
+            </div>
+        </div>
+    `;
+
+    // Render docs
+    $$('[data-render]').forEach(div => {
+        const id = div.dataset.render;
+        const kind = div.dataset.kind;
+        renderDocAttachment(div, id, kind);
+    });
+
+    // Wire upload inputs
+    $$('[data-upload]').forEach(inp => {
+        inp.addEventListener('change', e => uploadFiles(full.id, [...e.target.files]).then(() => selectNode(full.id)));
+    });
+
+    // Wire deletes
+    $$('[data-del-att]').forEach(b => {
+        b.addEventListener('click', () => deleteAttachment(b.dataset.delAtt, full.id));
+    });
+    $$('.att-del[data-att]').forEach(b => {
+        b.addEventListener('click', () => deleteAttachment(b.dataset.att, full.id));
+    });
+}
+
+async function renderDocAttachment(div, id, kind) {
+    try {
+        const r = await api(`/api/attachments/${id}/content`);
+        if (kind === 'markdown') {
+            div.innerHTML = marked.parse(r.text || '');
+            renderMath(div);
+        } else if (kind === 'latex') {
+            // Wrap entire body in math? Most .tex files have prose + math. Render as code + try to render math sections.
+            div.innerHTML = renderLatexDoc(r.text || '');
+            renderMath(div);
+        } else if (kind === 'word') {
+            div.innerHTML = r.html || '<p>（空）</p>';
+        } else { // text
+            div.innerHTML = `<pre>${escapeHtml(r.text || '')}</pre>`;
+        }
+    } catch (e) {
+        div.innerHTML = `<p style="color:var(--red)">载入失败：${escapeHtml(e.message)}</p>`;
+    }
+}
+
+function renderLatexDoc(src) {
+    // Strip preamble; keep content between \begin{document} ... \end{document} if present.
+    let body = src;
+    const m = src.match(/\\begin\{document\}([\s\S]*?)\\end\{document\}/);
+    if (m) body = m[1];
+    // Replace \section / \subsection / \subsubsection with markdown-ish HTML.
+    body = body
+        .replace(/\\section\*?\{([^}]*)\}/g, '<h1>$1</h1>')
+        .replace(/\\subsection\*?\{([^}]*)\}/g, '<h2>$1</h2>')
+        .replace(/\\subsubsection\*?\{([^}]*)\}/g, '<h3>$1</h3>')
+        .replace(/\\textbf\{([^}]*)\}/g, '<strong>$1</strong>')
+        .replace(/\\emph\{([^}]*)\}/g, '<em>$1</em>')
+        .replace(/\\textit\{([^}]*)\}/g, '<em>$1</em>');
+    // Convert blank-line-separated chunks into <p>, preserving math delimiters.
+    const chunks = body.split(/\n\s*\n/).map(s => s.trim()).filter(Boolean);
+    return chunks.map(c => /^<(h\d|p|ul|ol|pre)/.test(c) ? c : `<p>${c.replace(/\n/g, '<br>')}</p>`).join('\n');
+}
+
+function renderMath(el) {
+    if (window.renderMathInElement) {
+        try {
+            renderMathInElement(el, {
+                delimiters: [
+                    { left: '$$', right: '$$', display: true },
+                    { left: '\\[', right: '\\]', display: true },
+                    { left: '$', right: '$', display: false },
+                    { left: '\\(', right: '\\)', display: false },
+                ],
+                throwOnError: false,
+            });
+        } catch {}
+    }
+}
+
+async function uploadFiles(nodeId, files) {
+    if (!files.length) return;
+    const fd = new FormData();
+    for (const f of files) fd.append('files', f);
+    try {
+        await api(`/api/nodes/${nodeId}/attachments`, { method: 'POST', body: fd });
+        toast(`上传 ${files.length} 个文件`, 'ok');
+    } catch (e) { toast(e.message, 'error'); }
+}
+
+async function deleteAttachment(id, nodeId) {
+    if (!confirm('删除此附件？')) return;
+    try {
+        await api('/api/attachments/' + id, { method: 'DELETE' });
+        await selectNode(nodeId);
+        toast('已删除', 'ok');
+    } catch (e) { toast(e.message, 'error'); }
+}
+
+/* ── Root buttons ─────────────────────────────────────────────── */
+$('#add-root-folder').addEventListener('click', () => promptNewNode(null, 'folder'));
+$('#add-root-entry').addEventListener('click', () => promptNewNode(null, 'entry'));
+
+// Expose for inline onclick on folder cards
+window.selectNode = selectNode;
+
+/* ── Bootstrap ────────────────────────────────────────────────── */
+(async function init() {
+    // Try to silently re-auth with stored token.
+    if (state.token) {
+        const ok = await tryAuth(state.token);
+        if (!ok) logout();
+    }
+    try {
+        await loadTree();
+    } catch (e) {
+        $('#tree').innerHTML = `<div class="tree-empty" style="color:var(--red)">
+            后端连接失败<br>${escapeHtml(e.message)}<br><br>
+            <span style="color:var(--text-3)">请先启动 server/server.js<br>
+            或运行 <code style="color:var(--gold)">cd server && npm install && npm start</code></span>
+        </div>`;
+    }
+})();
+</script>
+</body>
+</html>

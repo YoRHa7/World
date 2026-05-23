@@ -1,0 +1,17 @@
+{
+  "name": "parsed-world-lore-db",
+  "version": "1.0.0",
+  "description": "Backend for The Parsed World lore tree database",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "dependencies": {
+    "better-sqlite3": "^11.3.0",
+    "cors": "^2.8.5",
+    "express": "^4.21.0",
+    "mammoth": "^1.8.0",
+    "multer": "^2.0.1"
+  }
+}
