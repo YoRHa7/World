@@ -266,6 +266,155 @@ app.get('/api/attachments/:id/content', (req, res) => {
     }
 });
 
+// ═══════════════════════════════════════════════════════════════════
+//  SEARCH — full-text-ish lookup over node names & descriptions
+// ═══════════════════════════════════════════════════════════════════
+app.get('/api/search', (req, res) => {
+    const q = String(req.query.q || '').trim();
+    if (!q) return res.json({ results: [] });
+    const like = `%${q.replace(/[%_]/g, c => '\\' + c)}%`;
+    const rows = db.prepare(`
+        SELECT id, parent_id, name, type, description
+        FROM nodes
+        WHERE name LIKE ? ESCAPE '\\' OR description LIKE ? ESCAPE '\\'
+        ORDER BY name ASC LIMIT 80
+    `).all(like, like);
+    // Build breadcrumb trail names for each hit
+    const nameStmt = db.prepare('SELECT parent_id, name FROM nodes WHERE id = ?');
+    const results = rows.map(r => {
+        const trail = [];
+        let pid = r.parent_id;
+        let guard = 0;
+        while (pid && guard++ < 32) {
+            const p = nameStmt.get(pid);
+            if (!p) break;
+            trail.unshift(p.name);
+            pid = p.parent_id;
+        }
+        return { id: r.id, name: r.name, type: r.type, description: r.description, trail };
+    });
+    res.json({ results });
+});
+
+// ═══════════════════════════════════════════════════════════════════
+//  LEVELS — community 2D platformer levels (关卡工坊)
+//  · read: public
+//  · create: public (returns one-time edit_key)
+//  · update / delete: requires the level's edit_key or admin token
+// ═══════════════════════════════════════════════════════════════════
+const MAX_LEVEL_DATA = 512 * 1024; // 512KB of JSON per level
+
+function validateLevelPayload(body, { partial = false } = {}) {
+    const out = {};
+    if (!partial || body.name !== undefined) {
+        const name = String(body.name || '').trim();
+        if (!name || name.length > 60) return { error: 'name 必填，且不超过 60 字' };
+        out.name = name;
+    }
+    if (body.author !== undefined) out.author = String(body.author).slice(0, 40);
+    if (body.description !== undefined) out.description = String(body.description).slice(0, 500);
+    if (!partial || body.data !== undefined) {
+        const data = typeof body.data === 'string' ? body.data : JSON.stringify(body.data || null);
+        if (!data || data === 'null') return { error: 'data 必填' };
+        if (data.length > MAX_LEVEL_DATA) return { error: '关卡数据过大' };
+        try { JSON.parse(data); } catch { return { error: 'data 必须是合法 JSON' }; }
+        out.data = data;
+    }
+    for (const k of ['width', 'height']) {
+        if (body[k] !== undefined) {
+            const v = Number(body[k]);
+            if (!Number.isInteger(v) || v < 8 || v > 400) return { error: `${k} 非法` };
+            out[k] = v;
+        }
+    }
+    return { out };
+}
+
+function canEditLevel(req, level) {
+    const token = req.headers['x-admin-token'] || req.query.token;
+    if (token === ADMIN_TOKEN) return true;
+    const key = req.headers['x-edit-key'] || req.query.edit_key;
+    return !!key && key === level.edit_key;
+}
+
+// List levels (metadata only)
+app.get('/api/levels', (_, res) => {
+    const rows = db.prepare(`
+        SELECT id, name, author, description, width, height, plays, created_at, updated_at
+        FROM levels ORDER BY updated_at DESC LIMIT 200
+    `).all();
+    res.json({ levels: rows });
+});
+
+// Get one level (full data, never the edit_key)
+app.get('/api/levels/:id', (req, res) => {
+    const row = db.prepare(`
+        SELECT id, name, author, description, data, width, height, plays, created_at, updated_at
+        FROM levels WHERE id = ?
+    `).get(Number(req.params.id));
+    if (!row) return res.status(404).json({ error: 'Not found' });
+    res.json({ level: row });
+});
+
+// Create level — public; responds with a one-time edit_key
+app.post('/api/levels', (req, res) => {
+    const { error, out } = validateLevelPayload(req.body || {});
+    if (error) return res.status(400).json({ error });
+    const editKey = crypto.randomBytes(16).toString('hex');
+    const now = nowMs();
+    const info = db.prepare(`
+        INSERT INTO levels (name, author, description, data, width, height, plays, edit_key, created_at, updated_at)
+        VALUES (?,?,?,?,?,?,0,?,?,?)
+    `).run(
+        out.name, out.author || '', out.description || '', out.data,
+        out.width || 60, out.height || 20, editKey, now, now
+    );
+    res.json({ id: info.lastInsertRowid, edit_key: editKey });
+});
+
+// Update level — edit_key or admin
+app.patch('/api/levels/:id', (req, res) => {
+    const id = Number(req.params.id);
+    const level = db.prepare('SELECT * FROM levels WHERE id = ?').get(id);
+    if (!level) return res.status(404).json({ error: 'Not found' });
+    if (!canEditLevel(req, level)) return res.status(401).json({ error: '无编辑权限（缺少 edit_key）' });
+    const { error, out } = validateLevelPayload(req.body || {}, { partial: true });
+    if (error) return res.status(400).json({ error });
+    db.prepare(`
+        UPDATE levels SET
+            name        = COALESCE(?, name),
+            author      = COALESCE(?, author),
+            description = COALESCE(?, description),
+            data        = COALESCE(?, data),
+            width       = COALESCE(?, width),
+            height      = COALESCE(?, height),
+            updated_at  = ?
+        WHERE id = ?
+    `).run(
+        out.name ?? null, out.author ?? null, out.description ?? null,
+        out.data ?? null, out.width ?? null, out.height ?? null, nowMs(), id
+    );
+    res.json({ ok: true });
+});
+
+// Delete level — edit_key or admin
+app.delete('/api/levels/:id', (req, res) => {
+    const id = Number(req.params.id);
+    const level = db.prepare('SELECT * FROM levels WHERE id = ?').get(id);
+    if (!level) return res.status(404).json({ error: 'Not found' });
+    if (!canEditLevel(req, level)) return res.status(401).json({ error: '无删除权限（缺少 edit_key）' });
+    db.prepare('DELETE FROM levels WHERE id = ?').run(id);
+    res.json({ ok: true });
+});
+
+// Count a play
+app.post('/api/levels/:id/play', (req, res) => {
+    const info = db.prepare('UPDATE levels SET plays = plays + 1 WHERE id = ?')
+        .run(Number(req.params.id));
+    if (!info.changes) return res.status(404).json({ error: 'Not found' });
+    res.json({ ok: true });
+});
+
 app.listen(PORT, () => {
     console.log(`\n  ✦ The Parsed World · Lore DB`);
     console.log(`  → listening on http://localhost:${PORT}`);

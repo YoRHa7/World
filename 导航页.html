@@ -1039,10 +1039,10 @@
             z-index: 2;
             display: grid;
             grid-template-columns: 1fr 1.7fr 1fr;
-            grid-template-rows: 1fr 1fr;
+            grid-template-rows: 1fr 1fr auto;
             gap: 10px;
             width: min(940px,94vw);
-            grid-template-areas: "tl promo tr" "bl promo br";
+            grid-template-areas: "tl promo tr" "bl promo br" "db db lv";
         }
 
         /* base card */
@@ -1225,6 +1225,89 @@
             background: rgba(255,255,255,.03);
         }
 
+        /* database & level forge — slim bottom cards */
+        .pos-db { grid-area: db; }
+        .pos-lv { grid-area: lv; }
+
+        .card-db {
+            flex-direction: row;
+            align-items: center;
+            gap: 18px;
+            padding: 14px 22px;
+            min-height: 64px;
+            border-color: rgba(180,130,255,.18);
+            background: linear-gradient(90deg, rgba(180,130,255,.06), rgba(80,232,208,.04) 50%, rgba(232,184,80,.06));
+        }
+
+            .card-db::before {
+                background: linear-gradient(90deg, transparent 5%, var(--purple) 30%, var(--teal) 50%, var(--gold) 70%, transparent 95%);
+                opacity: .6;
+            }
+
+            .card-db:hover {
+                border-color: rgba(180,130,255,.4);
+                box-shadow: 0 0 50px rgba(140,80,220,.18), 0 14px 40px rgba(0,0,0,.4);
+            }
+
+        .card-db .db-icon {
+            font-family: "JetBrains Mono", monospace;
+            font-size: 14px;
+            color: var(--gold);
+            border: 1px solid rgba(232,184,80,.3);
+            background: rgba(232,184,80,.06);
+            width: 36px; height: 36px;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+        }
+        .card-db .db-text { flex: 1; display: flex; flex-direction: column; gap: 2px; }
+        .card-db .db-type {
+            font-family: "JetBrains Mono", monospace;
+            font-size: 8px; letter-spacing: .32em; text-transform: uppercase;
+            color: var(--purple); opacity: .8;
+        }
+        .card-db .db-title {
+            font-family: "Noto Serif SC", serif;
+            font-size: 14px; font-weight: 700; color: var(--text);
+        }
+        .card-db .db-desc {
+            font-size: 10.5px; color: var(--text-3);
+            line-height: 1.5;
+        }
+        .card-db .db-cta {
+            font-family: "JetBrains Mono", monospace;
+            font-size: 9px; letter-spacing: .22em;
+            color: var(--gold); opacity: .55; flex-shrink: 0;
+            display: flex; align-items: center; gap: 8px;
+            transition: opacity .2s, gap .2s;
+        }
+        .card-db:hover .db-cta { opacity: .95; gap: 12px; }
+        .card-db .db-cta::after { content: "→"; }
+
+        .card-lv {
+            gap: 14px;
+            padding: 14px 18px;
+            border-color: rgba(80,232,208,.22);
+            background: linear-gradient(90deg, rgba(80,232,208,.07), rgba(180,130,255,.05));
+        }
+
+            .card-lv::before {
+                background: linear-gradient(90deg, transparent 5%, var(--teal) 40%, var(--purple) 75%, transparent 95%);
+                opacity: .6;
+            }
+
+            .card-lv:hover {
+                border-color: rgba(80,232,208,.45);
+                box-shadow: 0 0 50px rgba(60,200,180,.16), 0 14px 40px rgba(0,0,0,.4);
+            }
+
+        .card-lv .db-icon {
+            color: var(--teal);
+            border-color: rgba(80,232,208,.3);
+            background: rgba(80,232,208,.06);
+        }
+        .card-lv .db-type { color: var(--teal); }
+        .card-lv .db-cta { color: var(--teal); }
+
         /* promo */
         .card-promo {
             grid-area: promo;
@@ -1390,7 +1473,7 @@
             .hub-nav {
                 grid-template-columns: 1fr 1fr;
                 grid-template-rows: auto auto auto;
-                grid-template-areas: "promo promo" "tl tr" "bl br"
+                grid-template-areas: "promo promo" "tl tr" "bl br" "db db" "lv lv"
             }
 
             .card-promo {
@@ -1401,10 +1484,11 @@
         @media(max-width:480px) {
             .hub-nav {
                 grid-template-columns: 1fr;
-                grid-template-areas: "promo" "tl" "tr" "bl" "br"
+                grid-template-areas: "promo" "tl" "tr" "bl" "br" "db" "lv"
             }
         }
     </style>
+    <link rel="stylesheet" href="assets/theme.css">
 </head>
 <body>
 
@@ -1865,6 +1949,26 @@
                 <div class="hub-card-title">项目规划</div>
                 <div class="hub-card-desc">当前阶段进度、长期目标与协作优先级排列。</div>
                 <div class="hub-card-cta">查看规划</div>
+            </a>
+
+            <a class="hub-card card-db pos-db" href="世界观数据库.html" target="_blank">
+                <div class="db-icon">◈</div>
+                <div class="db-text">
+                    <div class="db-type">Lore Database · 设定数据库</div>
+                    <div class="db-title">世界观数据库</div>
+                    <div class="db-desc">完整的设定档案库 · 多层级目录树 · 图像 / Markdown / LaTeX / Word 文档浏览与管理。</div>
+                </div>
+                <div class="db-cta">进入数据库</div>
+            </a>
+
+            <a class="hub-card card-db card-lv pos-lv" href="关卡编辑器.html" target="_blank">
+                <div class="db-icon">◆</div>
+                <div class="db-text">
+                    <div class="db-type">Level Forge · 关卡工坊</div>
+                    <div class="db-title">关卡工坊</div>
+                    <div class="db-desc">绘制并试玩你的 2D 平台关卡，保存进数据库与他人共享。</div>
+                </div>
+                <div class="db-cta">开始锻造</div>
             </a>
         </nav>
     </div>

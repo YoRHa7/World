@@ -1,0 +1,1584 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>解析世界 · 关卡工坊</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700;900&family=Noto+Sans+SC:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        *,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+        html, body { height:100%; }
+        body {
+            background: var(--void, #06030f);
+            color: var(--text, #f0e8ff);
+            font-family: "Noto Sans SC", sans-serif;
+            font-size: 14px;
+            overflow: hidden;
+            user-select: none;
+        }
+
+        /* ── Topbar ── */
+        .topbar {
+            position: relative; z-index: 6;
+            display: flex; align-items: center; gap: 12px;
+            padding: 12px 20px;
+            border-bottom: 1px solid var(--border);
+            background: linear-gradient(180deg, rgba(20,12,38,.88), rgba(10,5,18,.7));
+            backdrop-filter: blur(8px);
+            flex-wrap: wrap;
+        }
+        .brand { display:flex; align-items:center; gap:10px; font-family:"Noto Serif SC", serif; letter-spacing:.18em; }
+        .brand-gem {
+            width:10px; height:10px;
+            background: radial-gradient(circle, var(--gold), var(--gold-b));
+            transform: rotate(45deg);
+            box-shadow: 0 0 12px var(--gold-b);
+            animation: flowPulse 3s ease-in-out infinite;
+        }
+        .brand-text { color: var(--gold); font-weight:700; font-size:15px; }
+        .brand-sub { color: var(--text-3); font-size:11px; letter-spacing:.3em; margin-left:6px; }
+        .spacer { flex:1; }
+        .pill {
+            font-family:"JetBrains Mono", monospace;
+            font-size:11px; padding:6px 13px;
+            border:1px solid var(--border-m); border-radius:999px;
+            color: var(--text-2); background: rgba(255,255,255,.02);
+            cursor:pointer; text-decoration:none; display:inline-flex; align-items:center; gap:6px;
+        }
+        .pill:hover { color: var(--gold); border-color: var(--gold-b); background: rgba(232,192,96,.08); }
+        .pill.primary { color: var(--gold); border-color: var(--gold-b); background: rgba(232,192,96,.10); }
+        .pill.play { color: var(--teal); border-color: rgba(80,232,208,.35); }
+        .pill.play:hover { background: rgba(80,232,208,.10); color: var(--teal); }
+        .pill:disabled { opacity:.35; cursor:not-allowed; }
+        .link-back { color: var(--text-3); text-decoration:none; font-size:12px; letter-spacing:.15em; }
+        .link-back:hover { color: var(--purple); }
+
+        /* ── Layout ── */
+        .layout {
+            position: relative; z-index: 2;
+            display: grid;
+            grid-template-columns: 270px 1fr;
+            height: calc(100vh - 51px);
+        }
+        body.playing .layout { grid-template-columns: 1fr; }
+        body.playing .panel { display: none; }
+
+        .panel {
+            background: linear-gradient(180deg, rgba(17,10,28,.88), rgba(10,5,18,.88));
+            border-right: 1px solid var(--border);
+            overflow-y: auto;
+            padding: 14px 14px 30px;
+        }
+        .p-section { margin-bottom: 20px; }
+        .p-title {
+            font-family:"Noto Serif SC", serif;
+            color: var(--gold); font-size:13px; letter-spacing:.25em;
+            display:flex; align-items:center; gap:8px;
+            padding-bottom:8px; margin-bottom:10px;
+            border-bottom:1px solid var(--border);
+        }
+        .p-title::before {
+            content:""; width:7px; height:7px; background:var(--gold);
+            transform:rotate(45deg); box-shadow:0 0 8px var(--gold-b);
+        }
+
+        /* Palette */
+        .palette { display:grid; grid-template-columns: repeat(3, 1fr); gap:7px; }
+        .tile-btn {
+            border:1px solid var(--border-m); border-radius:8px;
+            background: rgba(255,255,255,.02);
+            padding:7px 4px 5px; cursor:pointer;
+            display:flex; flex-direction:column; align-items:center; gap:4px;
+            color: var(--text-2); font-size:10.5px;
+            transition: .18s;
+        }
+        .tile-btn:hover { border-color: var(--gold-b); background: rgba(232,192,96,.06); transform: translateY(-1px); }
+        .tile-btn.active {
+            border-color: var(--gold);
+            background: linear-gradient(160deg, rgba(232,192,96,.16), rgba(180,130,255,.08));
+            color: var(--gold);
+            box-shadow: 0 0 14px rgba(232,192,96,.12);
+        }
+        .tile-btn canvas { width:30px; height:30px; image-rendering:auto; border-radius:4px; }
+
+        .tools { display:flex; gap:7px; margin-top:10px; flex-wrap:wrap; }
+        .tool-btn {
+            flex:1; min-width:52px;
+            border:1px solid var(--border-m); border-radius:6px;
+            background: rgba(255,255,255,.02); color: var(--text-2);
+            padding:6px 4px; font-size:11px; cursor:pointer;
+            font-family:"JetBrains Mono", monospace;
+        }
+        .tool-btn:hover { border-color: var(--gold-b); color: var(--gold); }
+        .tool-btn.active { border-color: var(--purple); color: var(--purple); background: rgba(180,130,255,.10); }
+
+        /* Form */
+        .field { margin-bottom:10px; }
+        .field label { display:block; color:var(--text-3); font-size:11px; letter-spacing:.12em; margin-bottom:4px; }
+        .field input, .field textarea {
+            width:100%; background: rgba(0,0,0,.35);
+            border:1px solid var(--border-m); color:var(--text);
+            padding:7px 9px; border-radius:6px;
+            font-family:inherit; font-size:13px; outline:none;
+            user-select: text;
+        }
+        .field input:focus, .field textarea:focus { border-color: var(--gold-b); }
+        .field textarea { resize:vertical; min-height:54px; }
+        .size-row { display:flex; gap:8px; align-items:flex-end; }
+        .size-row .field { flex:1; margin-bottom:0; }
+
+        .btn {
+            padding:7px 14px; font-size:12px; letter-spacing:.12em;
+            border-radius:6px; cursor:pointer;
+            background:transparent; border:1px solid var(--border-m); color:var(--text-2);
+        }
+        .btn:hover { border-color: var(--gold-b); color: var(--gold); }
+        .btn.primary {
+            background: linear-gradient(170deg, rgba(232,192,96,.18), rgba(232,192,96,.05));
+            border-color: var(--gold-b); color: var(--gold);
+        }
+        .btn.danger { color: var(--red); border-color: rgba(255,102,102,.3); }
+        .btn.danger:hover { background: rgba(255,102,102,.1); border-color: var(--red); }
+        .btn.block { width:100%; margin-top:8px; }
+
+        .stat-rows { font-size:12px; color:var(--text-2); display:flex; flex-direction:column; gap:5px; }
+        .stat-rows .ok { color: var(--green); }
+        .stat-rows .miss { color: var(--red); }
+        .stat-rows b { color: var(--gold); font-weight:500; }
+
+        /* ── Stage ── */
+        .stage-wrap { position:relative; overflow:hidden; background:transparent; }
+        #stage { display:block; width:100%; height:100%; cursor:crosshair; touch-action:none; }
+        body.playing #stage { cursor:none; }
+        body[data-tool="pan"] #stage, #stage.panning { cursor:grab; }
+
+        .statusbar {
+            position:absolute; left:0; right:0; bottom:0; z-index:4;
+            display:flex; gap:18px; align-items:center;
+            padding:6px 16px;
+            font-family:"JetBrains Mono", monospace; font-size:11px;
+            color: var(--text-3);
+            background: linear-gradient(0deg, rgba(8,4,16,.85), rgba(8,4,16,.4) 80%, transparent);
+            pointer-events:none;
+        }
+        .statusbar b { color: var(--text-2); font-weight:500; }
+        .statusbar .hint { margin-left:auto; letter-spacing:.05em; opacity:.8; }
+
+        /* ── Play HUD ── */
+        .hud {
+            position:absolute; top:14px; left:16px; z-index:5;
+            display:none; gap:14px;
+            font-family:"JetBrains Mono", monospace; font-size:13px;
+        }
+        body.playing .hud { display:flex; }
+        .hud .chip {
+            padding:6px 14px; border-radius:999px;
+            border:1px solid var(--border-m);
+            background: rgba(10,5,18,.72); backdrop-filter: blur(6px);
+        }
+        .hud .coin { color: var(--gold); border-color: var(--gold-b); }
+        .hud .death { color: var(--red); }
+        .hud .time { color: var(--teal); }
+
+        .play-exit {
+            position:absolute; top:14px; right:16px; z-index:5; display:none;
+        }
+        body.playing .play-exit { display:block; }
+
+        /* ── Overlays (win / dead flash) ── */
+        .overlay {
+            position:absolute; inset:0; z-index:8;
+            display:none; align-items:center; justify-content:center; flex-direction:column; gap:14px;
+            background: rgba(4,1,11,.62); backdrop-filter: blur(6px);
+            text-align:center;
+        }
+        .overlay.open { display:flex; }
+        .overlay .big {
+            font-family:"Noto Serif SC", serif; font-weight:900;
+            font-size: clamp(34px, 5vw, 56px); letter-spacing:.12em;
+        }
+        .overlay .sub { color:var(--text-2); font-family:"JetBrains Mono", monospace; font-size:13px; letter-spacing:.15em; }
+        .overlay .row { display:flex; gap:10px; margin-top:8px; }
+
+        /* ── Modal / toast（与数据库页一致的形制） ── */
+        .modal-mask {
+            position:fixed; inset:0; background:rgba(4,1,11,.7);
+            backdrop-filter:blur(4px); z-index:100;
+            display:none; align-items:center; justify-content:center;
+        }
+        .modal-mask.open { display:flex; }
+        .modal {
+            background: linear-gradient(180deg, var(--raised-2, #1d1438), var(--surface, #110a1c));
+            border:1px solid var(--border-m); border-radius:12px;
+            padding:22px 26px 18px;
+            min-width:400px; max-width:min(680px, 92vw);
+            max-height: 84vh; overflow-y:auto;
+            box-shadow:0 20px 60px rgba(0,0,0,.6);
+        }
+        .modal h3 {
+            font-family:"Noto Serif SC", serif; color:var(--gold);
+            letter-spacing:.15em; font-size:16px; margin-bottom:14px;
+            padding-bottom:8px; border-bottom:1px solid var(--border);
+        }
+        .modal .modal-foot { display:flex; gap:8px; justify-content:flex-end; margin-top:16px; }
+
+        .lv-item {
+            display:flex; align-items:center; gap:12px;
+            padding:11px 12px; margin-bottom:8px;
+            border:1px solid var(--border-m); border-radius:8px;
+            background: rgba(255,255,255,.02);
+        }
+        .lv-item:hover { border-color: var(--gold-b); background: rgba(232,192,96,.04); }
+        .lv-main { flex:1; min-width:0; }
+        .lv-name { color:var(--text); font-size:14px; font-family:"Noto Serif SC", serif; }
+        .lv-meta { color:var(--text-3); font-size:11px; font-family:"JetBrains Mono", monospace; margin-top:2px; }
+        .lv-acts { display:flex; gap:6px; flex-shrink:0; }
+        .lv-acts .btn { padding:5px 10px; font-size:11px; }
+        .lv-empty { color:var(--text-3); text-align:center; padding:26px; font-family:"JetBrains Mono", monospace; font-size:12px; }
+
+        .toast {
+            position:fixed; bottom:24px; left:50%; transform:translateX(-50%);
+            padding:10px 18px;
+            background:rgba(20,12,38,.95); border:1px solid var(--border-m); border-radius:6px;
+            font-size:12px; color:var(--text);
+            z-index:200; opacity:0; pointer-events:none;
+            transition:opacity .25s, transform .25s;
+        }
+        .toast.show { opacity:1; transform:translateX(-50%) translateY(-6px); }
+        .toast.error { border-color:rgba(255,102,102,.4); color:var(--red); }
+        .toast.ok { border-color:rgba(80,216,153,.4); color:var(--green); }
+
+        @media (max-width: 760px) {
+            .layout { grid-template-columns: 1fr; grid-template-rows: auto 1fr; }
+            .panel { max-height: 38vh; border-right:none; border-bottom:1px solid var(--border); }
+        }
+    </style>
+    <link rel="stylesheet" href="assets/theme.css">
+</head>
+<body data-tool="brush">
+
+<div class="topbar">
+    <div class="brand">
+        <span class="brand-gem"></span>
+        <span class="brand-text flow-text">关卡工坊</span>
+        <span class="brand-sub">LEVEL · FORGE</span>
+    </div>
+    <button class="pill play" id="btn-play">▶ 试玩</button>
+    <button class="pill" id="btn-undo" title="撤销 (Ctrl+Z)">↶ 撤销</button>
+    <button class="pill" id="btn-redo" title="重做 (Ctrl+Y)">↷ 重做</button>
+    <div class="spacer"></div>
+    <button class="pill" id="btn-library">◫ 关卡库</button>
+    <button class="pill primary" id="btn-save">✦ 保存到数据库</button>
+    <button class="pill" id="btn-export">⤓ 导出</button>
+    <button class="pill" id="btn-import">⤒ 导入</button>
+    <a class="link-back" href="世界观数据库.html">← 数据库</a>
+    <a class="link-back" href="index.html">主页</a>
+</div>
+
+<div class="layout">
+    <aside class="panel">
+        <div class="p-section">
+            <div class="p-title">元素画板</div>
+            <div class="palette" id="palette"></div>
+            <div class="tools">
+                <button class="tool-btn active" data-tool="brush" title="B">✎ 画笔</button>
+                <button class="tool-btn" data-tool="erase" title="E">⌫ 橡皮</button>
+                <button class="tool-btn" data-tool="rect" title="R">▭ 矩形</button>
+                <button class="tool-btn" data-tool="pick" title="I">⊕ 吸取</button>
+            </div>
+        </div>
+
+        <div class="p-section">
+            <div class="p-title">关卡档案</div>
+            <div class="field"><label>关卡名</label><input id="f-name" maxlength="60" placeholder="例如：晶谷初行"></div>
+            <div class="field"><label>作者</label><input id="f-author" maxlength="40" placeholder="署名（可选）"></div>
+            <div class="field"><label>简介</label><textarea id="f-desc" maxlength="500" placeholder="一句话介绍这张关卡…"></textarea></div>
+            <div class="size-row">
+                <div class="field"><label>宽（格）</label><input id="f-w" type="number" min="12" max="300" step="1"></div>
+                <div class="field"><label>高（格）</label><input id="f-h" type="number" min="8" max="120" step="1"></div>
+                <button class="btn" id="btn-resize">应用</button>
+            </div>
+        </div>
+
+        <div class="p-section">
+            <div class="p-title">完整性</div>
+            <div class="stat-rows" id="stats"></div>
+        </div>
+
+        <div class="p-section">
+            <div class="p-title">操作</div>
+            <button class="btn block" id="btn-demo">⌁ 生成示例地形</button>
+            <button class="btn block danger" id="btn-clear">✕ 清空画布</button>
+            <button class="btn block primary" id="btn-new">＋ 新建关卡</button>
+        </div>
+    </aside>
+
+    <main class="stage-wrap" id="stage-wrap">
+        <canvas id="stage"></canvas>
+
+        <div class="statusbar" id="statusbar">
+            <span>坐标 <b id="sb-pos">–</b></span>
+            <span>缩放 <b id="sb-zoom">100%</b></span>
+            <span>笔刷 <b id="sb-tile">–</b></span>
+            <span class="hint" id="sb-hint">左键绘制 · 右键擦除 · 滚轮缩放 · 空格/中键拖动平移 · P 试玩</span>
+        </div>
+
+        <div class="hud">
+            <span class="chip coin">◆ <span id="hud-coin">0/0</span></span>
+            <span class="chip time"><span id="hud-time">0.0s</span></span>
+            <span class="chip death">✕ <span id="hud-death">0</span></span>
+        </div>
+        <div class="play-exit">
+            <button class="pill" id="btn-exit-play">⏏ 返回编辑 (Esc)</button>
+        </div>
+
+        <div class="overlay" id="win-overlay">
+            <div class="big flow-text">通 关</div>
+            <div class="sub" id="win-sub"></div>
+            <div class="row">
+                <button class="btn primary" id="btn-win-replay">再来一次</button>
+                <button class="btn" id="btn-win-edit">返回编辑</button>
+            </div>
+        </div>
+    </main>
+</div>
+
+<div class="modal-mask" id="modal-mask"><div class="modal" id="modal"></div></div>
+<div class="toast" id="toast"></div>
+<input type="file" id="import-input" accept=".json,application/json" style="display:none">
+
+<script>
+/* ════════════════════════════════════════════════════════════════
+   解析世界 · 关卡工坊 — 2D 平台关卡编辑器 + 试玩引擎
+   · 编辑：网格绘制 / 矩形填充 / 撤销重做 / 平移缩放
+   · 试玩：完整平台跳跃物理（土狼时间 / 跳跃缓冲 / 单向浮板…）
+   · 存储：世界观数据库 /api/levels（离线时回落 localStorage 草稿）
+   ════════════════════════════════════════════════════════════════ */
+
+const $  = (q, r=document) => r.querySelector(q);
+const $$ = (q, r=document) => [...r.querySelectorAll(q)];
+
+const API_BASE = (() => {
+    if (location.protocol === 'http:' || location.protocol === 'https:') {
+        if (location.port && location.port !== '4174') {
+            return localStorage.getItem('lore-api') || `${location.protocol}//${location.hostname}:4174`;
+        }
+        return '';
+    }
+    return localStorage.getItem('lore-api') || 'http://localhost:4174';
+})();
+
+function toast(msg, kind='') {
+    const t = $('#toast');
+    t.textContent = msg;
+    t.className = 'toast show ' + kind;
+    clearTimeout(t._tm);
+    t._tm = setTimeout(() => t.className = 'toast', 2600);
+}
+
+async function api(path, opts = {}) {
+    const headers = Object.assign({}, opts.headers || {});
+    if (opts.body && !(opts.body instanceof FormData) && !headers['Content-Type']) {
+        headers['Content-Type'] = 'application/json';
+        opts.body = JSON.stringify(opts.body);
+    }
+    const r = await fetch(API_BASE + path, { ...opts, headers });
+    if (!r.ok) {
+        const txt = await r.text().catch(() => '');
+        let msg = txt;
+        try { msg = JSON.parse(txt).error || msg; } catch {}
+        throw new Error(msg || `HTTP ${r.status}`);
+    }
+    return r.json();
+}
+
+/* ── 元素定义 ─────────────────────────────────────────────────── */
+const T = {
+    EMPTY:0, SOLID:1, PLATFORM:2, SPIKE:3, COIN:4,
+    SPRING:5, ENEMY:6, SPAWN:7, GOAL:8, CRYSTAL:9, LAVA:10,
+};
+const TILE_DEFS = [
+    { id:T.SOLID,    name:'晶岩',   hint:'实心地形' },
+    { id:T.PLATFORM, name:'浮板',   hint:'单向平台（下+跳 落下）' },
+    { id:T.SPIKE,    name:'尖刺',   hint:'触碰即死' },
+    { id:T.COIN,     name:'晶币',   hint:'可收集' },
+    { id:T.SPRING,   name:'弹簧',   hint:'高弹跳' },
+    { id:T.ENEMY,    name:'巡逻体', hint:'踩头消灭' },
+    { id:T.SPAWN,    name:'出生点', hint:'唯一' },
+    { id:T.GOAL,     name:'终焉旗', hint:'通关目标' },
+    { id:T.CRYSTAL,  name:'流晶',   hint:'装饰' },
+    { id:T.LAVA,     name:'熔渊',   hint:'危险液体' },
+];
+const UNIQUE_TILES = new Set([T.SPAWN, T.GOAL]);
+
+/* ── 关卡状态 ─────────────────────────────────────────────────── */
+const DEFAULT_W = 60, DEFAULT_H = 20;
+const level = {
+    id: null,            // 数据库 id（null = 未保存）
+    name: '', author: '', description: '',
+    w: DEFAULT_W, h: DEFAULT_H,
+    tiles: new Uint8Array(DEFAULT_W * DEFAULT_H),
+};
+const editKeys = JSON.parse(localStorage.getItem('level-keys') || '{}');
+
+const idx = (x, y) => y * level.w + x;
+const inBounds = (x, y) => x >= 0 && x < level.w && y >= 0 && y < level.h;
+const getTile = (x, y) => inBounds(x, y) ? level.tiles[idx(x, y)] : T.SOLID; // 越界视为墙
+
+function setTile(x, y, t) {
+    if (!inBounds(x, y)) return;
+    if (UNIQUE_TILES.has(t)) {
+        // 出生点 / 终点全图唯一
+        for (let i = 0; i < level.tiles.length; i++) if (level.tiles[i] === t) level.tiles[i] = T.EMPTY;
+    }
+    level.tiles[idx(x, y)] = t;
+}
+
+function findTile(t) {
+    for (let y = 0; y < level.h; y++)
+        for (let x = 0; x < level.w; x++)
+            if (level.tiles[idx(x, y)] === t) return { x, y };
+    return null;
+}
+function countTiles(t) {
+    let n = 0;
+    for (let i = 0; i < level.tiles.length; i++) if (level.tiles[i] === t) n++;
+    return n;
+}
+
+/* ── 撤销 / 重做 ─────────────────────────────────────────────── */
+const undoStack = [], redoStack = [];
+function snapshot() {
+    undoStack.push({ w: level.w, h: level.h, tiles: level.tiles.slice() });
+    if (undoStack.length > 80) undoStack.shift();
+    redoStack.length = 0;
+}
+function restore(s) { level.w = s.w; level.h = s.h; level.tiles = s.tiles.slice(); afterEdit(); }
+function undo() {
+    if (!undoStack.length) return;
+    redoStack.push({ w: level.w, h: level.h, tiles: level.tiles.slice() });
+    restore(undoStack.pop());
+}
+function redo() {
+    if (!redoStack.length) return;
+    undoStack.push({ w: level.w, h: level.h, tiles: level.tiles.slice() });
+    restore(redoStack.pop());
+}
+
+/* ── 序列化 ──────────────────────────────────────────────────── */
+function serialize() {
+    return {
+        v: 1, w: level.w, h: level.h,
+        tiles: Array.from(level.tiles),
+    };
+}
+function deserialize(data) {
+    if (!data || data.v !== 1 || !Array.isArray(data.tiles)) throw new Error('关卡数据格式不正确');
+    const w = Math.max(8, Math.min(400, data.w|0));
+    const h = Math.max(8, Math.min(400, data.h|0));
+    level.w = w; level.h = h;
+    level.tiles = new Uint8Array(w * h);
+    for (let i = 0; i < Math.min(data.tiles.length, w * h); i++) {
+        const t = data.tiles[i] | 0;
+        level.tiles[i] = (t >= 0 && t <= T.LAVA) ? t : T.EMPTY;
+    }
+}
+
+/* 本地草稿（自动） */
+let draftTimer = null;
+function scheduleDraft() {
+    clearTimeout(draftTimer);
+    draftTimer = setTimeout(() => {
+        localStorage.setItem('level-editor-draft', JSON.stringify({
+            id: level.id, name: level.name, author: level.author,
+            description: level.description, data: serialize(),
+        }));
+    }, 700);
+}
+
+/* ── 视图（编辑器相机） ──────────────────────────────────────── */
+const TS = 36; // 基准格像素
+const view = { x: 0, y: 0, zoom: 1 };
+const canvas = $('#stage');
+const ctx = canvas.getContext('2d');
+let DPR = Math.min(window.devicePixelRatio || 1, 2);
+
+function resizeCanvas() {
+    const wrap = $('#stage-wrap');
+    DPR = Math.min(window.devicePixelRatio || 1, 2);
+    canvas.width = wrap.clientWidth * DPR;
+    canvas.height = wrap.clientHeight * DPR;
+}
+window.addEventListener('resize', resizeCanvas);
+
+const px = () => TS * view.zoom; // 当前每格像素（CSS 像素）
+
+function screenToCell(sx, sy) {
+    return {
+        x: Math.floor((sx + view.x) / px()),
+        y: Math.floor((sy + view.y) / px()),
+    };
+}
+
+/* ── 元素绘制（编辑器 & 游戏共用） ───────────────────────────── */
+function drawTile(c, t, x, y, s, time) {
+    // c: 2d ctx, (x,y) 左上角像素, s: 尺寸
+    switch (t) {
+        case T.SOLID: {
+            const g = c.createLinearGradient(x, y, x, y + s);
+            g.addColorStop(0, '#2c2150'); g.addColorStop(1, '#1a1232');
+            c.fillStyle = g; c.fillRect(x, y, s, s);
+            c.strokeStyle = 'rgba(200,160,255,.28)'; c.lineWidth = Math.max(1, s*.04);
+            c.strokeRect(x + .5, y + .5, s - 1, s - 1);
+            c.fillStyle = 'rgba(232,192,96,.10)';
+            c.fillRect(x + s*.12, y + s*.12, s*.28, s*.10);
+            break;
+        }
+        case T.PLATFORM: {
+            const g = c.createLinearGradient(x, y, x + s, y);
+            g.addColorStop(0, 'rgba(122,184,240,.25)'); g.addColorStop(.5, 'rgba(122,184,240,.85)'); g.addColorStop(1, 'rgba(122,184,240,.25)');
+            c.fillStyle = g;
+            c.fillRect(x + s*.04, y + s*.12, s*.92, s*.20);
+            c.fillStyle = 'rgba(122,184,240,.25)';
+            c.fillRect(x + s*.2, y + s*.32, s*.6, s*.07);
+            break;
+        }
+        case T.SPIKE: {
+            c.fillStyle = '#d8e4ff';
+            for (let i = 0; i < 3; i++) {
+                const bx = x + s * (i/3);
+                c.beginPath();
+                c.moveTo(bx + s/6, y + s*.12);
+                c.lineTo(bx, y + s);
+                c.lineTo(bx + s/3, y + s);
+                c.closePath(); c.fill();
+            }
+            c.fillStyle = 'rgba(255,102,102,.35)';
+            c.fillRect(x, y + s*.88, s, s*.12);
+            break;
+        }
+        case T.COIN: {
+            const cx0 = x + s/2, cy0 = y + s/2;
+            const wob = time ? Math.sin(time*3 + (x+y)*.05) * s*.06 : 0;
+            const r = s*.26;
+            const g = c.createRadialGradient(cx0, cy0+wob, r*.2, cx0, cy0+wob, r*1.6);
+            g.addColorStop(0, 'rgba(244,216,138,.9)'); g.addColorStop(1, 'rgba(232,192,96,0)');
+            c.fillStyle = g;
+            c.beginPath(); c.arc(cx0, cy0+wob, r*1.6, 0, 7); c.fill();
+            c.save();
+            c.translate(cx0, cy0 + wob); c.rotate(Math.PI/4);
+            c.fillStyle = '#e8c060';
+            c.fillRect(-r*.7, -r*.7, r*1.4, r*1.4);
+            c.fillStyle = 'rgba(255,255,255,.65)';
+            c.fillRect(-r*.7, -r*.7, r*.5, r*.5);
+            c.restore();
+            break;
+        }
+        case T.SPRING: {
+            c.strokeStyle = '#50e8d0'; c.lineWidth = Math.max(1.4, s*.07);
+            const squish = time ? (Math.sin(time*5 + x*.1) * .04 + .04) : 0;
+            c.beginPath();
+            for (let i = 0; i < 3; i++) {
+                const yy = y + s*(.50 + i*.16 - squish*i);
+                c.moveTo(x + s*.25, yy); c.lineTo(x + s*.75, yy);
+            }
+            c.stroke();
+            c.fillStyle = 'rgba(80,232,208,.9)';
+            c.fillRect(x + s*.18, y + s*(.32 - squish*2), s*.64, s*.12);
+            break;
+        }
+        case T.ENEMY: {
+            const bob = time ? Math.sin(time*4 + x*.3) * s*.04 : 0;
+            const g = c.createLinearGradient(x, y, x, y+s);
+            g.addColorStop(0, '#b04860'); g.addColorStop(1, '#702038');
+            c.fillStyle = g;
+            c.beginPath();
+            c.ellipse(x + s/2, y + s*.62 + bob, s*.34, s*.30, 0, 0, 7);
+            c.fill();
+            c.fillStyle = '#ffd0d0';
+            c.beginPath(); c.arc(x + s*.40, y + s*.55 + bob, s*.05, 0, 7); c.fill();
+            c.beginPath(); c.arc(x + s*.60, y + s*.55 + bob, s*.05, 0, 7); c.fill();
+            break;
+        }
+        case T.SPAWN: {
+            c.strokeStyle = 'rgba(80,216,153,.85)'; c.lineWidth = Math.max(1.2, s*.05);
+            c.setLineDash([s*.12, s*.10]);
+            c.strokeRect(x + s*.16, y + s*.10, s*.68, s*.80);
+            c.setLineDash([]);
+            c.fillStyle = 'rgba(80,216,153,.85)';
+            c.beginPath(); c.arc(x + s/2, y + s*.36, s*.12, 0, 7); c.fill();
+            c.fillRect(x + s*.44, y + s*.46, s*.12, s*.32);
+            break;
+        }
+        case T.GOAL: {
+            c.strokeStyle = '#e8c060'; c.lineWidth = Math.max(1.4, s*.06);
+            c.beginPath(); c.moveTo(x + s*.28, y + s*.06); c.lineTo(x + s*.28, y + s*.96); c.stroke();
+            const wave = time ? Math.sin(time*4) * s*.05 : 0;
+            c.fillStyle = 'rgba(232,192,96,.9)';
+            c.beginPath();
+            c.moveTo(x + s*.30, y + s*.10);
+            c.quadraticCurveTo(x + s*.62, y + s*.16 + wave, x + s*.86, y + s*.10);
+            c.lineTo(x + s*.86, y + s*.42);
+            c.quadraticCurveTo(x + s*.60, y + s*.48 - wave, x + s*.30, y + s*.42);
+            c.closePath(); c.fill();
+            break;
+        }
+        case T.CRYSTAL: {
+            const sh = time ? (Math.sin(time*2 + (x*7+y*13)*.1)+1)/2 : .5;
+            c.fillStyle = `rgba(200,160,255,${.35 + sh*.4})`;
+            c.beginPath();
+            c.moveTo(x + s*.5, y + s*.10);
+            c.lineTo(x + s*.74, y + s*.52);
+            c.lineTo(x + s*.5, y + s*.94);
+            c.lineTo(x + s*.26, y + s*.52);
+            c.closePath(); c.fill();
+            c.strokeStyle = 'rgba(240,230,255,.5)'; c.lineWidth = 1;
+            c.stroke();
+            break;
+        }
+        case T.LAVA: {
+            const t0 = time || 0;
+            const g = c.createLinearGradient(x, y, x, y + s);
+            g.addColorStop(0, 'rgba(255,120,60,.92)'); g.addColorStop(1, 'rgba(160,30,40,.95)');
+            c.fillStyle = g;
+            const wob1 = Math.sin(t0*2.4 + x*.08) * s*.06;
+            c.beginPath();
+            c.moveTo(x, y + s*.25 + wob1);
+            c.quadraticCurveTo(x + s/2, y + s*.12 - wob1, x + s, y + s*.25 + wob1);
+            c.lineTo(x + s, y + s); c.lineTo(x, y + s);
+            c.closePath(); c.fill();
+            c.fillStyle = 'rgba(255,220,120,.5)';
+            c.beginPath(); c.arc(x + s*(.3 + .2*Math.sin(t0+x)), y + s*.45, s*.05, 0, 7); c.fill();
+            break;
+        }
+    }
+}
+
+/* ── 画板（左侧元素按钮） ────────────────────────────────────── */
+let currentTile = T.SOLID;
+function buildPalette() {
+    const box = $('#palette');
+    for (const def of TILE_DEFS) {
+        const b = document.createElement('button');
+        b.className = 'tile-btn' + (def.id === currentTile ? ' active' : '');
+        b.title = def.hint;
+        b.dataset.tile = def.id;
+        const cv = document.createElement('canvas');
+        cv.width = 60; cv.height = 60;
+        const c2 = cv.getContext('2d');
+        c2.fillStyle = 'rgba(255,255,255,.03)'; c2.fillRect(0,0,60,60);
+        drawTile(c2, def.id, 6, 6, 48, 0);
+        b.appendChild(cv);
+        const nm = document.createElement('span');
+        nm.textContent = def.name;
+        b.appendChild(nm);
+        b.addEventListener('click', () => {
+            currentTile = def.id;
+            $$('.tile-btn').forEach(x => x.classList.toggle('active', x === b));
+            if (tool === 'erase' || tool === 'pick') setTool('brush');
+            updateStatusTile();
+        });
+        box.appendChild(b);
+    }
+}
+function tileName(t) { return (TILE_DEFS.find(d => d.id === t) || { name:'空' }).name; }
+function updateStatusTile() { $('#sb-tile').textContent = tileName(currentTile); }
+
+/* ── 工具切换 ───────────────────────────────────────────────── */
+let tool = 'brush';
+function setTool(t) {
+    tool = t;
+    document.body.dataset.tool = t;
+    $$('.tool-btn').forEach(b => b.classList.toggle('active', b.dataset.tool === t));
+}
+$$('.tool-btn').forEach(b => b.addEventListener('click', () => setTool(b.dataset.tool)));
+
+/* ── 编辑器输入 ─────────────────────────────────────────────── */
+let painting = false, paintErase = false, lastCell = null;
+let panning = false, panStart = null;
+let rectStart = null, rectEnd = null;
+let spaceDown = false;
+let mouseCell = { x:-1, y:-1 };
+
+canvas.addEventListener('contextmenu', e => e.preventDefault());
+
+canvas.addEventListener('pointerdown', e => {
+    if (mode === 'play') return;
+    canvas.setPointerCapture(e.pointerId);
+    const rect = canvas.getBoundingClientRect();
+    const sx = e.clientX - rect.left, sy = e.clientY - rect.top;
+
+    if (e.button === 1 || spaceDown) {
+        panning = true; panStart = { sx, sy, vx: view.x, vy: view.y };
+        canvas.classList.add('panning');
+        return;
+    }
+    const cell = screenToCell(sx, sy);
+    if (e.button === 2) { // 右键擦除
+        snapshot(); painting = true; paintErase = true;
+        applyBrush(cell, T.EMPTY); lastCell = cell;
+        return;
+    }
+    if (tool === 'pick') {
+        const t = getTile(cell.x, cell.y);
+        if (t !== T.EMPTY && inBounds(cell.x, cell.y)) {
+            currentTile = t;
+            $$('.tile-btn').forEach(x => x.classList.toggle('active', Number(x.dataset.tile) === t));
+            updateStatusTile();
+        }
+        return;
+    }
+    if (tool === 'rect') {
+        snapshot();
+        rectStart = cell; rectEnd = cell;
+        return;
+    }
+    // brush / erase
+    snapshot(); painting = true; paintErase = (tool === 'erase');
+    applyBrush(cell, paintErase ? T.EMPTY : currentTile);
+    lastCell = cell;
+});
+
+canvas.addEventListener('pointermove', e => {
+    const rect = canvas.getBoundingClientRect();
+    const sx = e.clientX - rect.left, sy = e.clientY - rect.top;
+    const cell = screenToCell(sx, sy);
+    mouseCell = cell;
+    $('#sb-pos').textContent = inBounds(cell.x, cell.y) ? `${cell.x}, ${cell.y}` : '–';
+
+    if (panning && panStart) {
+        view.x = panStart.vx - (sx - panStart.sx);
+        view.y = panStart.vy - (sy - panStart.sy);
+        return;
+    }
+    if (mode === 'play') return;
+    if (rectStart) { rectEnd = cell; return; }
+    if (painting) {
+        // 在两次事件间插值，避免快速移动漏格
+        const t = paintErase ? T.EMPTY : currentTile;
+        plotLine(lastCell, cell, t);
+        lastCell = cell;
+    }
+});
+
+window.addEventListener('pointerup', e => {
+    if (panning) { panning = false; canvas.classList.remove('panning'); }
+    if (rectStart && rectEnd) {
+        const x0 = Math.min(rectStart.x, rectEnd.x), x1 = Math.max(rectStart.x, rectEnd.x);
+        const y0 = Math.min(rectStart.y, rectEnd.y), y1 = Math.max(rectStart.y, rectEnd.y);
+        const t = (e.button === 2) ? T.EMPTY : currentTile;
+        for (let y = y0; y <= y1; y++)
+            for (let x = x0; x <= x1; x++) setTile(x, y, t);
+        rectStart = rectEnd = null;
+        afterEdit();
+    }
+    if (painting) { painting = false; afterEdit(); }
+});
+
+function plotLine(a, b, t) {
+    const dx = b.x - a.x, dy = b.y - a.y;
+    const steps = Math.max(Math.abs(dx), Math.abs(dy), 1);
+    for (let i = 0; i <= steps; i++) {
+        applyBrush({ x: Math.round(a.x + dx*i/steps), y: Math.round(a.y + dy*i/steps) }, t);
+    }
+}
+function applyBrush(cell, t) { setTile(cell.x, cell.y, t); updateStats(); scheduleDraft(); }
+
+canvas.addEventListener('wheel', e => {
+    if (mode === 'play') return;
+    e.preventDefault();
+    const rect = canvas.getBoundingClientRect();
+    const sx = e.clientX - rect.left, sy = e.clientY - rect.top;
+    const before = px();
+    const factor = e.deltaY < 0 ? 1.12 : 1/1.12;
+    view.zoom = Math.max(.2, Math.min(3, view.zoom * factor));
+    const after = px();
+    // 围绕指针缩放
+    view.x = (view.x + sx) * (after/before) - sx;
+    view.y = (view.y + sy) * (after/before) - sy;
+    $('#sb-zoom').textContent = Math.round(view.zoom * 100) + '%';
+}, { passive:false });
+
+window.addEventListener('keydown', e => {
+    if (e.target.matches('input, textarea')) return;
+    if (e.code === 'Space') { spaceDown = true; if (mode === 'edit') e.preventDefault(); }
+    if (mode === 'edit') {
+        if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'z') { e.preventDefault(); e.shiftKey ? redo() : undo(); }
+        if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'y') { e.preventDefault(); redo(); }
+        if (e.key === 'b' || e.key === 'B') setTool('brush');
+        if (e.key === 'e' || e.key === 'E') setTool('erase');
+        if (e.key === 'r' || e.key === 'R') setTool('rect');
+        if (e.key === 'i' || e.key === 'I') setTool('pick');
+        if (e.key === 'p' || e.key === 'P') startPlay();
+    } else {
+        if (e.key === 'Escape') stopPlay();
+        if (e.key === 'r' || e.key === 'R') respawn(true);
+        keys[e.code] = true;
+        if (['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','Space'].includes(e.code)) e.preventDefault();
+    }
+});
+window.addEventListener('keyup', e => {
+    if (e.code === 'Space') spaceDown = false;
+    keys[e.code] = false;
+});
+
+/* ── 状态 / 表单同步 ────────────────────────────────────────── */
+function afterEdit() { updateStats(); syncSizeInputs(); scheduleDraft(); }
+
+function updateStats() {
+    const spawn = findTile(T.SPAWN), goal = findTile(T.GOAL);
+    const coins = countTiles(T.COIN), enemies = countTiles(T.ENEMY);
+    $('#stats').innerHTML = `
+        <div>${spawn ? '<span class="ok">✓</span> 出生点已放置' : '<span class="miss">✕</span> 缺少出生点'}</div>
+        <div>${goal ? '<span class="ok">✓</span> 终焉旗已放置' : '<span class="miss">✕</span> 缺少终焉旗'}</div>
+        <div>晶币 <b>${coins}</b> · 巡逻体 <b>${enemies}</b></div>
+        <div>画布 <b>${level.w} × ${level.h}</b> 格</div>
+    `;
+}
+function syncSizeInputs() { $('#f-w').value = level.w; $('#f-h').value = level.h; }
+function syncMetaInputs() {
+    $('#f-name').value = level.name;
+    $('#f-author').value = level.author;
+    $('#f-desc').value = level.description;
+}
+$('#f-name').addEventListener('input', e => { level.name = e.target.value; scheduleDraft(); });
+$('#f-author').addEventListener('input', e => { level.author = e.target.value; scheduleDraft(); });
+$('#f-desc').addEventListener('input', e => { level.description = e.target.value; scheduleDraft(); });
+
+$('#btn-resize').addEventListener('click', () => {
+    const w = Math.max(12, Math.min(300, Number($('#f-w').value) | 0));
+    const h = Math.max(8, Math.min(120, Number($('#f-h').value) | 0));
+    if (w === level.w && h === level.h) return;
+    snapshot();
+    const next = new Uint8Array(w * h);
+    for (let y = 0; y < Math.min(h, level.h); y++)
+        for (let x = 0; x < Math.min(w, level.w); x++)
+            next[y * w + x] = level.tiles[idx(x, y)];
+    level.w = w; level.h = h; level.tiles = next;
+    afterEdit();
+    toast(`画布已调整为 ${w} × ${h}`, 'ok');
+});
+
+$('#btn-undo').addEventListener('click', undo);
+$('#btn-redo').addEventListener('click', redo);
+
+$('#btn-clear').addEventListener('click', () => {
+    snapshot();
+    level.tiles.fill(T.EMPTY);
+    afterEdit();
+    toast('画布已清空');
+});
+
+$('#btn-new').addEventListener('click', () => {
+    snapshot();
+    level.id = null;
+    level.name = ''; level.author = ''; level.description = '';
+    level.w = DEFAULT_W; level.h = DEFAULT_H;
+    level.tiles = new Uint8Array(level.w * level.h);
+    genDemo(false);
+    syncMetaInputs(); afterEdit();
+    toast('已新建关卡（含基础地形）', 'ok');
+});
+
+/* 示例地形生成 */
+$('#btn-demo').addEventListener('click', () => { snapshot(); genDemo(true); afterEdit(); });
+function genDemo(rich) {
+    const W = level.w, H = level.h;
+    // 地面
+    for (let x = 0; x < W; x++) { setTile(x, H-1, T.SOLID); if (x % 3 !== 1) setTile(x, H-2, T.SOLID); }
+    setTile(2, H-3, T.SPAWN);
+    setTile(W-3, H-3, T.GOAL);
+    if (!rich) return;
+    let x = 6;
+    let rngSeed = 174;
+    const rng = () => (rngSeed = (rngSeed * 9301 + 49297) % 233280) / 233280;
+    while (x < W - 8) {
+        const kind = rng();
+        const gy = H - 3;
+        if (kind < .3) { // 浮板阶梯 + 晶币
+            const h0 = 3 + Math.floor(rng()*3);
+            for (let i = 0; i < 3; i++) {
+                setTile(x + i*2, gy - h0 + i, T.PLATFORM);
+                setTile(x + i*2, gy - h0 + i - 1, T.COIN);
+            }
+            x += 8;
+        } else if (kind < .5) { // 尖刺沟 + 弹簧
+            const wgap = 2 + Math.floor(rng()*2);
+            for (let i = 0; i < wgap; i++) { setTile(x+i, H-2, T.EMPTY); setTile(x+i, H-1, T.SPIKE); }
+            setTile(x - 1, H - 3, T.SPRING);
+            x += wgap + 4;
+        } else if (kind < .7) { // 巡逻体平台
+            for (let i = 0; i < 4; i++) setTile(x+i, gy - 2, T.SOLID);
+            setTile(x + 1, gy - 3, T.ENEMY);
+            setTile(x + 3, gy - 3, T.COIN);
+            x += 7;
+        } else { // 流晶装饰柱
+            setTile(x, gy, T.CRYSTAL);
+            setTile(x, gy - 1, T.CRYSTAL);
+            setTile(x + 1, gy - 2, T.COIN);
+            x += 5;
+        }
+    }
+}
+
+/* ── 渲染循环 ───────────────────────────────────────────────── */
+let mode = 'edit'; // edit | play
+let rafTime = 0;
+
+function renderEditor(time) {
+    const W = canvas.width / DPR, H = canvas.height / DPR;
+    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+    ctx.clearRect(0, 0, W, H);
+
+    const s = px();
+    // 关卡边界底色
+    const lx = -view.x, ly = -view.y;
+    const lw = level.w * s, lh = level.h * s;
+    const grad = ctx.createLinearGradient(lx, ly, lx, ly + lh);
+    grad.addColorStop(0, 'rgba(20,12,40,.55)');
+    grad.addColorStop(1, 'rgba(10,6,22,.75)');
+    ctx.fillStyle = grad;
+    ctx.fillRect(lx, ly, lw, lh);
+    ctx.strokeStyle = 'rgba(232,192,96,.35)';
+    ctx.lineWidth = 1.5;
+    ctx.strokeRect(lx - .5, ly - .5, lw + 1, lh + 1);
+
+    // 可见范围
+    const x0 = Math.max(0, Math.floor(view.x / s));
+    const y0 = Math.max(0, Math.floor(view.y / s));
+    const x1 = Math.min(level.w - 1, Math.ceil((view.x + W) / s));
+    const y1 = Math.min(level.h - 1, Math.ceil((view.y + H) / s));
+
+    // 网格
+    if (s >= 12) {
+        ctx.strokeStyle = 'rgba(180,130,255,.07)';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        for (let gx = x0; gx <= x1 + 1; gx++) {
+            const sx2 = gx * s - view.x;
+            ctx.moveTo(sx2, Math.max(0, ly)); ctx.lineTo(sx2, Math.min(H, ly + lh));
+        }
+        for (let gy = y0; gy <= y1 + 1; gy++) {
+            const sy2 = gy * s - view.y;
+            ctx.moveTo(Math.max(0, lx), sy2); ctx.lineTo(Math.min(W, lx + lw), sy2);
+        }
+        ctx.stroke();
+    }
+
+    // 元素
+    for (let y = y0; y <= y1; y++) {
+        for (let x = x0; x <= x1; x++) {
+            const t = level.tiles[idx(x, y)];
+            if (t) drawTile(ctx, t, x * s - view.x, y * s - view.y, s, time);
+        }
+    }
+
+    // 矩形预览
+    if (rectStart && rectEnd) {
+        const rx0 = Math.min(rectStart.x, rectEnd.x), rx1 = Math.max(rectStart.x, rectEnd.x);
+        const ry0 = Math.min(rectStart.y, rectEnd.y), ry1 = Math.max(rectStart.y, rectEnd.y);
+        ctx.fillStyle = 'rgba(232,192,96,.14)';
+        ctx.strokeStyle = 'rgba(232,192,96,.6)';
+        ctx.fillRect(rx0*s - view.x, ry0*s - view.y, (rx1-rx0+1)*s, (ry1-ry0+1)*s);
+        ctx.strokeRect(rx0*s - view.x + .5, ry0*s - view.y + .5, (rx1-rx0+1)*s - 1, (ry1-ry0+1)*s - 1);
+    }
+
+    // 悬停高亮
+    if (inBounds(mouseCell.x, mouseCell.y)) {
+        ctx.strokeStyle = 'rgba(240,232,255,.45)';
+        ctx.lineWidth = 1.5;
+        ctx.strokeRect(mouseCell.x*s - view.x + 1, mouseCell.y*s - view.y + 1, s - 2, s - 2);
+    }
+}
+
+/* ════════════════════════════════════════════════════════════════
+   试 玩 引 擎
+   ════════════════════════════════════════════════════════════════ */
+const keys = {};
+const game = {
+    p: null,           // player
+    enemies: [],
+    coinsTaken: new Set(),
+    coinsTotal: 0,
+    deaths: 0,
+    time: 0,
+    won: false,
+    cam: { x: 0, y: 0 },
+    particles: [],
+    deadFlash: 0,
+    spawn: { x: 1, y: 1 },
+};
+
+const PHYS = {
+    grav: 46, maxFall: 30,
+    accel: 64, decel: 52, maxVx: 9.4,
+    jumpV: 15.4, springV: 24, jumpCut: .42,
+    coyote: .10, buffer: .12,
+    enemyV: 2.3,
+};
+
+const solidAt = (x, y) => getTile(Math.floor(x), Math.floor(y)) === T.SOLID;
+
+function startPlay() {
+    const spawn = findTile(T.SPAWN);
+    if (!spawn) { toast('请先放置出生点', 'error'); return; }
+    if (!findTile(T.GOAL)) { toast('请先放置终焉旗', 'error'); return; }
+    mode = 'play';
+    document.body.classList.add('playing');
+    resizeCanvas();
+    $('#btn-play').textContent = '■ 编辑中…';
+    game.spawn = spawn;
+    game.coinsTaken = new Set();
+    game.coinsTotal = countTiles(T.COIN);
+    game.deaths = 0; game.time = 0; game.won = false;
+    game.particles = [];
+    // 收集巡逻体
+    game.enemies = [];
+    for (let y = 0; y < level.h; y++)
+        for (let x = 0; x < level.w; x++)
+            if (level.tiles[idx(x, y)] === T.ENEMY)
+                game.enemies.push({ x: x + .5, y: y + .5, dir: 1, dead: false, w: .68, h: .60 });
+    respawn(false);
+    game.cam.x = game.p.x; game.cam.y = game.p.y;
+    $('#win-overlay').classList.remove('open');
+    updateHud();
+    if (level.id) api(`/api/levels/${level.id}/play`, { method:'POST' }).catch(() => {});
+}
+
+function stopPlay() {
+    mode = 'edit';
+    document.body.classList.remove('playing');
+    resizeCanvas();
+    $('#btn-play').textContent = '▶ 试玩';
+    $('#win-overlay').classList.remove('open');
+}
+
+function respawn(countDeath) {
+    if (countDeath) {
+        game.deaths++;
+        game.deadFlash = .5;
+        burst(game.p.x, game.p.y, 'rgba(255,102,102,$a)', 22);
+    }
+    game.p = {
+        x: game.spawn.x + .5, y: game.spawn.y + .5,
+        vx: 0, vy: 0, w: .62, h: .86,
+        grounded: false, coyote: 0, buffer: 0, drop: 0,
+        face: 1, animT: 0,
+    };
+    updateHud();
+}
+
+function burst(x, y, colorTpl, n) {
+    for (let i = 0; i < n; i++) {
+        const a = Math.random() * Math.PI * 2, v = 2 + Math.random() * 6;
+        game.particles.push({
+            x, y, vx: Math.cos(a)*v, vy: Math.sin(a)*v - 2,
+            life: .5 + Math.random()*.4, max: .9, c: colorTpl,
+        });
+    }
+}
+
+function updateHud() {
+    $('#hud-coin').textContent = `${game.coinsTaken.size}/${game.coinsTotal}`;
+    $('#hud-death').textContent = game.deaths;
+}
+
+/* 物理步进（固定 dt） */
+function stepGame(dt) {
+    if (game.won) return;
+    game.time += dt;
+    const p = game.p;
+
+    const left  = keys.ArrowLeft || keys.KeyA;
+    const right = keys.ArrowRight || keys.KeyD;
+    const down  = keys.ArrowDown || keys.KeyS;
+    const jump  = keys.ArrowUp || keys.KeyW || keys.Space;
+
+    // 水平
+    const dir = (right ? 1 : 0) - (left ? 1 : 0);
+    if (dir) {
+        p.vx += dir * PHYS.accel * dt;
+        p.face = dir;
+    } else {
+        const dv = PHYS.decel * dt;
+        if (Math.abs(p.vx) <= dv) p.vx = 0; else p.vx -= Math.sign(p.vx) * dv;
+    }
+    p.vx = Math.max(-PHYS.maxVx, Math.min(PHYS.maxVx, p.vx));
+
+    // 跳跃缓冲 / 土狼时间
+    p.buffer = jump ? (p._jHeld ? p.buffer - dt : PHYS.buffer) : 0;
+    p._jHeld = jump;
+    p.coyote = p.grounded ? PHYS.coyote : p.coyote - dt;
+
+    if (p.buffer > 0 && p.coyote > 0) {
+        if (down && standingOnPlatformOnly(p)) {
+            p.drop = .22; // 下落穿过浮板
+        } else {
+            p.vy = -PHYS.jumpV;
+            burst(p.x, p.y + p.h/2, 'rgba(200,160,255,$a)', 5);
+        }
+        p.buffer = 0; p.coyote = 0; p.grounded = false;
+    }
+    if (!jump && p.vy < 0) p.vy *= Math.pow(PHYS.jumpCut, dt * 18); // 松手截断跳跃
+
+    // 垂直
+    p.vy = Math.min(PHYS.maxFall, p.vy + PHYS.grav * dt);
+    p.drop = Math.max(0, p.drop - dt);
+
+    moveAndCollide(p, dt);
+
+    // 元素交互（以身体中部 / 缩小盒检测）
+    interactTiles(p);
+
+    // 巡逻体
+    for (const en of game.enemies) {
+        if (en.dead) continue;
+        en.x += en.dir * PHYS.enemyV * dt;
+        const aheadX = en.x + en.dir * (en.w/2 + .05);
+        const wall = isSolidLike(aheadX, en.y);
+        const floor = isSolidLike(aheadX, en.y + en.h/2 + .2) || getTile(Math.floor(aheadX), Math.floor(en.y + en.h/2 + .2)) === T.PLATFORM;
+        if (wall || !floor) { en.dir *= -1; en.x += en.dir * PHYS.enemyV * dt * 2; }
+
+        // 玩家碰撞
+        if (aabb(p, en)) {
+            if (p.vy > 2 && (p.y + p.h/2) < en.y) {
+                en.dead = true;
+                p.vy = -9.5;
+                burst(en.x, en.y, 'rgba(176,72,96,$a)', 16);
+            } else {
+                respawn(true);
+                return;
+            }
+        }
+    }
+
+    // 坠出地图
+    if (p.y > level.h + 3) { respawn(true); return; }
+
+    // 粒子
+    for (const pt of game.particles) {
+        pt.life -= dt;
+        pt.vy += 22 * dt;
+        pt.x += pt.vx * dt; pt.y += pt.vy * dt;
+    }
+    game.particles = game.particles.filter(pt => pt.life > 0);
+    game.deadFlash = Math.max(0, game.deadFlash - dt);
+
+    // 相机
+    const vw = canvas.width / DPR / TS, vh = canvas.height / DPR / TS;
+    let tx = p.x - vw/2, ty = p.y - vh/2;
+    tx = Math.max(0, Math.min(level.w - vw, tx));
+    ty = Math.max(-2, Math.min(level.h - vh + 1, ty));
+    if (level.w < vw) tx = (level.w - vw) / 2;
+    if (level.h < vh) ty = (level.h - vh) / 2;
+    const k = 1 - Math.pow(.001, dt);
+    game.cam.x += (tx - game.cam.x) * k;
+    game.cam.y += (ty - game.cam.y) * k;
+
+    $('#hud-time').textContent = game.time.toFixed(1) + 's';
+}
+
+function isSolidLike(x, y) { return getTile(Math.floor(x), Math.floor(y)) === T.SOLID; }
+
+function aabb(a, b) {
+    return Math.abs(a.x - b.x) < (a.w + b.w)/2 && Math.abs(a.y - b.y) < (a.h + b.h)/2;
+}
+
+function standingOnPlatformOnly(p) {
+    const yFeet = Math.floor(p.y + p.h/2 + .05);
+    const xs = [Math.floor(p.x - p.w/2 + .04), Math.floor(p.x + p.w/2 - .04)];
+    let plat = false;
+    for (const x of xs) {
+        const t = getTile(x, yFeet);
+        if (t === T.SOLID) return false;
+        if (t === T.PLATFORM) plat = true;
+    }
+    return plat;
+}
+
+function moveAndCollide(p, dt) {
+    // X 轴
+    p.x += p.vx * dt;
+    const hw = p.w/2, hh = p.h/2;
+    if (p.vx > 0) {
+        const xe = p.x + hw;
+        for (const y of [p.y - hh + .06, p.y, p.y + hh - .06]) {
+            if (solidAt(xe, y)) { p.x = Math.floor(xe) - hw - .001; p.vx = 0; break; }
+        }
+    } else if (p.vx < 0) {
+        const xe = p.x - hw;
+        for (const y of [p.y - hh + .06, p.y, p.y + hh - .06]) {
+            if (solidAt(xe, y)) { p.x = Math.floor(xe) + 1 + hw + .001; p.vx = 0; break; }
+        }
+    }
+
+    // Y 轴
+    const prevFeet = p.y + hh;
+    p.y += p.vy * dt;
+    p.grounded = false;
+    if (p.vy >= 0) {
+        const ye = p.y + hh;
+        const row = Math.floor(ye);
+        for (const x of [p.x - hw + .05, p.x + hw - .05]) {
+            const t = getTile(Math.floor(x), row);
+            const isOneWay = t === T.PLATFORM && p.drop <= 0 && prevFeet <= row + .12;
+            if (t === T.SOLID || isOneWay) {
+                p.y = row - hh - .001;
+                p.vy = 0; p.grounded = true;
+                break;
+            }
+        }
+    } else {
+        const ye = p.y - hh;
+        for (const x of [p.x - hw + .05, p.x + hw - .05]) {
+            if (solidAt(x, ye)) { p.y = Math.floor(ye) + 1 + hh + .001; p.vy = 0; break; }
+        }
+    }
+}
+
+function interactTiles(p) {
+    const hw = p.w/2 - .08, hh = p.h/2 - .06;
+    const x0 = Math.floor(p.x - hw), x1 = Math.floor(p.x + hw);
+    const y0 = Math.floor(p.y - hh), y1 = Math.floor(p.y + hh);
+    for (let y = y0; y <= y1; y++) {
+        for (let x = x0; x <= x1; x++) {
+            const t = getTile(x, y);
+            if (t === T.COIN) {
+                const key = `${x},${y}`;
+                if (!game.coinsTaken.has(key)) {
+                    game.coinsTaken.add(key);
+                    burst(x + .5, y + .5, 'rgba(232,192,96,$a)', 10);
+                    updateHud();
+                }
+            } else if (t === T.SPIKE || t === T.LAVA) {
+                respawn(true); return;
+            } else if (t === T.GOAL) {
+                winGame(); return;
+            }
+        }
+    }
+    // 弹簧：脚下检测
+    const yFeet = Math.floor(p.y + p.h/2 + .08);
+    for (const x of [p.x - hw, p.x + hw]) {
+        if (getTile(Math.floor(x), yFeet) === T.SPRING && p.vy >= 0) {
+            p.vy = -PHYS.springV;
+            p.grounded = false;
+            burst(p.x, p.y + p.h/2, 'rgba(80,232,208,$a)', 14);
+            break;
+        }
+    }
+}
+
+function winGame() {
+    game.won = true;
+    $('#win-sub').textContent =
+        `用时 ${game.time.toFixed(1)}s · 晶币 ${game.coinsTaken.size}/${game.coinsTotal} · 阵亡 ${game.deaths} 次`;
+    $('#win-overlay').classList.add('open');
+    burst(game.p.x, game.p.y, 'rgba(232,192,96,$a)', 40);
+}
+$('#btn-win-replay').addEventListener('click', () => { startPlay(); });
+$('#btn-win-edit').addEventListener('click', stopPlay);
+$('#btn-exit-play').addEventListener('click', stopPlay);
+
+/* 试玩渲染 */
+function renderPlay(time) {
+    const W = canvas.width / DPR, H = canvas.height / DPR;
+    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+    ctx.clearRect(0, 0, W, H);
+
+    const s = TS;
+    const camPx = game.cam.x * s, camPy = game.cam.y * s;
+
+    // 流体远景（视差极光）
+    const bg = ctx.createLinearGradient(0, 0, 0, H);
+    bg.addColorStop(0, 'rgba(26,16,52,.65)');
+    bg.addColorStop(1, 'rgba(8,4,18,.85)');
+    ctx.fillStyle = bg; ctx.fillRect(0, 0, W, H);
+    for (let i = 0; i < 3; i++) {
+        const ox = ((i * 340 + time * (8 + i*6)) - camPx * (0.15 + i*0.08)) % (W + 500) - 250;
+        const oy = H * (0.22 + i * 0.22) - camPy * 0.06;
+        const g = ctx.createRadialGradient(ox, oy, 0, ox, oy, 200 + i*70);
+        const cols = ['rgba(140,90,230,.10)', 'rgba(232,192,96,.07)', 'rgba(80,232,208,.06)'];
+        g.addColorStop(0, cols[i]); g.addColorStop(1, 'rgba(0,0,0,0)');
+        ctx.fillStyle = g;
+        ctx.fillRect(0, 0, W, H);
+    }
+
+    const x0 = Math.max(0, Math.floor(camPx / s) - 1);
+    const y0 = Math.max(0, Math.floor(camPy / s) - 1);
+    const x1 = Math.min(level.w - 1, Math.ceil((camPx + W) / s) + 1);
+    const y1 = Math.min(level.h - 1, Math.ceil((camPy + H) / s) + 1);
+
+    for (let y = y0; y <= y1; y++) {
+        for (let x = x0; x <= x1; x++) {
+            const t = level.tiles[idx(x, y)];
+            if (!t || t === T.ENEMY || t === T.SPAWN) continue;
+            if (t === T.COIN && game.coinsTaken.has(`${x},${y}`)) continue;
+            drawTile(ctx, t, x*s - camPx, y*s - camPy, s, time);
+        }
+    }
+
+    // 巡逻体
+    for (const en of game.enemies) {
+        if (en.dead) continue;
+        drawTile(ctx, T.ENEMY, (en.x - .5)*s - camPx, (en.y - .5)*s - camPy, s, time);
+    }
+
+    // 玩家（流光小解析体）
+    const p = game.p;
+    const pxx = p.x*s - camPx, pyy = p.y*s - camPy;
+    const lean = Math.max(-0.18, Math.min(0.18, p.vx * 0.018));
+    ctx.save();
+    ctx.translate(pxx, pyy);
+    ctx.rotate(lean);
+    const glow = ctx.createRadialGradient(0, 0, 2, 0, 0, s*1.1);
+    glow.addColorStop(0, 'rgba(232,192,96,.30)'); glow.addColorStop(1, 'rgba(232,192,96,0)');
+    ctx.fillStyle = glow;
+    ctx.fillRect(-s, -s, s*2, s*2);
+    const bw = p.w*s, bh = p.h*s;
+    const bodyG = ctx.createLinearGradient(0, -bh/2, 0, bh/2);
+    bodyG.addColorStop(0, '#f4d88a'); bodyG.addColorStop(.55, '#e8c060'); bodyG.addColorStop(1, '#b88c34');
+    ctx.fillStyle = bodyG;
+    roundRect(ctx, -bw/2, -bh/2, bw, bh, bw*.35);
+    ctx.fill();
+    // 眼睛
+    ctx.fillStyle = '#241432';
+    const ex = p.face * bw*.16;
+    ctx.beginPath(); ctx.arc(ex - bw*.12, -bh*.14, bw*.09, 0, 7); ctx.fill();
+    ctx.beginPath(); ctx.arc(ex + bw*.12, -bh*.14, bw*.09, 0, 7); ctx.fill();
+    ctx.restore();
+
+    // 粒子
+    for (const pt of game.particles) {
+        const a = Math.max(0, pt.life / pt.max);
+        ctx.fillStyle = pt.c.replace('$a', (a*.9).toFixed(2));
+        const r = 2 + a*3;
+        ctx.fillRect(pt.x*s - camPx - r/2, pt.y*s - camPy - r/2, r, r);
+    }
+
+    // 死亡红闪
+    if (game.deadFlash > 0) {
+        ctx.fillStyle = `rgba(200,40,60,${game.deadFlash * .4})`;
+        ctx.fillRect(0, 0, W, H);
+    }
+}
+
+function roundRect(c, x, y, w, h, r) {
+    c.beginPath();
+    c.moveTo(x+r, y);
+    c.arcTo(x+w, y, x+w, y+h, r);
+    c.arcTo(x+w, y+h, x, y+h, r);
+    c.arcTo(x, y+h, x, y, r);
+    c.arcTo(x, y, x+w, y, r);
+    c.closePath();
+}
+
+/* 主循环 */
+let lastT = performance.now(), acc = 0;
+const FIXED = 1/120;
+function loop(now) {
+    const dt = Math.min(.1, (now - lastT) / 1000);
+    lastT = now;
+    rafTime += dt;
+    if (mode === 'play') {
+        acc += dt;
+        while (acc >= FIXED) { stepGame(FIXED); acc -= FIXED; }
+        renderPlay(rafTime);
+    } else {
+        renderEditor(rafTime);
+    }
+    requestAnimationFrame(loop);
+}
+
+$('#btn-play').addEventListener('click', () => mode === 'edit' ? startPlay() : stopPlay());
+
+/* ════════════════════════════════════════════════════════════════
+   数据库存取 / 导入导出 / 关卡库
+   ════════════════════════════════════════════════════════════════ */
+function openModal({ title, body, confirmText='确定', cancelText='关闭', onConfirm, hideConfirm=false }) {
+    const m = $('#modal');
+    m.innerHTML = `
+        <h3>${title}</h3>
+        <div class="modal-body">${body}</div>
+        <div class="modal-foot">
+            <button class="btn" data-act="cancel">${cancelText}</button>
+            ${hideConfirm ? '' : `<button class="btn primary" data-act="ok">${confirmText}</button>`}
+        </div>`;
+    $('#modal-mask').classList.add('open');
+    const close = () => $('#modal-mask').classList.remove('open');
+    m.querySelector('[data-act="cancel"]').onclick = close;
+    const ok = m.querySelector('[data-act="ok"]');
+    if (ok) ok.onclick = async () => { const r = onConfirm ? await onConfirm() : true; if (r !== false) close(); };
+    return { close };
+}
+$('#modal-mask').addEventListener('click', e => {
+    if (e.target === e.currentTarget) $('#modal-mask').classList.remove('open');
+});
+
+function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, c => ({
+        '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+    }[c]));
+}
+
+/* 保存 */
+$('#btn-save').addEventListener('click', async () => {
+    level.name = $('#f-name').value.trim();
+    if (!level.name) { toast('请先填写关卡名', 'error'); $('#f-name').focus(); return; }
+    const payload = {
+        name: level.name,
+        author: level.author,
+        description: level.description,
+        data: JSON.stringify(serialize()),
+        width: level.w, height: level.h,
+    };
+    try {
+        if (level.id && editKeys[level.id]) {
+            await api(`/api/levels/${level.id}`, {
+                method: 'PATCH', body: payload,
+                headers: { 'X-Edit-Key': editKeys[level.id] },
+            });
+            toast('已更新到数据库', 'ok');
+        } else {
+            const r = await api('/api/levels', { method: 'POST', body: payload });
+            level.id = r.id;
+            editKeys[r.id] = r.edit_key;
+            localStorage.setItem('level-keys', JSON.stringify(editKeys));
+            toast(`已保存到数据库（#${r.id}）`, 'ok');
+        }
+        scheduleDraft();
+    } catch (e) {
+        toast(`保存失败：${e.message} — 已保留本地草稿`, 'error');
+        scheduleDraft();
+    }
+});
+
+/* 关卡库 */
+$('#btn-library').addEventListener('click', async () => {
+    let listHtml;
+    try {
+        const { levels } = await api('/api/levels');
+        listHtml = levels.length ? levels.map(lv => `
+            <div class="lv-item" data-id="${lv.id}">
+                <div class="lv-main">
+                    <div class="lv-name">${escapeHtml(lv.name)}</div>
+                    <div class="lv-meta">
+                        ${lv.author ? escapeHtml(lv.author) + ' · ' : ''}${lv.width}×${lv.height} ·
+                        ▶ ${lv.plays} · ${new Date(lv.updated_at).toLocaleDateString('zh-CN')}
+                        ${editKeys[lv.id] ? ' · <span style="color:var(--green)">可编辑</span>' : ''}
+                    </div>
+                </div>
+                <div class="lv-acts">
+                    <button class="btn" data-load="${lv.id}">载入</button>
+                    <button class="btn primary" data-playlv="${lv.id}">试玩</button>
+                    ${editKeys[lv.id] ? `<button class="btn danger" data-dellv="${lv.id}">删除</button>` : ''}
+                </div>
+            </div>`).join('')
+            : `<div class="lv-empty">数据库中还没有关卡 —— 画一张，成为第一个工匠。</div>`;
+    } catch (e) {
+        listHtml = `<div class="lv-empty" style="color:var(--red)">
+            无法连接数据库：${escapeHtml(e.message)}<br><br>
+            <span style="color:var(--text-3)">请启动 server（cd server && npm start）。<br>当前编辑内容会自动保留为本地草稿。</span>
+        </div>`;
+    }
+    const { close } = openModal({ title:'◫ 关卡库 · 来自世界观数据库', body: listHtml, hideConfirm: true });
+    $$('#modal [data-load]').forEach(b => b.addEventListener('click', async () => {
+        await loadLevel(Number(b.dataset.load)); close();
+    }));
+    $$('#modal [data-playlv]').forEach(b => b.addEventListener('click', async () => {
+        await loadLevel(Number(b.dataset.playlv)); close(); startPlay();
+    }));
+    $$('#modal [data-dellv]').forEach(b => b.addEventListener('click', async () => {
+        const id = Number(b.dataset.dellv);
+        if (!confirm('确认从数据库删除此关卡？')) return;
+        try {
+            await api(`/api/levels/${id}`, { method:'DELETE', headers:{ 'X-Edit-Key': editKeys[id] } });
+            delete editKeys[id];
+            localStorage.setItem('level-keys', JSON.stringify(editKeys));
+            b.closest('.lv-item').remove();
+            if (level.id === id) level.id = null;
+            toast('已删除', 'ok');
+        } catch (e) { toast(e.message, 'error'); }
+    }));
+});
+
+async function loadLevel(id) {
+    try {
+        const { level: lv } = await api(`/api/levels/${id}`);
+        snapshot();
+        deserialize(JSON.parse(lv.data));
+        level.id = lv.id;
+        level.name = lv.name; level.author = lv.author || ''; level.description = lv.description || '';
+        syncMetaInputs(); afterEdit();
+        fitView();
+        toast(`已载入「${lv.name}」`, 'ok');
+    } catch (e) { toast(`载入失败：${e.message}`, 'error'); }
+}
+
+/* 导出 / 导入 */
+$('#btn-export').addEventListener('click', () => {
+    const blob = new Blob([JSON.stringify({
+        name: $('#f-name').value.trim() || '未命名关卡',
+        author: level.author, description: level.description,
+        data: serialize(),
+    }, null, 2)], { type: 'application/json' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = `${$('#f-name').value.trim() || 'level'}.json`;
+    a.click();
+    URL.revokeObjectURL(a.href);
+});
+$('#btn-import').addEventListener('click', () => $('#import-input').click());
+$('#import-input').addEventListener('change', async e => {
+    const f = e.target.files[0];
+    e.target.value = '';
+    if (!f) return;
+    try {
+        const obj = JSON.parse(await f.text());
+        snapshot();
+        deserialize(obj.data || obj); // 兼容裸数据
+        level.id = null;
+        level.name = obj.name || ''; level.author = obj.author || ''; level.description = obj.description || '';
+        syncMetaInputs(); afterEdit(); fitView();
+        toast('导入成功', 'ok');
+    } catch (err) { toast(`导入失败：${err.message}`, 'error'); }
+});
+
+function fitView() {
+    const W = canvas.width / DPR, H = canvas.height / DPR;
+    const fit = Math.min(W / (level.w * TS), H / (level.h * TS), 1.4);
+    view.zoom = Math.max(.2, Math.min(3, fit * .92));
+    view.x = (level.w * px() - W) / 2;
+    view.y = (level.h * px() - H) / 2;
+    $('#sb-zoom').textContent = Math.round(view.zoom * 100) + '%';
+}
+
+/* ── 启动 ───────────────────────────────────────────────────── */
+(function init() {
+    buildPalette();
+    updateStatusTile();
+    resizeCanvas();
+
+    // 恢复草稿，否则生成示例
+    const draft = localStorage.getItem('level-editor-draft');
+    let restored = false;
+    if (draft) {
+        try {
+            const d = JSON.parse(draft);
+            deserialize(d.data);
+            level.id = d.id || null;
+            level.name = d.name || ''; level.author = d.author || ''; level.description = d.description || '';
+            restored = true;
+        } catch {}
+    }
+    if (!restored) genDemo(true);
+
+    syncMetaInputs();
+    afterEdit();
+    fitView();
+    requestAnimationFrame(now => { lastT = now; requestAnimationFrame(loop); });
+})();
+</script>
+</body>
+</html>

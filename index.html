@@ -839,7 +839,7 @@
             grid-template-rows: 1fr 1fr auto;
             gap: 10px;
             width: min(940px,94vw);
-            grid-template-areas: "tl promo tr" "bl promo br" "db db db";
+            grid-template-areas: "tl promo tr" "bl promo br" "db db lv";
         }
 
         /* base card */
@@ -1234,6 +1234,39 @@
         .card-db:hover .db-cta { opacity: .95; gap: 12px; }
         .card-db .db-cta::after { content: "→"; }
 
+        /* level forge — slim teal card */
+        .pos-lv {
+            grid-area: lv;
+        }
+
+        .card-lv {
+            flex-direction: row;
+            align-items: center;
+            gap: 14px;
+            padding: 14px 18px;
+            min-height: 64px;
+            border-color: rgba(80,232,208,.22);
+            background: linear-gradient(90deg, rgba(80,232,208,.07), rgba(180,130,255,.05));
+        }
+
+            .card-lv::before {
+                background: linear-gradient(90deg, transparent 5%, var(--teal) 40%, var(--purple) 75%, transparent 95%);
+                opacity: .6;
+            }
+
+            .card-lv:hover {
+                border-color: rgba(80,232,208,.45);
+                box-shadow: 0 0 50px rgba(60,200,180,.16), 0 14px 40px rgba(0,0,0,.4);
+            }
+
+        .card-lv .db-icon {
+            color: var(--teal);
+            border-color: rgba(80,232,208,.3);
+            background: rgba(80,232,208,.06);
+        }
+        .card-lv .db-type { color: var(--teal); }
+        .card-lv .db-cta { color: var(--teal); }
+
         @media(max-width:720px) {
             html, body {
                 overflow: auto
@@ -1247,7 +1280,7 @@
             .hub-nav {
                 grid-template-columns: 1fr 1fr;
                 grid-template-rows: auto auto auto auto;
-                grid-template-areas: "promo promo" "tl tr" "bl br" "db db"
+                grid-template-areas: "promo promo" "tl tr" "bl br" "db db" "lv lv"
             }
 
             .card-promo {
@@ -1258,10 +1291,11 @@
         @media(max-width:480px) {
             .hub-nav {
                 grid-template-columns: 1fr;
-                grid-template-areas: "promo" "tl" "tr" "bl" "br" "db"
+                grid-template-areas: "promo" "tl" "tr" "bl" "br" "db" "lv"
             }
         }
     </style>
+    <link rel="stylesheet" href="assets/theme.css">
 </head>
 <body>
 
@@ -1733,6 +1767,16 @@
                     <div class="db-desc">完整的设定档案库 · 多层级目录树 · 图像 / Markdown / LaTeX / Word 文档浏览与管理。</div>
                 </div>
                 <div class="db-cta">进入数据库</div>
+            </a>
+
+            <a class="hub-card card-db card-lv pos-lv" href="关卡编辑器.html" target="_blank">
+                <div class="db-icon">◆</div>
+                <div class="db-text">
+                    <div class="db-type">Level Forge · 关卡工坊</div>
+                    <div class="db-title">关卡工坊</div>
+                    <div class="db-desc">绘制并试玩你的 2D 平台关卡，保存进数据库与他人共享。</div>
+                </div>
+                <div class="db-cta">开始锻造</div>
             </a>
         </nav>
     </div>
