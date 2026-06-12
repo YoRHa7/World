@@ -1,0 +1,184 @@
+/* ════════════════════════════════════════════════════════════════
+   解析世界 · The Parsed World — 全站统一主题
+   风格：流动美学 (Fluid Aesthetics)
+   ----------------------------------------------------------------
+   引入方式：在每个页面 </head> 之前、页面内联样式之后加载。
+   同优先级规则按出现顺序覆盖，因此本文件中的设计令牌与
+   背景层会统一覆盖各页面的旧定义，实现全站风格一致。
+   ════════════════════════════════════════════════════════════════ */
+
+:root {
+    /* ── 基底色 ── */
+    --void: #06030f;
+    --deep: #080414;
+    --surface: #110a1c;
+    --raised: #17102a;
+    --raised-2: #1d1438;
+    --abyss: #0d0820;
+
+    /* ── 边界 ── */
+    --border: rgba(201, 168, 76, .10);
+    --border-m: rgba(201, 168, 76, .22);
+    --border-s: rgba(201, 168, 76, .10);
+    --border-p: rgba(180, 130, 255, .18);
+    --border-active: rgba(201, 168, 76, .30);
+    --border-strong: rgba(201, 168, 76, .38);
+
+    /* ── 文字 ── */
+    --text: #f0e8ff;
+    --text-2: #b8a8d8;
+    --text-3: #6a5890;
+    --text-4: #57487a;
+
+    /* ── 主色 ── */
+    --gold: #e8c060;
+    --gold-b: rgba(232, 192, 96, .30);
+    --gold-light: #f4d88a;
+    --gold-dim: #9a7c3c;
+    --purple: #c8a0ff;
+    --purple-deep: #7030c0;
+    --blue: #7ab8f0;
+    --teal: #50e8d0;
+    --red: #ff6666;
+    --green: #50d899;
+    --pink: #f472b6;
+
+    /* ── 旧页面变量别名 → 统一映射 ── */
+    --bg: var(--void);
+    --bg2: var(--surface);
+    --bg3: var(--raised);
+    --bg4: var(--raised-2);
+    --star: #d8e4ff;
+    --star-dim: #94a8cc;
+    --evil-glow: #c43030;
+    --arcane-light: #9b7fe4;
+    --teal-light: #6de4d0;
+    --text-main: var(--text);
+    --text-muted: var(--text-2);
+    --text-faint: var(--text-3);
+}
+
+/* ── 基础质感 ── */
+body {
+    background: var(--void);
+    color: var(--text);
+    font-family: "Noto Sans SC", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+}
+
+/* ── 流体极光层（全站统一背景）──
+   覆盖各页面原有的 body::before 网格 / 氛围层 */
+body::before {
+    content: "";
+    position: fixed;
+    inset: -28%;
+    z-index: 0;
+    pointer-events: none;
+    display: block;
+    opacity: 1;
+    filter: none;
+    mix-blend-mode: normal;
+    background:
+        radial-gradient(38% 32% at 22% 28%, rgba(232, 192, 96, .075), transparent 70%),
+        radial-gradient(44% 38% at 78% 70%, rgba(140, 90, 230, .105), transparent 70%),
+        radial-gradient(30% 26% at 64% 20%, rgba(80, 232, 208, .055), transparent 70%),
+        radial-gradient(34% 30% at 34% 80%, rgba(122, 184, 240, .065), transparent 70%);
+    background-size: 100% 100%;
+    background-position: 0 0;
+    animation: fluidDrift 38s ease-in-out infinite alternate;
+    will-change: transform;
+}
+
+/* 细网格 + 暗角（静态层） */
+body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    display: block;
+    opacity: 1;
+    filter: none;
+    mix-blend-mode: normal;
+    transform: none;
+    animation: none;
+    background:
+        linear-gradient(rgba(232, 192, 96, .015) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(180, 130, 255, .015) 1px, transparent 1px),
+        radial-gradient(ellipse 125% 95% at 50% 50%, transparent 58%, rgba(2, 0, 8, .48) 100%);
+    background-size: 56px 56px, 56px 56px, 100% 100%;
+    background-position: 0 0;
+}
+
+@keyframes fluidDrift {
+    0%   { transform: translate3d(-2%, -1%, 0) rotate(0deg) scale(1); }
+    50%  { transform: translate3d(2.5%, 2%, 0) rotate(2.4deg) scale(1.06); }
+    100% { transform: translate3d(-1%, 3%, 0) rotate(-2deg) scale(1.03); }
+}
+
+/* ── 统一滚动条 ── */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: rgba(10, 5, 20, .55); }
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, rgba(180, 130, 255, .32), rgba(232, 192, 96, .26));
+    border-radius: 6px;
+    border: 2px solid rgba(8, 4, 16, .85);
+}
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, rgba(180, 130, 255, .55), rgba(232, 192, 96, .42));
+}
+::-webkit-scrollbar-corner { background: transparent; }
+* { scrollbar-width: thin; scrollbar-color: rgba(160, 120, 230, .38) rgba(10, 5, 20, .55); }
+
+/* ── 统一选区 / 焦点 ── */
+::selection { background: rgba(232, 192, 96, .28); color: #fff7e0; }
+:focus-visible { outline: 1px solid var(--gold-b); outline-offset: 2px; }
+
+/* ── 交互过渡（流动手感） ── */
+a { transition: color .25s ease, border-color .25s ease, background .25s ease, box-shadow .25s ease, opacity .25s ease; }
+button {
+    transition: color .2s ease, border-color .2s ease, background .2s ease,
+                box-shadow .2s ease, transform .2s ease, opacity .2s ease;
+}
+
+/* ── 流动工具类（供各页面 / 新页面使用） ── */
+.flow-text {
+    background: linear-gradient(110deg, var(--gold-light) 0%, var(--gold) 28%, var(--purple) 62%, var(--teal) 100%);
+    background-size: 230% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    animation: flowText 9s ease-in-out infinite alternate;
+}
+@keyframes flowText { to { background-position: 100% 0; } }
+
+.glass {
+    background: linear-gradient(160deg, rgba(23, 16, 42, .72), rgba(10, 5, 18, .80));
+    border: 1px solid var(--border-m);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 12px;
+}
+
+.flow-divider {
+    height: 1px;
+    border: none;
+    background: linear-gradient(90deg, transparent, var(--gold-b) 30%, var(--border-p) 70%, transparent);
+}
+
+@keyframes flowPulse {
+    0%, 100% { box-shadow: 0 0 10px var(--gold-b); opacity: 1; }
+    50% { box-shadow: 0 0 26px var(--gold-b); opacity: .65; }
+}
+
+/* ── 动效偏好：尊重系统设置 ── */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+        scroll-behavior: auto !important;
+    }
+}

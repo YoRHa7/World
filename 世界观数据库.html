@@ -460,6 +460,73 @@
 
         body[data-mode="read"] .admin-only { display: none !important; }
 
+        /* ── 关卡工坊入口 ── */
+        .pill-forge { text-decoration: none; color: var(--teal); border-color: rgba(80,232,208,.3); }
+        .pill-forge:hover { color: var(--teal); border-color: rgba(80,232,208,.55); background: rgba(80,232,208,.08); }
+
+        /* ── 目录搜索 ── */
+        .sb-search {
+            padding: 10px 12px 8px;
+            border-bottom: 1px solid var(--border);
+        }
+        .sb-search input {
+            width: 100%;
+            background: rgba(0,0,0,.35);
+            border: 1px solid var(--border-m);
+            border-radius: 999px;
+            color: var(--text);
+            padding: 6px 14px;
+            font-size: 12px;
+            font-family: inherit;
+            outline: none;
+            transition: border-color .2s, box-shadow .2s;
+        }
+        .sb-search input:focus {
+            border-color: var(--gold-b);
+            box-shadow: 0 0 12px rgba(232,192,96,.10);
+        }
+        .sb-search input::placeholder { color: var(--text-3); }
+
+        /* ── 图片灯箱 ── */
+        .lightbox {
+            position: fixed; inset: 0; z-index: 300;
+            display: none; align-items: center; justify-content: center;
+            background: rgba(4,1,11,.86);
+            backdrop-filter: blur(8px);
+            cursor: zoom-out;
+        }
+        .lightbox.open { display: flex; }
+        .lightbox img {
+            max-width: 92vw; max-height: 88vh;
+            border-radius: 8px;
+            border: 1px solid var(--border-m);
+            box-shadow: 0 24px 80px rgba(0,0,0,.7), 0 0 60px rgba(180,130,255,.12);
+        }
+        .lightbox .lb-name {
+            position: absolute; bottom: 22px; left: 50%; transform: translateX(-50%);
+            font-family: "JetBrains Mono", monospace; font-size: 12px;
+            color: var(--text-2); letter-spacing: .12em;
+            background: rgba(10,5,18,.8); border: 1px solid var(--border);
+            border-radius: 999px; padding: 6px 16px;
+        }
+        .att-card img { cursor: zoom-in; }
+
+        /* ── 占位页的工坊卡片 ── */
+        .ph-forge {
+            display: inline-flex; align-items: center; gap: 10px;
+            margin-top: 8px; padding: 10px 22px;
+            border: 1px solid rgba(80,232,208,.3); border-radius: 999px;
+            color: var(--teal); text-decoration: none;
+            font-size: 12px; letter-spacing: .2em;
+            font-family: "JetBrains Mono", monospace;
+            transition: .25s;
+        }
+        .ph-forge:hover {
+            background: rgba(80,232,208,.08);
+            border-color: rgba(80,232,208,.55);
+            box-shadow: 0 0 24px rgba(80,232,208,.12);
+        }
+
         @media (max-width: 720px) {
             .layout { grid-template-columns: 1fr; }
             .sidebar { display: none; }
@@ -468,6 +535,7 @@
             }
         }
     </style>
+    <link rel="stylesheet" href="assets/theme.css">
 </head>
 <body data-mode="read">
 
@@ -478,6 +546,7 @@
         <span class="brand-sub">LORE · DATABASE</span>
     </div>
     <div class="spacer"></div>
+    <a class="pill pill-forge" href="关卡编辑器.html">◆ 关卡工坊</a>
     <a class="link-back" href="index.html">← 返回导航</a>
     <button id="auth-btn" class="pill">管理登录</button>
 </div>
@@ -496,6 +565,9 @@
                 <button class="icon-btn" id="add-root-entry"  title="新建根条目">+◆</button>
             </div>
         </div>
+        <div class="sb-search">
+            <input id="tree-search" type="search" placeholder="⌕ 搜索条目名称 / 简介…" autocomplete="off">
+        </div>
         <div class="sb-tree" id="tree">
             <div class="tree-empty">载入中…</div>
         </div>
@@ -506,6 +578,7 @@
             <div class="gem"></div>
             <div class="ph-title">解析世界 · 世界观数据库</div>
             <div class="ph-sub">从左侧目录选择一个条目，查阅它的图像、设定与文档。<br>编辑者登录后即可上传 Markdown / LaTeX / Word / 图像，并维护多层级目录结构。</div>
+            <a class="ph-forge" href="关卡编辑器.html">◆ 进入关卡工坊 · 设计你的 2D 平台关卡</a>
         </div>
     </main>
 </div>
@@ -516,6 +589,11 @@
 </div>
 
 <div class="toast" id="toast"></div>
+
+<div class="lightbox" id="lightbox">
+    <img id="lightbox-img" alt="">
+    <div class="lb-name" id="lightbox-name"></div>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/marked@12.0.0/marked.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
@@ -543,6 +621,7 @@ const state = {
     expanded: new Set(JSON.parse(localStorage.getItem('lore-expanded') || '[]')),
     token: localStorage.getItem('lore-token') || '',
     isAdmin: false,
+    filter: '',
 };
 
 const $ = (q, root=document) => root.querySelector(q);
@@ -661,21 +740,37 @@ async function loadTree() {
     renderTree();
 }
 
+function filterTree(nodes, q) {
+    const out = [];
+    for (const n of nodes) {
+        const kids = n.children ? filterTree(n.children, q) : [];
+        const hit = n.name.toLowerCase().includes(q) ||
+                    (n.description || '').toLowerCase().includes(q);
+        if (hit || kids.length) {
+            // 自身命中且无命中子节点时保留原有子树，否则只显示命中的分支
+            out.push({ ...n, children: (hit && !kids.length) ? (n.children || []) : kids });
+        }
+    }
+    return out;
+}
+
 function renderTree() {
     const root = $('#tree');
     root.innerHTML = '';
-    if (!state.tree.length) {
+    const q = state.filter.trim().toLowerCase();
+    const nodes = q ? filterTree(state.tree, q) : state.tree;
+    if (!nodes.length) {
         root.innerHTML = `<div class="tree-empty">
-            （空）${state.isAdmin ? '<br>使用右上角 +▾ / +◆ 新建' : ''}
+            ${q ? `未找到「${escapeHtml(state.filter)}」相关条目` : `（空）${state.isAdmin ? '<br>使用右上角 +▾ / +◆ 新建' : ''}`}
         </div>`;
         return;
     }
     const frag = document.createDocumentFragment();
-    for (const n of state.tree) frag.appendChild(renderNode(n));
+    for (const n of nodes) frag.appendChild(renderNode(n, !!q));
     root.appendChild(frag);
 }
 
-function renderNode(n) {
+function renderNode(n, forceExpand = false) {
     const el = document.createElement('div');
     el.className = 'tree-node';
     el.dataset.id = n.id;
@@ -686,7 +781,7 @@ function renderNode(n) {
 
     const isFolder = n.type === 'folder';
     const hasKids = isFolder && n.children.length > 0;
-    const expanded = state.expanded.has(n.id);
+    const expanded = forceExpand || state.expanded.has(n.id);
 
     row.innerHTML = `
         <span class="tree-caret ${hasKids ? (expanded ? 'open' : '') : 'empty'}">${hasKids ? '▸' : '·'}</span>
@@ -723,7 +818,7 @@ function renderNode(n) {
     if (isFolder) {
         const kidsBox = document.createElement('div');
         kidsBox.className = 'tree-children' + (expanded ? '' : ' collapsed');
-        for (const k of n.children) kidsBox.appendChild(renderNode(k));
+        for (const k of n.children) kidsBox.appendChild(renderNode(k, forceExpand));
         el.appendChild(kidsBox);
     }
     return el;
@@ -905,6 +1000,7 @@ function renderPlaceholder() {
             <div class="gem"></div>
             <div class="ph-title">解析世界 · 世界观数据库</div>
             <div class="ph-sub">从左侧目录选择一个条目，查阅它的图像、设定与文档。</div>
+            <a class="ph-forge" href="关卡编辑器.html">◆ 进入关卡工坊 · 设计你的 2D 平台关卡</a>
         </div>`;
 }
 
@@ -1085,6 +1181,35 @@ async function deleteAttachment(id, nodeId) {
         toast('已删除', 'ok');
     } catch (e) { toast(e.message, 'error'); }
 }
+
+/* ── Search ───────────────────────────────────────────────────── */
+let searchTimer = null;
+$('#tree-search').addEventListener('input', e => {
+    clearTimeout(searchTimer);
+    searchTimer = setTimeout(() => {
+        state.filter = e.target.value;
+        renderTree();
+    }, 160);
+});
+$('#tree-search').addEventListener('keydown', e => {
+    if (e.key === 'Escape') { e.target.value = ''; state.filter = ''; renderTree(); }
+});
+
+/* ── Lightbox ─────────────────────────────────────────────────── */
+function openLightbox(src, name) {
+    $('#lightbox-img').src = src;
+    $('#lightbox-name').textContent = name || '';
+    $('#lightbox').classList.add('open');
+}
+$('#lightbox').addEventListener('click', () => $('#lightbox').classList.remove('open'));
+window.addEventListener('keydown', e => {
+    if (e.key === 'Escape') $('#lightbox').classList.remove('open');
+});
+// 事件委托：点击任意条目图像放大查看
+$('#content').addEventListener('click', e => {
+    const img = e.target.closest('.att-card img');
+    if (img) openLightbox(img.src, img.alt);
+});
 
 /* ── Root buttons ─────────────────────────────────────────────── */
 $('#add-root-folder').addEventListener('click', () => promptNewNode(null, 'folder'));

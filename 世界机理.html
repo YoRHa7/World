@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>解析世界 · 世界机理 — 昼夜与日月星辰</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700;900&family=Noto+Sans+SC:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        *,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+        html { scroll-behavior:smooth; }
+        body {
+            background: var(--void, #06030f);
+            color: var(--text, #f0e8ff);
+            font-family: "Noto Sans SC", sans-serif;
+            font-size: 14px;
+            line-height: 1.8;
+        }
+
+        /* ── Topbar ── */
+        .topbar {
+            position: sticky; top:0; z-index: 20;
+            display:flex; align-items:center; gap:14px;
+            padding: 13px 22px;
+            border-bottom: 1px solid var(--border);
+            background: linear-gradient(180deg, rgba(20,12,38,.92), rgba(10,5,18,.78));
+            backdrop-filter: blur(8px);
+        }
+        .brand { display:flex; align-items:center; gap:10px; font-family:"Noto Serif SC", serif; letter-spacing:.18em; }
+        .brand-gem {
+            width:10px; height:10px;
+            background: radial-gradient(circle, var(--gold), var(--gold-b));
+            transform: rotate(45deg);
+            box-shadow: 0 0 12px var(--gold-b);
+            animation: flowPulse 3s ease-in-out infinite;
+        }
+        .brand-text { color: var(--gold); font-weight:700; font-size:15px; }
+        .brand-sub { color: var(--text-3); font-size:11px; letter-spacing:.3em; margin-left:6px; }
+        .spacer { flex:1; }
+        .link-back { color: var(--text-3); text-decoration:none; font-size:12px; letter-spacing:.15em; }
+        .link-back:hover { color: var(--purple); }
+
+        .wrap { position:relative; z-index:2; max-width:1180px; margin:0 auto; padding: 40px clamp(16px, 4vw, 48px) 110px; }
+
+        /* ── Hero ── */
+        .hero { text-align:center; margin-bottom: 34px; }
+        .hero .eyebrow {
+            font-family:"JetBrains Mono", monospace;
+            font-size:11px; letter-spacing:.4em; color:var(--text-3);
+            margin-bottom:12px;
+        }
+        .hero h1 {
+            font-family:"Noto Serif SC", serif; font-weight:900;
+            font-size: clamp(30px, 4.4vw, 50px); letter-spacing:.08em;
+            margin-bottom: 12px;
+        }
+        .hero p { color: var(--text-2); max-width: 720px; margin: 0 auto; font-size: 14.5px; }
+
+        /* ── Stage ── */
+        .stage {
+            position: relative;
+            border: 1px solid var(--border-m);
+            border-radius: 14px;
+            background: linear-gradient(180deg, rgba(14,8,26,.85), rgba(7,3,15,.9));
+            overflow: hidden;
+            box-shadow: 0 30px 80px rgba(0,0,0,.5), inset 0 0 80px rgba(120,70,200,.05);
+        }
+        #scene { display:block; width:100%; height:auto; }
+
+        .phase-chip {
+            position:absolute; top:16px; left:18px;
+            font-family:"JetBrains Mono", monospace; font-size:12px; letter-spacing:.15em;
+            color: var(--gold);
+            padding: 7px 16px; border-radius:999px;
+            border:1px solid var(--gold-b);
+            background: rgba(10,5,18,.75); backdrop-filter: blur(6px);
+            pointer-events:none;
+        }
+        .mode-tip {
+            position:absolute; bottom:14px; left:50%; transform:translateX(-50%);
+            max-width: 86%;
+            text-align:center;
+            font-size: 12.5px; color: var(--text-2);
+            padding: 8px 20px; border-radius: 999px;
+            border:1px solid var(--border);
+            background: rgba(10,5,18,.78); backdrop-filter: blur(6px);
+            pointer-events:none;
+        }
+
+        /* ── Controls ── */
+        .controls {
+            display:flex; align-items:center; gap:14px; flex-wrap:wrap;
+            margin: 16px 0 10px;
+            padding: 12px 16px;
+            border:1px solid var(--border); border-radius:12px;
+            background: rgba(17,10,28,.55);
+        }
+        .ctl-btn {
+            font-family:"JetBrains Mono", monospace;
+            font-size:12px; padding:7px 16px;
+            border:1px solid var(--border-m); border-radius:999px;
+            color:var(--text-2); background:rgba(255,255,255,.02); cursor:pointer;
+        }
+        .ctl-btn:hover { color:var(--gold); border-color:var(--gold-b); }
+        .ctl-btn.active { color:var(--gold); border-color:var(--gold-b); background:rgba(232,192,96,.10); }
+        .ctl-group { display:flex; align-items:center; gap:8px; }
+        .ctl-label { font-size:11px; color:var(--text-3); letter-spacing:.15em; font-family:"JetBrains Mono", monospace; }
+        input[type=range] {
+            -webkit-appearance:none; appearance:none;
+            width:130px; height:4px; border-radius:2px;
+            background: linear-gradient(90deg, var(--gold-b), var(--border-p));
+            outline:none; cursor:pointer;
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance:none; appearance:none;
+            width:14px; height:14px; border-radius:50%;
+            background: var(--gold);
+            box-shadow: 0 0 10px var(--gold-b);
+            border:2px solid #0a0512;
+        }
+        .modes { display:flex; gap:8px; flex-wrap:wrap; }
+
+        /* ── 法则卡片 ── */
+        .laws { margin-top: 56px; }
+        .laws-head {
+            text-align:center; margin-bottom: 30px;
+        }
+        .laws-head h2 {
+            font-family:"Noto Serif SC", serif; font-weight:900;
+            font-size: clamp(22px, 3vw, 32px); letter-spacing:.12em;
+            color: var(--text);
+        }
+        .laws-head .sub { color:var(--text-3); font-family:"JetBrains Mono", monospace; font-size:11px; letter-spacing:.35em; margin-top:6px; }
+
+        .code-block {
+            font-family:"JetBrains Mono", monospace;
+            font-size: 13px; line-height: 2.1;
+            border:1px solid var(--border-m); border-radius:12px;
+            background: linear-gradient(180deg, rgba(8,4,16,.9), rgba(14,8,28,.85));
+            padding: 22px 28px;
+            margin-bottom: 36px;
+            overflow-x:auto;
+            position:relative;
+        }
+        .code-block::before {
+            content:"// THE PARSED WORLD · KERNEL";
+            display:block;
+            color: var(--text-3); font-size:10px; letter-spacing:.3em;
+            margin-bottom: 10px;
+        }
+        .code-block .ln { display:block; white-space:pre; }
+        .code-block .kw { color: var(--purple); }
+        .code-block .fn { color: var(--blue); }
+        .code-block .lit { color: var(--gold); }
+        .code-block .cm { color: var(--text-3); }
+        .code-block .op { color: var(--teal); }
+
+        .law-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(330px, 1fr)); gap:18px; }
+        .law-card {
+            border:1px solid var(--border-m); border-radius:12px;
+            background: linear-gradient(170deg, rgba(23,16,42,.6), rgba(10,5,18,.75));
+            padding: 22px 24px;
+            position:relative; overflow:hidden;
+        }
+        .law-card::before {
+            content:""; position:absolute; top:0; left:0; right:0; height:2px;
+            background: linear-gradient(90deg, transparent, var(--gold-b) 30%, var(--border-p) 70%, transparent);
+        }
+        .law-num {
+            font-family:"JetBrains Mono", monospace;
+            font-size:10px; letter-spacing:.35em; color:var(--text-3);
+            margin-bottom:8px;
+        }
+        .law-title {
+            font-family:"Noto Serif SC", serif; font-weight:700;
+            font-size:18px; letter-spacing:.1em; color:var(--gold);
+            margin-bottom:10px;
+        }
+        .law-card p { color:var(--text-2); font-size:13.5px; margin-bottom:8px; }
+        .law-card strong { color:var(--text); }
+        .law-card .note {
+            font-size:12px; color:var(--text-3);
+            border-left:2px solid var(--border-p);
+            padding-left:10px; margin-top:10px;
+        }
+        .law-card .src {
+            display:inline-block; margin-top:10px;
+            font-family:"JetBrains Mono", monospace; font-size:10px; letter-spacing:.2em;
+            color:var(--text-3);
+            border:1px solid var(--border); border-radius:999px; padding:3px 10px;
+        }
+        #balance-canvas { width:100%; height:auto; border-radius:8px; margin-top:12px;
+            border:1px solid var(--border); background:rgba(0,0,0,.3); }
+
+        .elem-chain {
+            display:flex; flex-wrap:wrap; gap:6px; align-items:center; margin:10px 0 4px;
+            font-family:"JetBrains Mono", monospace; font-size:12px;
+        }
+        .elem-chain .e {
+            width:30px; height:30px; border-radius:50%;
+            display:inline-flex; align-items:center; justify-content:center;
+            border:1px solid; font-size:13px; font-family:"Noto Serif SC", serif;
+        }
+        .elem-chain .arr { color:var(--text-3); }
+        .res-line { display:flex; align-items:center; gap:8px; font-size:12.5px; color:var(--text-2); margin-top:6px; }
+        .res-line .vs { color:var(--text-3); font-family:"JetBrains Mono", monospace; }
+
+        .foot {
+            margin-top: 60px; text-align:center;
+            color: var(--text-3); font-size:12px;
+            font-family:"JetBrains Mono", monospace; letter-spacing:.15em;
+        }
+        .foot a { color: var(--gold); text-decoration:none; }
+        .foot a:hover { text-decoration:underline; }
+
+        @media (max-width:720px) {
+            .controls { gap:10px; }
+            .mode-tip { font-size:11px; padding:6px 12px; }
+        }
+    </style>
+    <link rel="stylesheet" href="assets/theme.css">
+</head>
+<body>
+
+<div class="topbar">
+    <div class="brand">
+        <span class="brand-gem"></span>
+        <span class="brand-text flow-text">世界机理</span>
+        <span class="brand-sub">WORLD · MECHANISM</span>
+    </div>
+    <div class="spacer"></div>
+    <a class="link-back" href="世界观简介.html">← 世界观简介</a>
+    <a class="link-back" href="世界观数据库.html">数据库</a>
+    <a class="link-back" href="index.html">主页</a>
+</div>
+
+<div class="wrap">
+    <div class="hero">
+        <div class="eyebrow">UNDERLYING CODE OF THE PARSED WORLD</div>
+        <h1 class="flow-text">世界运转 · 底层代码</h1>
+        <p>这个世界是<strong>一体两面的盘</strong>——从界外看去像一块夹心饼干。光与能量皆由原素的流动带来：
+            光暗原素彼此相斥、互为消长，经由<strong>界外大环</strong>与<strong>过渡内环</strong>两条假想轨道有节律地倒腾，
+            便有了昼夜；日月星辰是大环中的小环，与大环交换原素，便有了升落。</p>
+    </div>
+
+    <div class="stage">
+        <canvas id="scene"></canvas>
+        <div class="phase-chip" id="phase-chip">正面 · 正午</div>
+        <div class="mode-tip" id="mode-tip"></div>
+    </div>
+
+    <div class="controls">
+        <button class="ctl-btn" id="btn-pause">⏸ 暂停</button>
+        <div class="ctl-group">
+            <span class="ctl-label">速度</span>
+            <input type="range" id="ctl-speed" min="0.25" max="3" step="0.05" value="1">
+            <span class="ctl-label" id="speed-val">1.0×</span>
+        </div>
+        <div class="ctl-group">
+            <span class="ctl-label">昼夜</span>
+            <input type="range" id="ctl-phase" min="0" max="360" step="1" value="0" style="width:180px;">
+        </div>
+        <div class="spacer"></div>
+        <div class="modes">
+            <button class="ctl-btn mode active" data-mode="all">全景</button>
+            <button class="ctl-btn mode" data-mode="balance">光暗均衡</button>
+            <button class="ctl-btn mode" data-mode="rings">双环交换</button>
+            <button class="ctl-btn mode" data-mode="celestial">日月星辰</button>
+        </div>
+    </div>
+
+    <!-- ══ 法则 ══ -->
+    <div class="laws">
+        <div class="laws-head">
+            <h2>底层法则 · 六行内核</h2>
+            <div class="sub">EXTRACTED FROM WORLD LORE · SECTION 01 / 02 / 06</div>
+        </div>
+
+        <div class="code-block">
+<span class="ln"><span class="kw">world</span>    <span class="op">:=</span> <span class="fn">双面盘</span>(正面, 背面) <span class="op">+</span> 过渡地带                <span class="cm">// 一体两面 · 夹心饼干 · 地平之盘</span></span>
+<span class="ln"><span class="kw">RULE 1</span>   ∀区域 x: 光(x) <span class="op">+</span> 暗(x) <span class="op">≡</span> <span class="lit">恒量</span>                <span class="cm">// 原素相斥 · 局部均衡</span></span>
+<span class="ln"><span class="kw">RULE 2</span>   正面.光 ↑ <span class="op">⇔</span> 背面.暗 ↑                          <span class="cm">// 正反互为镜像 · 此长彼消</span></span>
+<span class="ln"><span class="kw">RULE 3</span>   <span class="kw">交换轨道</span> <span class="op">:=</span> { <span class="lit">界外大环</span>, <span class="lit">过渡内环</span> }              <span class="cm">// 非物理 · 假想轨道（似电子轨道）</span></span>
+<span class="ln"><span class="kw">RULE 4</span>   <span class="kw">日月星辰</span> <span class="op">:=</span> 大环.<span class="fn">子环</span>[]  ⇄ 大环交换原素        <span class="cm">// 大环中的小环 → 日月升落</span></span>
+<span class="ln"><span class="kw">RULE 5</span>   <span class="kw">能量</span> <span class="op">:=</span> 原素 → 生息 → <span class="fn">异化</span>(魔力)                <span class="cm">// 三层能量结构 · 生息不可再生</span></span>
+<span class="ln"><span class="kw">RULE 6</span>   <span class="fn">失衡</span>(魔力↑) → { 献祭, 汲取, <span class="lit">解析</span> }             <span class="cm">// 世界自我修复 · 非人格化趋势</span></span>
+        </div>
+
+        <div class="law-grid">
+            <div class="law-card">
+                <div class="law-num">LAW · 00 · 物质基底</div>
+                <div class="law-title">八原素与对立共鸣</div>
+                <p>世界由八种原素构成，按凝结稳定性依次出现——土最稳定最先凝结，暗最晚但一旦稳定极难分解：</p>
+                <div class="elem-chain">
+                    <span class="e" style="color:#d4a060;border-color:#d4a060;">土</span><span class="arr">→</span>
+                    <span class="e" style="color:#d8d8d8;border-color:#d8d8d8;">金</span><span class="arr">→</span>
+                    <span class="e" style="color:#60b0f0;border-color:#60b0f0;">水</span><span class="arr">→</span>
+                    <span class="e" style="color:#70c860;border-color:#70c860;">木</span><span class="arr">→</span>
+                    <span class="e" style="color:#f06040;border-color:#f06040;">火</span><span class="arr">→</span>
+                    <span class="e" style="color:#90d0f0;border-color:#90d0f0;">气</span><span class="arr">→</span>
+                    <span class="e" style="color:#f0d860;border-color:#f0d860;">光</span><span class="arr">→</span>
+                    <span class="e" style="color:#b080e0;border-color:#b080e0;">暗</span>
+                </div>
+                <div class="res-line"><span style="color:#d4a060;">土</span><span class="vs">↔</span><span style="color:#90d0f0;">气</span><span class="vs">稳固↔流动</span></div>
+                <div class="res-line"><span style="color:#d8d8d8;">金</span><span class="vs">↔</span><span style="color:#70c860;">木</span><span class="vs">硬化↔生长</span></div>
+                <div class="res-line"><span style="color:#60b0f0;">水</span><span class="vs">↔</span><span style="color:#f06040;">火</span><span class="vs">溶解↔燃烧</span></div>
+                <div class="res-line"><span style="color:#f0d860;">光</span><span class="vs">↔</span><span style="color:#b080e0;">暗</span><span class="vs">揭示↔隐匿 ← 昼夜引擎</span></div>
+                <span class="src">世界观简介 · §01.1</span>
+            </div>
+
+            <div class="law-card">
+                <div class="law-num">LAW · 01 · 昼夜引擎</div>
+                <div class="law-title">原素相斥 · 局部均衡</div>
+                <p>光暗这对共鸣原素<strong>互相排斥</strong>。对盘面上任意一个局部区域，其正面与背面的光暗总量守恒：
+                    <strong>正面的光多了，背面的暗就多</strong>；反过来也一样。每个局部区域都独立遵从这条规律。</p>
+                <p>昼夜更替因此不是「光源绕行」，而是<strong>正面和背面相互倒腾</strong>——光暗原素整体性地此长彼消。</p>
+                <canvas id="balance-canvas" width="640" height="240"></canvas>
+                <div class="note">上图：同一局部区域的正 / 背两面。金色为光原素浓度，紫色为暗原素浓度，二者在每一面内互补，在两面间镜像。</div>
+            </div>
+
+            <div class="law-card">
+                <div class="law-num">LAW · 02 · 世界形体</div>
+                <div class="law-title">一体两面的盘</div>
+                <p>现实世界是一只<strong>盘</strong>——地平之世，没有球面曲率。盘有正反两个可居面，
+                    从界外看像一块<strong>夹心饼干</strong>：两片大陆面之间夹着过渡地带。</p>
+                <p>正反两面互不知晓彼此存在，唯一的<strong>物理通道</strong>是大断崖（凝晶高原大裂谷）。
+                    两面的天空都是<strong>有界的</strong>——天穹是边界，不是无尽虚空。</p>
+                <div class="note">「物理通道」只有大断崖一条；下文的环皆为非物理的原素轨道，不可通行。</div>
+                <span class="src">世界观简介 · §06</span>
+            </div>
+
+            <div class="law-card">
+                <div class="law-num">LAW · 03 · 交换轨道</div>
+                <div class="law-title">界外大环 与 过渡内环</div>
+                <p><strong>界外大环</strong>：天空边界之外环绕全盘的一道假想轨道——类似电子轨道，
+                    是原素的流动路径而非实体通道。正反两面的光暗原素经它完成大宗交换。</p>
+                <p><strong>过渡内环</strong>：盘体内部、正面与背面之间的过渡地带中还有一道交换环。
+                    内外两环一表一里，使光暗的交替<strong>更有节律</strong>——如同呼吸的吸与呼。</p>
+                <div class="note">动画中：外侧虚线椭圆为大环，盘体中缝的流光为内环。金色粒子为光原素流，紫色粒子为暗原素流，方向恒相反。</div>
+            </div>
+
+            <div class="law-card">
+                <div class="law-num">LAW · 04 · 天体之环</div>
+                <div class="law-title">日月星辰 = 大环中的小环</div>
+                <p>日、月与众星辰都不是天体球，而是<strong>大环之内的小环</strong>——一环之中又有许多小圈。
+                    它们沿大环运行，并持续与大环<strong>交换原素</strong>。</p>
+                <p><strong>日环</strong>吞吐光原素最盛，行至哪一面的天界之外，哪一面便得昼；
+                    <strong>月环</strong>居其对侧，吞吐微弱而清冷；<strong>星环</strong>无数，是大环上细小的恒常涟漪。
+                    日月更替，即小环与大环间原素交换的外显。</p>
+            </div>
+
+            <div class="law-card">
+                <div class="law-num">LAW · 05 · 能量与修复</div>
+                <div class="law-title">三层结构 · 自我修复</div>
+                <p>原素是本源能量的物质形态；<strong>生息</strong>附着于生命、不可再生；
+                    生息被强行转化即成<strong>魔力</strong>——高密度而不稳定，积聚则干扰原素的自然循环。</p>
+                <p>当循环被干扰，世界以三档机制自我修复：<strong>献祭</strong>（精细调节）→
+                    <strong>汲取</strong>（粗调）→ <strong>解析</strong>（不可逆，万物还原为原素）。
+                    昼夜之环若失律，便是世界树枯萎之兆。</p>
+                <span class="src">世界观简介 · §01 / §02</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="foot">
+        机理源出 <a href="世界观简介.html">《世界观简介》</a> §01 能量体系 · §02 平衡机制 · §06 势力格局 ——
+        昼夜与日月星辰部分为本页新增正典。
+    </div>
+</div>
+
+<script>
+/* ════════════════════════════════════════════════════════════════
+   世界机理动画 — 一体两面盘世界的昼夜与日月星辰
+   φ ∈ [0, 2π)   昼夜相位
+   正面光浓度 L = .5 + .45·cos φ      背面光浓度 = 1 − L
+   日环沿大环行至 angle = φ − π/2（φ=0 时位于正面天顶）
+   ════════════════════════════════════════════════════════════════ */
+
+const $ = (q, r=document) => r.querySelector(q);
+const $$ = (q, r=document) => [...r.querySelectorAll(q)];
+const TAU = Math.PI * 2;
+
+/* ── 场景常量（逻辑坐标 1200×860） ── */
+const VW = 1200, VH = 860;
+const CX = 600, CY = 430;
+const DISC_RX = 300;          // 盘半宽
+const CRUST = 40, SEAM = 46;  // 面壳厚 / 过渡地带厚
+const DISC_HT = CRUST*2 + SEAM;
+const SKY_RY = 215;           // 天界高度
+const RING_RX = 470, RING_RY = 332;  // 界外大环
+
+const canvas = $('#scene');
+const ctx = canvas.getContext('2d');
+let DPR = 1, SCALE = 1;
+
+function resize() {
+    const w = canvas.parentElement.clientWidth;
+    DPR = Math.min(window.devicePixelRatio || 1, 2);
+    const h = w * VH / VW;
+    canvas.width = w * DPR; canvas.height = h * DPR;
+    canvas.style.height = h + 'px';
+    SCALE = w * DPR / VW;
+}
+window.addEventListener('resize', resize);
+
+/* ── 状态 ── */
+const state = {
+    phase: 0,           // φ
+    speed: 1,
+    playing: true,
+    mode: 'all',
+    period: 36,         // 一昼夜秒数（1×）
+};
+const frontLight = () => .5 + .45 * Math.cos(state.phase);
+
+/* 各图层在不同模式下的强调系数 */
+const MODE_ALPHA = {
+    all:       { domes:1, disc:1, seam:1,  bigRing:1,  small:1,  ringFlow:1,  seamFlow:1,  particles:1,  labels:1 },
+    balance:   { domes:1, disc:1, seam:.9, bigRing:.2, small:.15,ringFlow:.15,seamFlow:1,  particles:1,  labels:.5 },
+    rings:     { domes:.45,disc:.8,seam:1, bigRing:1,  small:.3, ringFlow:1,  seamFlow:1,  particles:.25,labels:.7 },
+    celestial: { domes:.5, disc:.6,seam:.3,bigRing:.85,small:1,  ringFlow:.5, seamFlow:.2, particles:.2, labels:.6 },
+};
+const MODE_TIP = {
+    all: '全景 —— 光暗原素在正反两面间倒腾：界外大环走外路，过渡内环走内路，日月星辰是大环中的小环。',
+    balance: '光暗均衡 —— 任一局部区域：正面的光多了，背面的暗就多。两面天穹下的粒子浓度互为镜像。',
+    rings: '双环交换 —— 外侧虚线为界外大环（假想轨道·非物理），盘体中缝为过渡内环。金色光原素与紫色暗原素恒反向流动。',
+    celestial: '日月星辰 —— 大环之内的小环。日环吞吐光原素最盛，行至哪面天外哪面即昼；月环居对侧；星环无数。',
+};
+
+/* ── 粒子系统 ── */
+function rand(a, b) { return a + Math.random() * (b - a); }
+
+// 天穹内漂浮粒子（每面 光/暗 各一组）
+function makeDomeParticles(n, side) { // side: -1 正面(上) / +1 背面(下)
+    const arr = [];
+    for (let i = 0; i < n; i++) {
+        // 椭圆天穹内随机点
+        let x, y;
+        do {
+            x = rand(-1, 1); y = rand(0, 1);
+        } while (x*x + y*y > 1);
+        arr.push({
+            x: CX + x * (DISC_RX - 30),
+            y: CY + side * (DISC_HT/2 + 14 + y * (SKY_RY - 46)),
+            tw: rand(0, TAU), tws: rand(.6, 1.8),
+            r: rand(1.2, 2.6),
+            dx: rand(-4, 4), dy: rand(-2.5, 2.5),
+        });
+    }
+    return arr;
+}
+const domeP = {
+    frontLight: makeDomeParticles(75, -1),
+    frontDark:  makeDomeParticles(75, -1),
+    backLight:  makeDomeParticles(75, +1),
+    backDark:   makeDomeParticles(75, +1),
+};
+
+// 大环彗星（金顺时针 / 紫逆时针）
+const ringComets = [];
+for (let i = 0; i < 14; i++) {
+    ringComets.push({ a: i / 14 * TAU, v: .12, gold: true });
+    ringComets.push({ a: i / 14 * TAU + .2, v: -.12, gold: false });
+}
+// 内环（中缝）彗星
+const seamComets = [];
+for (let i = 0; i < 9; i++) {
+    seamComets.push({ s: i / 9, v: .14, gold: true });
+    seamComets.push({ s: i / 9 + .05, v: -.14, gold: false });
+}
+// 交换火花（外环 ↔ 天穹）
+const sparks = [];
+
+const ringPt = a => ({ x: CX + RING_RX * Math.cos(a), y: CY + RING_RY * Math.sin(a) });
+
+/* ── 绘制 ── */
+function alpha(layer) { return (MODE_ALPHA[state.mode] || MODE_ALPHA.all)[layer] ?? 1; }
+
+function withAlpha(layer, fn) {
+    const a = alpha(layer);
+    if (a <= 0.01) return;
+    ctx.save(); ctx.globalAlpha *= a;
+    fn();
+    ctx.restore();
+}
+
+function draw(time) {
+    ctx.setTransform(SCALE, 0, 0, SCALE, 0, 0);
+    ctx.clearRect(0, 0, VW, VH);
+    const L = frontLight();          // 正面光
+    const Lb = 1 - L;                // 背面光
+
+    /* 远景星点 */
+    ctx.fillStyle = 'rgba(216,228,255,.35)';
+    for (let i = 0; i < 40; i++) {
+        const sx = (i * 137.5) % VW, sy = (i * 89.7) % VH;
+        const tw = .3 + .7 * Math.abs(Math.sin(time * .8 + i));
+        ctx.globalAlpha = .25 * tw;
+        ctx.fillRect(sx, sy, 1.6, 1.6);
+    }
+    ctx.globalAlpha = 1;
+
+    /* ── 天穹（有界天空，随光浓度变色） ── */
+    withAlpha('domes', () => {
+        drawDome(-1, L, time);
+        drawDome(+1, Lb, time);
+    });
+
+    /* ── 天穹粒子 ── */
+    withAlpha('particles', () => {
+        drawDomeParticles(domeP.frontLight, time, 'gold', L);
+        drawDomeParticles(domeP.frontDark,  time, 'dark', 1 - L);
+        drawDomeParticles(domeP.backLight,  time, 'gold', Lb);
+        drawDomeParticles(domeP.backDark,   time, 'dark', 1 - Lb);
+    });
+
+    /* ── 盘体（夹心饼干） ── */
+    withAlpha('disc', () => drawDisc(L, time));
+
+    /* ── 过渡内环（中缝流光） ── */
+    withAlpha('seam', () => drawSeam(time));
+    withAlpha('seamFlow', () => drawSeamComets(time));
+
+    /* ── 界外大环 ── */
+    withAlpha('bigRing', () => drawBigRing(time));
+    withAlpha('ringFlow', () => { drawRingComets(time); drawSparks(time); });
+
+    /* ── 日月星辰（大环中的小环） ── */
+    withAlpha('small', () => drawCelestials(time));
+
+    /* ── 标注 ── */
+    withAlpha('labels', () => drawLabels());
+}
+
+function drawDome(side, light, time) {
+    // side -1 上(正面) / +1 下(背面)
+    const baseY = CY + side * (DISC_HT/2 - 4);
+    const peakY = CY + side * (DISC_HT/2 + SKY_RY);
+    // 颜色：昼 = 暖金青，夜 = 深紫
+    const day = [70 + 90*light, 60 + 70*light, 40 + 50*light];
+    const g = ctx.createLinearGradient(0, baseY, 0, peakY);
+    g.addColorStop(0, `rgba(${day[0]|0},${day[1]|0},${day[2]+40|0},${.16 + light*.18})`);
+    g.addColorStop(1, 'rgba(10,5,22,.05)');
+    ctx.fillStyle = g;
+    ctx.beginPath();
+    ctx.ellipse(CX, baseY, DISC_RX, SKY_RY, 0, side < 0 ? Math.PI : 0, side < 0 ? TAU : Math.PI);
+    ctx.closePath();
+    ctx.fill();
+    // 天界边界线
+    ctx.strokeStyle = `rgba(180,150,255,${.22 + .15*Math.sin(time*1.4 + side)})`;
+    ctx.lineWidth = 1.4;
+    ctx.setLineDash([2, 7]);
+    ctx.beginPath();
+    ctx.ellipse(CX, baseY, DISC_RX, SKY_RY, 0, side < 0 ? Math.PI : 0, side < 0 ? TAU : Math.PI);
+    ctx.stroke();
+    ctx.setLineDash([]);
+}
+
+function drawDomeParticles(arr, time, kind, level) {
+    for (const p of arr) {
+        const tw = .35 + .65 * Math.abs(Math.sin(p.tw + time * p.tws));
+        const a = Math.max(0, (level - .08)) * tw * .95;
+        if (a < .02) continue;
+        const x = p.x + Math.sin(time * .4 + p.tw) * p.dx;
+        const y = p.y + Math.cos(time * .3 + p.tw) * p.dy;
+        ctx.fillStyle = kind === 'gold'
+            ? `rgba(244,216,138,${a})` : `rgba(176,128,224,${a})`;
+        ctx.beginPath(); ctx.arc(x, y, p.r, 0, TAU); ctx.fill();
+    }
+}
+
+function drawDisc(L, time) {
+    const top = CY - DISC_HT/2, r = CRUST * .9;
+    // 正面壳
+    let g = ctx.createLinearGradient(0, top, 0, top + CRUST);
+    g.addColorStop(0, `rgba(${52 + 50*L|0},${42 + 38*L|0},${80 + 20*L|0},.95)`);
+    g.addColorStop(1, 'rgba(26,18,50,.95)');
+    ctx.fillStyle = g;
+    roundSlab(CX - DISC_RX, top, DISC_RX*2, CRUST, r, true, false);
+    ctx.fill();
+    // 背面壳
+    g = ctx.createLinearGradient(0, top + CRUST + SEAM, 0, top + DISC_HT);
+    g.addColorStop(0, 'rgba(26,18,50,.95)');
+    g.addColorStop(1, `rgba(${52 + 50*(1-L)|0},${42 + 38*(1-L)|0},${80 + 20*(1-L)|0},.95)`);
+    ctx.fillStyle = g;
+    roundSlab(CX - DISC_RX, top + CRUST + SEAM, DISC_RX*2, CRUST, r, false, true);
+    ctx.fill();
+    // 外描边
+    ctx.strokeStyle = 'rgba(201,168,76,.30)';
+    ctx.lineWidth = 1.4;
+    roundSlab(CX - DISC_RX, top, DISC_RX*2, DISC_HT, r, true, true);
+    ctx.stroke();
+
+    // 大断崖（右缘缺口 · 唯一物理通道）
+    const gx = CX + DISC_RX - 46;
+    ctx.strokeStyle = 'rgba(80,232,208,.55)';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(gx, top + 6);
+    ctx.lineTo(gx + 10, top + CRUST*.6);
+    ctx.lineTo(gx - 6, top + CRUST + SEAM*.5);
+    ctx.lineTo(gx + 8, top + DISC_HT - CRUST*.6);
+    ctx.lineTo(gx, top + DISC_HT - 6);
+    ctx.stroke();
+}
+
+function roundSlab(x, y, w, h, r, roundTop, roundBottom) {
+    const rt = roundTop ? r : 0, rb = roundBottom ? r : 0;
+    ctx.beginPath();
+    ctx.moveTo(x + rt, y);
+    ctx.lineTo(x + w - rt, y);
+    ctx.arcTo(x + w, y, x + w, y + rt, rt || .01);
+    ctx.lineTo(x + w, y + h - rb);
+    ctx.arcTo(x + w, y + h, x + w - rb, y + h, rb || .01);
+    ctx.lineTo(x + rb, y + h);
+    ctx.arcTo(x, y + h, x, y + h - rb, rb || .01);
+    ctx.lineTo(x, y + rt);
+    ctx.arcTo(x, y, x + rt, y, rt || .01);
+    ctx.closePath();
+}
+
+function drawSeam(time) {
+    const y = CY, x0 = CX - DISC_RX + 14, x1 = CX + DISC_RX - 14;
+    const g = ctx.createLinearGradient(x0, 0, x1, 0);
+    const pulse = .25 + .12 * Math.sin(time * 2);
+    g.addColorStop(0, 'rgba(232,192,96,0)');
+    g.addColorStop(.3, `rgba(232,192,96,${pulse})`);
+    g.addColorStop(.7, `rgba(180,130,255,${pulse})`);
+    g.addColorStop(1, 'rgba(180,130,255,0)');
+    ctx.fillStyle = g;
+    ctx.fillRect(x0, y - SEAM/2 + 6, x1 - x0, SEAM - 12);
+    ctx.strokeStyle = 'rgba(240,232,255,.18)';
+    ctx.setLineDash([6, 6]);
+    ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(x0, y); ctx.lineTo(x1, y); ctx.stroke();
+    ctx.setLineDash([]);
+}
+
+function drawSeamComets(time) {
+    const y = CY, x0 = CX - DISC_RX + 18, x1 = CX + DISC_RX - 18;
+    for (const c of seamComets) {
+        c.s = (c.s + c.v * state.speed / 60 + 1) % 1;
+        const x = x0 + c.s * (x1 - x0);
+        const lane = c.gold ? -8 : 8;
+        const grad = ctx.createRadialGradient(x, y + lane, 0, x, y + lane, 14);
+        grad.addColorStop(0, c.gold ? 'rgba(244,216,138,.9)' : 'rgba(176,128,224,.9)');
+        grad.addColorStop(1, 'rgba(0,0,0,0)');
+        ctx.fillStyle = grad;
+        ctx.beginPath(); ctx.arc(x, y + lane, 14, 0, TAU); ctx.fill();
+        // 尾迹
+        ctx.strokeStyle = c.gold ? 'rgba(244,216,138,.4)' : 'rgba(176,128,224,.4)';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(x, y + lane);
+        ctx.lineTo(x - Math.sign(c.v) * 26, y + lane);
+        ctx.stroke();
+    }
+}
+
+function drawBigRing(time) {
+    ctx.strokeStyle = 'rgba(201,168,76,.35)';
+    ctx.lineWidth = 1.6;
+    ctx.setLineDash([10, 8]);
+    ctx.lineDashOffset = -time * 12;
+    ctx.beginPath();
+    ctx.ellipse(CX, CY, RING_RX, RING_RY, 0, 0, TAU);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    // 内侧伴线
+    ctx.strokeStyle = 'rgba(180,130,255,.12)';
+    ctx.beginPath();
+    ctx.ellipse(CX, CY, RING_RX - 10, RING_RY - 8, 0, 0, TAU);
+    ctx.stroke();
+}
+
+function drawRingComets(time) {
+    for (const c of ringComets) {
+        c.a = (c.a + c.v * state.speed / 60 + TAU) % TAU;
+        const p = ringPt(c.a);
+        const grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, 12);
+        grad.addColorStop(0, c.gold ? 'rgba(244,216,138,.85)' : 'rgba(176,128,224,.85)');
+        grad.addColorStop(1, 'rgba(0,0,0,0)');
+        ctx.fillStyle = grad;
+        ctx.beginPath(); ctx.arc(p.x, p.y, 12, 0, TAU); ctx.fill();
+        const tail = ringPt(c.a - Math.sign(c.v) * .05);
+        ctx.strokeStyle = c.gold ? 'rgba(244,216,138,.35)' : 'rgba(176,128,224,.35)';
+        ctx.lineWidth = 2;
+        ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(tail.x, tail.y); ctx.stroke();
+    }
+}
+
+/* 外环 ↔ 天穹 的交换火花 */
+function drawSparks(time) {
+    // 流向取决于 dL/dt 符号：L 上升 → 光涌向正面、暗涌向背面
+    const dL = -Math.sin(state.phase);             // dL/dφ
+    const rate = Math.abs(dL) * state.speed * .9;  // 每帧期望生成数
+    if (state.playing && Math.random() < rate) {
+        const gold = Math.random() < .5;
+        // 光流向 L 上升的面；暗反之
+        const toFront = (dL > 0) === gold;
+        const side = toFront ? -1 : 1;
+        const t0 = ringPt(side < 0 ? rand(-2.4, -0.7) : rand(0.7, 2.4));
+        sparks.push({
+            x: t0.x, y: t0.y,
+            tx: CX + rand(-DISC_RX*.7, DISC_RX*.7),
+            ty: CY + side * (DISC_HT/2 + rand(40, SKY_RY - 60)),
+            s: 0, gold,
+        });
+    }
+    for (const sp of sparks) {
+        sp.s += .012 * state.speed;
+        const t = sp.s, mx = (sp.x + sp.tx)/2, my = (sp.y + sp.ty)/2 + (sp.ty > CY ? 40 : -40);
+        const x = (1-t)*(1-t)*sp.x + 2*(1-t)*t*mx + t*t*sp.tx;
+        const y = (1-t)*(1-t)*sp.y + 2*(1-t)*t*my + t*t*sp.ty;
+        ctx.fillStyle = sp.gold
+            ? `rgba(244,216,138,${.8*(1-t)})` : `rgba(176,128,224,${.8*(1-t)})`;
+        ctx.beginPath(); ctx.arc(x, y, 2.4, 0, TAU); ctx.fill();
+    }
+    for (let i = sparks.length - 1; i >= 0; i--) if (sparks[i].s >= 1) sparks.splice(i, 1);
+}
+
+/* 日月星辰 —— 大环中的小环 */
+function drawCelestials(time) {
+    const aSun = state.phase - Math.PI/2;
+    drawSmallRing(aSun, 26, '#f4d88a', 'rgba(232,192,96,', time, 1);    // 日环
+    drawSmallRing(aSun + Math.PI, 18, '#bcd4ff', 'rgba(150,180,255,', time, .6); // 月环
+    // 星环：大环上的众多小圈
+    for (let i = 0; i < 10; i++) {
+        const a = aSun + Math.PI * (.25 + i * .155) + Math.sin(i * 7) * .1;
+        drawSmallRing(a, 5 + (i % 3) * 2, '#d8e4ff', 'rgba(216,228,255,', time, .3, true);
+    }
+}
+
+function drawSmallRing(a, r, coreColor, glowPrefix, time, strength, isStar) {
+    const p = ringPt(a);
+    // 与大环的交换辉光
+    const ex = .5 + .5 * Math.sin(time * 3 + a * 4);
+    const glow = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, r * 3.2);
+    glow.addColorStop(0, glowPrefix + (strength * (.30 + .25*ex)) + ')');
+    glow.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = glow;
+    ctx.beginPath(); ctx.arc(p.x, p.y, r * 3.2, 0, TAU); ctx.fill();
+    // 环本体（空心圈，强调「环」而非「球」）
+    ctx.strokeStyle = coreColor;
+    ctx.lineWidth = isStar ? 1.2 : 2.4;
+    ctx.beginPath(); ctx.arc(p.x, p.y, r, 0, TAU); ctx.stroke();
+    if (!isStar) {
+        // 环上巡行的原素点 → 暗示与大环的交换
+        for (let i = 0; i < 3; i++) {
+            const oa = time * 1.6 + i * TAU/3;
+            ctx.fillStyle = coreColor;
+            ctx.beginPath();
+            ctx.arc(p.x + Math.cos(oa)*r, p.y + Math.sin(oa)*r, 2.4, 0, TAU);
+            ctx.fill();
+        }
+        // 与大环之间的交换刻线
+        const t1 = ringPt(a + .06), t2 = ringPt(a - .06);
+        ctx.strokeStyle = glowPrefix + (.35 * ex) + ')';
+        ctx.lineWidth = 1.2;
+        ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(t1.x, t1.y);
+        ctx.moveTo(p.x, p.y); ctx.lineTo(t2.x, t2.y); ctx.stroke();
+    }
+}
+
+function drawLabels() {
+    ctx.font = '11px "JetBrains Mono", monospace';
+    ctx.textAlign = 'left';
+    label(CX + RING_RX*.72, CY - RING_RY*.78, '界外大环 · 假想轨道（非物理）', 'rgba(232,192,96,.75)');
+    label(CX - DISC_RX - 8, CY - DISC_HT/2 - SKY_RY*.8, '有界天空 · 正面', 'rgba(180,150,255,.7)', 'right');
+    label(CX - DISC_RX - 8, CY + DISC_HT/2 + SKY_RY*.8, '有界天空 · 背面', 'rgba(180,150,255,.7)', 'right');
+    label(CX - DISC_RX + 16, CY - DISC_HT/2 - 10, '正面世界', 'rgba(240,232,255,.8)');
+    label(CX - DISC_RX + 16, CY + DISC_HT/2 + 18, '背面世界', 'rgba(240,232,255,.8)');
+    label(CX - 40, CY + 4, '过渡地带 · 内环', 'rgba(240,232,255,.65)');
+    label(CX + DISC_RX - 40, CY - DISC_HT/2 - 10, '大断崖 · 唯一物理通道', 'rgba(80,232,208,.8)', 'right');
+    const sun = ringPt(state.phase - Math.PI/2);
+    label(sun.x + 32, sun.y - 6, '日环', 'rgba(244,216,138,.9)');
+    const moon = ringPt(state.phase + Math.PI/2);
+    label(moon.x + 26, moon.y - 6, '月环', 'rgba(188,212,255,.85)');
+}
+
+function label(x, y, text, color, align='left') {
+    ctx.textAlign = align;
+    ctx.fillStyle = color;
+    ctx.fillText(text, x, y);
+}
+
+/* ── 相位文案 ── */
+function phaseText() {
+    const deg = ((state.phase * 180 / Math.PI) % 360 + 360) % 360;
+    if (deg < 45 || deg >= 315) return '正面 · 正午 ── 背面 · 深夜';
+    if (deg < 135) return '正面 · 黄昏 → 光原素经双环流向背面';
+    if (deg < 225) return '正面 · 深夜 ── 背面 · 正午';
+    return '正面 · 黎明 ← 光原素经双环涌回正面';
+}
+
+/* ── 法则01 小图：局部均衡 ── */
+const bCanvas = $('#balance-canvas');
+const bCtx = bCanvas.getContext('2d');
+function drawBalance(time) {
+    const W = 640, H = 240;
+    bCtx.setTransform(1, 0, 0, 1, 0, 0);
+    bCtx.clearRect(0, 0, W, H);
+    const L = frontLight();
+    const rows = [
+        { y: 30,  name: '正面 · 区域A', light: L },
+        { y: 135, name: '背面 · 区域A', light: 1 - L },
+    ];
+    bCtx.font = '12px "JetBrains Mono", monospace';
+    for (const r of rows) {
+        bCtx.fillStyle = 'rgba(184,168,216,.9)';
+        bCtx.textAlign = 'left';
+        bCtx.fillText(r.name, 20, r.y + 4);
+        // 槽
+        const bx = 150, bw = 400, bh = 16;
+        for (const [i, kind] of [['light'], ['dark']].map((_, i) => [i, i ? 'dark' : 'light'])) {
+            const y = r.y - 8 + i * 28;
+            const lv = kind === 'light' ? r.light : 1 - r.light;
+            bCtx.fillStyle = 'rgba(255,255,255,.05)';
+            bCtx.fillRect(bx, y, bw, bh);
+            const g = bCtx.createLinearGradient(bx, 0, bx + bw, 0);
+            if (kind === 'light') { g.addColorStop(0, 'rgba(244,216,138,.9)'); g.addColorStop(1, 'rgba(232,192,96,.5)'); }
+            else { g.addColorStop(0, 'rgba(176,128,224,.9)'); g.addColorStop(1, 'rgba(120,80,180,.5)'); }
+            bCtx.fillStyle = g;
+            bCtx.fillRect(bx, y, bw * lv, bh);
+            bCtx.fillStyle = kind === 'light' ? '#f4d88a' : '#c8a0ff';
+            bCtx.textAlign = 'left';
+            bCtx.fillText(kind === 'light' ? '光' : '暗', bx - 22, y + 13);
+            bCtx.textAlign = 'right';
+            bCtx.fillText((lv * 100).toFixed(0) + '%', bx + bw + 42, y + 13);
+        }
+    }
+    // 守恒说明
+    bCtx.textAlign = 'center';
+    bCtx.fillStyle = 'rgba(106,88,144,.95)';
+    bCtx.fillText('光(x) + 暗(x) ≡ 100% · 正反两面互为镜像', W/2, H - 14);
+}
+
+/* ── 控制 ── */
+$('#btn-pause').addEventListener('click', () => {
+    state.playing = !state.playing;
+    $('#btn-pause').textContent = state.playing ? '⏸ 暂停' : '▶ 播放';
+});
+$('#ctl-speed').addEventListener('input', e => {
+    state.speed = Number(e.target.value);
+    $('#speed-val').textContent = state.speed.toFixed(2).replace(/0+$/,'').replace(/\.$/,'.0') + '×';
+});
+$('#ctl-phase').addEventListener('input', e => {
+    state.phase = Number(e.target.value) * Math.PI / 180;
+});
+$$('.mode').forEach(b => b.addEventListener('click', () => {
+    state.mode = b.dataset.mode;
+    $$('.mode').forEach(x => x.classList.toggle('active', x === b));
+    $('#mode-tip').textContent = MODE_TIP[state.mode];
+}));
+$('#mode-tip').textContent = MODE_TIP.all;
+
+/* ── 主循环 ── */
+let last = performance.now();
+function loop(now) {
+    const dt = Math.min(.1, (now - last) / 1000);
+    last = now;
+    if (state.playing) {
+        state.phase = (state.phase + TAU * dt * state.speed / state.period) % TAU;
+        $('#ctl-phase').value = Math.round(state.phase * 180 / Math.PI);
+    }
+    draw(now / 1000);
+    drawBalance(now / 1000);
+    $('#phase-chip').textContent = phaseText();
+    requestAnimationFrame(loop);
+}
+
+resize();
+requestAnimationFrame(now => { last = now; requestAnimationFrame(loop); });
+</script>
+</body>
+</html>

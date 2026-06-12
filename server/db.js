@@ -33,6 +33,20 @@ db.exec(`
   );
 
   CREATE INDEX IF NOT EXISTS idx_attachments_node ON attachments(node_id);
+
+  CREATE TABLE IF NOT EXISTS levels (
+    id          INTEGER PRIMARY KEY AUTOINCREMENT,
+    name        TEXT NOT NULL,
+    author      TEXT DEFAULT '',
+    description TEXT DEFAULT '',
+    data        TEXT NOT NULL,
+    width       INTEGER NOT NULL DEFAULT 60,
+    height      INTEGER NOT NULL DEFAULT 20,
+    plays       INTEGER NOT NULL DEFAULT 0,
+    edit_key    TEXT NOT NULL,
+    created_at  INTEGER NOT NULL,
+    updated_at  INTEGER NOT NULL
+  );
 `);
 
 module.exports = db;

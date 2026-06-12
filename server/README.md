@@ -1,6 +1,6 @@
 # 解析世界 · 世界观数据库 后端
 
-为站点 `世界观数据库.html` 提供数据存储与文件管理。
+为站点 `世界观数据库.html` 与 `关卡编辑器.html`（关卡工坊）提供数据存储与文件管理。
 
 ## 功能
 - **树形目录**：自定义任意层级的目录 / 条目结构
@@ -9,7 +9,11 @@
   - `.md` 客户端用 marked + KaTeX 渲染
   - `.tex` 客户端做轻量解析 + KaTeX 数学公式
   - `.docx` 服务端用 mammoth 转 HTML 缓存
-- **权限**：读取公开 · 写入需要 `ADMIN_TOKEN`
+- **搜索**：`/api/search` 按名称 / 简介模糊检索条目（数据库页左侧搜索框走客户端过滤，此接口供外部调用）
+- **关卡工坊**：社区共创的 2D 平台游戏关卡库
+  - 任何人可创建关卡，创建时返回一次性 `edit_key`（编辑器自动保存在浏览器本地）
+  - 修改 / 删除需携带 `X-Edit-Key`（或管理员令牌）
+- **权限**：读取公开 · 设定写入需要 `ADMIN_TOKEN` · 关卡写入凭 `edit_key`
 
 ## 启动
 
@@ -57,8 +61,16 @@ npm start
 | GET | `/api/attachments/:id/content` | – | 取文本 / 已渲染 HTML |
 | DELETE | `/api/attachments/:id` | ✓ | 删除附件 |
 | POST | `/api/auth/check` | – | 校验令牌 `{token}` |
+| GET | `/api/search?q=` | – | 按名称 / 简介检索条目（含面包屑路径） |
+| GET | `/api/levels` | – | 关卡列表（仅元数据） |
+| GET | `/api/levels/:id` | – | 关卡完整数据 |
+| POST | `/api/levels` | – | 创建关卡，返回 `{id, edit_key}` |
+| PATCH | `/api/levels/:id` | ◆ | 更新关卡 |
+| DELETE | `/api/levels/:id` | ◆ | 删除关卡 |
+| POST | `/api/levels/:id/play` | – | 试玩计数 +1 |
 
-写操作请在请求头中带上 `X-Admin-Token: <你的 token>`。
+写操作请在请求头中带上 `X-Admin-Token: <你的 token>`；
+关卡写操作（◆）带上创建时获得的 `X-Edit-Key`（管理员令牌亦可）。
 
 ## 部署提示
 - 反向代理（nginx / caddy）转发到 `localhost:PORT`
