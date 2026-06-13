@@ -1,4 +1,26 @@
-# 解析世界 · 世界观数据库 后端
+# 鎏金枢界 · NEXUS 后端
+
+为新站点 `index.html` → `nexus.html`（档案库 + 共鸣场论坛 + 世界脉络动画）提供数据存储；
+同时兼容旧站点 `世界观数据库.html`、`关卡编辑器.html`（关卡工坊）的数据与文件管理。
+
+> **管理密钥（ADMIN_TOKEN）默认值为 `1MIKI0`**，可用环境变量覆盖。
+
+## NEXUS 接口
+| 方法 | 路径 | 鉴权 | 说明 |
+|---|---|---|---|
+| GET | `/api/arc/entries?q=&category=` | – | 档案列表 + 分类计数 |
+| GET | `/api/arc/entries/:id` | – | 档案详情 + 关联回响 |
+| POST/PATCH/DELETE | `/api/arc/entries/:id` | ✓ | 织入 / 修订 / 抹除档案 |
+| GET | `/api/forum/threads[?entry_id=]` | – | 回响串列表 |
+| GET | `/api/forum/threads/:id` | – | 回响串 + 全部回帖 |
+| POST | `/api/forum/threads` | – | 发起回响串（可带 entry_id） |
+| POST | `/api/forum/threads/:id/posts` | – | 回帖 |
+| PATCH/DELETE | `/api/forum/threads/:id` | ✓ | 置顶 / 改题 / 删除 |
+| DELETE | `/api/forum/posts/:id` | ✓ | 删除单条回帖 |
+
+首次启动会自动播种「原素 / 生息 / 魔力 / 世界平衡机制 / 一体两面之盘 / 昼夜与日月星辰」六篇档案与一条置顶欢迎帖。
+
+---
 
 为站点 `世界观数据库.html` 与 `关卡编辑器.html`（关卡工坊）提供数据存储与文件管理。
 
