@@ -1,87 +1,2420 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>鎏金枢界 · NEXUS</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;700;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-<style>
-*,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
-:root {
-    --ink:#0d0714; --milk:#fdf6ea; --milk-3:#9a86bb;
-    --au:#f2bd4e; --vio:#9d5cf0;
-    --grad: linear-gradient(120deg,#f7cf6b,#f2bd4e 30%,#c277f5 70%,#8b46e8);
-}
-html,body { height:100%; }
-body {
-    background: radial-gradient(120% 90% at 70% -10%, #1d0f33 0%, var(--ink) 55%) fixed;
-    color: var(--milk);
-    font-family:"Noto Sans SC",sans-serif;
-    overflow:hidden;
-    display:flex; align-items:center; justify-content:center;
-    cursor:pointer;
-}
-.blobs { position:fixed; inset:0; z-index:0; overflow:hidden; filter:blur(70px) saturate(1.2); }
-.blob { position:absolute; opacity:.55; }
-.b1 { width:46vw;height:46vw;left:-12vw;top:-14vw; background:radial-gradient(circle at 35% 35%,#f2bd4e,#d97c26 60%,transparent 75%); animation:m1 24s ease-in-out infinite alternate; }
-.b2 { width:54vw;height:54vw;right:-16vw;top:14vh; background:radial-gradient(circle at 60% 40%,#9d5cf0,#5d22c8 65%,transparent 78%); animation:m2 30s ease-in-out infinite alternate; }
-.b3 { width:38vw;height:38vw;left:26vw;bottom:-20vw; background:radial-gradient(circle at 50% 50%,#e89bd0,#b64ce0 60%,transparent 78%); opacity:.32; animation:m3 36s ease-in-out infinite alternate; }
-@keyframes m1 { 0%{border-radius:58% 42% 55% 45%/50% 58% 42% 50%;transform:translate(0,0) scale(1);}100%{border-radius:42% 58% 45% 55%/58% 42% 58% 42%;transform:translate(8vw,6vh) rotate(26deg) scale(1.12);} }
-@keyframes m2 { 0%{border-radius:45% 55% 60% 40%/55% 45% 55% 45%;transform:translate(0,0) scale(1);}100%{border-radius:60% 40% 42% 58%/42% 60% 40% 60%;transform:translate(-9vw,-5vh) rotate(-20deg) scale(1.08);} }
-@keyframes m3 { 0%{border-radius:50% 50% 44% 56%/56% 44% 56% 44%;transform:translate(0,0) scale(1);}100%{border-radius:40% 60% 58% 42%/46% 58% 42% 58%;transform:translate(5vw,-7vh) scale(1.18);} }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>解析世界 · 导航</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700;900&family=Noto+Sans+SC:wght@300;400;500&family=JetBrains+Mono:wght@400;500&family=Cinzel+Decorative:wght@400;700&family=Great+Vibes&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --void: #05020e;
+            --border: rgba(180,130,255,.1);
+            --text: #ede8ff;
+            --text-2: #b8a8d8;
+            --text-3: #6a5890;
+            --gold: #e8b850;
+            --gold-b: rgba(232,184,80,.3);
+            --purple: #c090ff;
+            --blue: #7ab8f0;
+            --teal: #50e8d0;
+        }
 
-.portal { position:relative; z-index:2; text-align:center; padding:30px; }
-.orb {
-    width:128px; height:128px; margin:0 auto 38px;
-    border-radius:50%;
-    background: var(--grad);
-    box-shadow: 0 0 50px rgba(242,189,78,.5), 0 0 90px rgba(157,92,240,.4);
-    position:relative;
-    animation: orbF 5s ease-in-out infinite;
-}
-.orb::after { content:""; position:absolute; inset:22px; border-radius:50%; background:radial-gradient(circle at 34% 28%,rgba(255,255,255,.9),transparent 56%); }
-.orb::before {
-    content:""; position:absolute; inset:-14px; border-radius:50%;
-    border:1px solid rgba(242,189,78,.3);
-    animation: ring 8s linear infinite;
-}
-@keyframes orbF { 50%{ transform:translateY(-8px) scale(1.05);} }
-@keyframes ring { to { transform:rotate(360deg); } }
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
-h1 {
-    font-size: clamp(40px,8vw,90px); font-weight:900; letter-spacing:.16em; line-height:1.1;
-    background: var(--grad); background-size:200% 100%;
-    -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
-    animation: flow 7s ease-in-out infinite alternate;
-}
-@keyframes flow { to { background-position:100% 0; } }
-.en { font-family:"JetBrains Mono",monospace; font-size:13px; letter-spacing:.7em; color:var(--milk-3); margin:14px 0 48px; padding-left:.7em; }
-.enter {
-    display:inline-flex; align-items:center; gap:12px;
-    padding:16px 44px; border-radius:999px;
-    font-size:16px; font-weight:700; letter-spacing:.16em;
-    color:#1a0d05; background: var(--grad); background-size:160% 100%;
-    text-decoration:none; border:none; cursor:pointer; font-family:inherit;
-    box-shadow:0 12px 40px rgba(190,120,120,.35);
-    transition:.4s cubic-bezier(.34,1.56,.44,1);
-}
-.enter:hover { background-position:100% 0; transform:translateY(-3px) scale(1.04); box-shadow:0 18px 50px rgba(157,92,240,.5); }
-.enter .arr { transition:.4s; } .enter:hover .arr { transform:translateX(6px); }
-.hint { margin-top:30px; font-size:12px; letter-spacing:.3em; color:var(--milk-3); opacity:.7; animation: blink 3s ease-in-out infinite; }
-@keyframes blink { 50%{opacity:.25;} }
-@media(prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;}}
-</style>
+        html, body {
+            height: 100%;
+            overflow: hidden;
+        }
+
+        body {
+            background: #04010b;
+            color: var(--text);
+            font-family: "Noto Sans SC", sans-serif;
+        }
+
+        /* ── keyframes ── */
+        @keyframes twinkle {
+            0% {
+                opacity: .7
+            }
+
+            100% {
+                opacity: 1
+            }
+        }
+
+        @keyframes gridDrift {
+            to {
+                background-position: 60px 60px;
+            }
+        }
+
+        @keyframes scanLine {
+            from {
+                top: -1px
+            }
+
+            to {
+                top: 100%
+            }
+        }
+
+        @keyframes breathe {
+            0%,100% {
+                opacity: .5;
+                transform: translate(-50%,-50%) scale(.95)
+            }
+
+            50% {
+                opacity: 1;
+                transform: translate(-50%,-50%) scale(1.05)
+            }
+        }
+
+        @keyframes gemPulse {
+            0%,100% {
+                box-shadow: 0 0 6px rgba(232,184,80,.3);
+                opacity: .6
+            }
+
+            50% {
+                box-shadow: 0 0 22px rgba(232,184,80,.8);
+                opacity: 1
+            }
+        }
+
+        @keyframes ringRotate {
+            to {
+                transform: translate(-50%,-50%) rotate(360deg);
+            }
+        }
+
+        @keyframes ringRotateRev {
+            to {
+                transform: translate(-50%,-50%) rotate(-360deg);
+            }
+        }
+
+        @keyframes ringRotateSimple {
+            to {
+                transform: translateX(-50%) rotate(360deg);
+            }
+        }
+
+        @keyframes orbPulse {
+            0%,100% {
+                opacity: .5
+            }
+
+            50% {
+                opacity: 1
+            }
+        }
+
+        @keyframes compassSpin {
+            to {
+                transform: translateX(-50%) rotate(360deg);
+            }
+        }
+
+        @keyframes hintPulse {
+            0%,100% {
+                opacity: .3;
+                transform: translateX(-50%) translateY(0)
+            }
+
+            50% {
+                opacity: .8;
+                transform: translateX(-50%) translateY(4px)
+            }
+        }
+
+        /* GLITCH EFFECT — fires 3 times per 10s cycle */
+        /* Glitch windows at ~30%, ~63%, ~96% of 10s = t=3s,6.3s,9.6s each ~0.4s wide */
+        @keyframes glitch1 {
+            0%,27%,33%,60%,66%,93%,100% { clip-path:none;transform:none;opacity:1;filter:none }
+            28%  { clip-path:polygon(0 15%,100% 15%,100% 30%,0 30%);transform:translate(-3px,0);opacity:.9;filter:hue-rotate(90deg) }
+            29%  { clip-path:polygon(0 55%,100% 55%,100% 70%,0 70%);transform:translate(3px,0);filter:hue-rotate(-30deg) }
+            30%  { clip-path:polygon(0 5%,100% 5%,100% 12%,0 12%);transform:translate(-2px,0);filter:hue-rotate(60deg) }
+            31%  { clip-path:none;transform:none;filter:none }
+            61%  { clip-path:polygon(0 20%,100% 20%,100% 38%,0 38%);transform:translate(3px,0);opacity:.9;filter:hue-rotate(-90deg) }
+            62%  { clip-path:polygon(0 60%,100% 60%,100% 75%,0 75%);transform:translate(-3px,0);filter:hue-rotate(40deg) }
+            63%  { clip-path:polygon(0 8%,100% 8%,100% 16%,0 16%);transform:translate(2px,0);filter:hue-rotate(-60deg) }
+            64%  { clip-path:none;transform:none;filter:none }
+            94%  { clip-path:polygon(0 40%,100% 40%,100% 55%,0 55%);transform:translate(-3px,0);opacity:.9;filter:hue-rotate(120deg) }
+            95%  { clip-path:polygon(0 10%,100% 10%,100% 22%,0 22%);transform:translate(3px,0);filter:hue-rotate(-45deg) }
+            96%  { clip-path:polygon(0 70%,100% 70%,100% 82%,0 82%);transform:translate(-2px,0);filter:hue-rotate(80deg) }
+            97%  { clip-path:none;transform:none;filter:none }
+        }
+
+        @keyframes glitch2 {
+            0%,25%,32%,58%,65%,91%,100% { opacity:0;transform:none }
+            26% { opacity:.7;transform:translate(4px,0);clip-path:polygon(0 40%,100% 40%,100% 55%,0 55%);filter:hue-rotate(180deg) brightness(1.4) }
+            27% { opacity:.5;transform:translate(-4px,0);clip-path:polygon(0 70%,100% 70%,100% 85%,0 85%);filter:hue-rotate(-90deg) }
+            28% { opacity:0 }
+            59% { opacity:.7;transform:translate(-4px,0);clip-path:polygon(0 25%,100% 25%,100% 42%,0 42%);filter:hue-rotate(200deg) brightness(1.3) }
+            60% { opacity:.5;transform:translate(4px,0);clip-path:polygon(0 60%,100% 60%,100% 78%,0 78%);filter:hue-rotate(-120deg) }
+            61% { opacity:0 }
+            92% { opacity:.7;transform:translate(4px,0);clip-path:polygon(0 15%,100% 15%,100% 32%,0 32%);filter:hue-rotate(160deg) brightness(1.5) }
+            93% { opacity:.5;transform:translate(-4px,0);clip-path:polygon(0 65%,100% 65%,100% 80%,0 80%);filter:hue-rotate(-80deg) }
+            94% { opacity:0 }
+        }
+
+        @keyframes glitch3 {
+            0%,27%,34%,60%,67%,92%,100% { opacity:0 }
+            28% { opacity:.4;transform:translate(0,2px);filter:hue-rotate(270deg) saturate(3) }
+            29% { opacity:0 }
+            61% { opacity:.4;transform:translate(0,-2px);filter:hue-rotate(300deg) saturate(4) }
+            62% { opacity:0 }
+            93% { opacity:.4;transform:translate(0,2px);filter:hue-rotate(240deg) saturate(3.5) }
+            94% { opacity:0 }
+        }
+
+        @keyframes orbSpin {
+            0%   { transform: translate(-50%,-50%) rotate(0deg) scale(1); }
+            50%  { transform: translate(-50%,-50%) rotate(180deg) scale(1.03); }
+            100% { transform: translate(-50%,-50%) rotate(360deg) scale(1); }
+        }
+
+        @keyframes magicAurora {
+            0%,100% { opacity:.18; transform:translate(-50%,-50%) scale(1) rotate(0deg); }
+            33%     { opacity:.28; transform:translate(-50%,-50%) scale(1.08) rotate(120deg); }
+            66%     { opacity:.22; transform:translate(-50%,-50%) scale(.95) rotate(240deg); }
+        }
+
+        @keyframes magicRune {
+            0%   { opacity:0; transform:translate(-50%,-50%) rotate(0deg) scale(.8); }
+            10%  { opacity:.25; }
+            50%  { opacity:.15; transform:translate(-50%,-50%) rotate(180deg) scale(1.1); }
+            90%  { opacity:.25; }
+            100% { opacity:0; transform:translate(-50%,-50%) rotate(360deg) scale(.8); }
+        }
+
+        @keyframes magicShoot {
+            0%   { opacity:0; transform:scaleX(0) translateX(0); }
+            20%  { opacity:.8; }
+            80%  { opacity:.5; }
+            100% { opacity:0; transform:scaleX(1) translateX(0); }
+        }
+
+        @keyframes energyWave {
+            0%   { transform:translate(-50%,-50%) scale(0.5); opacity:.5; }
+            100% { transform:translate(-50%,-50%) scale(2.5); opacity:0; }
+        }
+
+        /* Magic aurora/rune-ring helpers no longer needed — geometry is in SVG */
+
+        @keyframes titleFloat {
+            0%,100% { transform: translateX(-50%) translateY(0) }
+            50%      { transform: translateX(-50%) translateY(-6px) }
+        }
+
+        @keyframes shimmerGold {
+            0%,100% {
+                background-position: 0% 50%
+            }
+
+            50% {
+                background-position: 100% 50%
+            }
+        }
+
+        @keyframes particleDrift {
+            0% {
+                transform: translateY(0) translateX(0);
+                opacity: 0
+            }
+
+            10% {
+                opacity: 1
+            }
+
+            90% {
+                opacity: .6
+            }
+
+            100% {
+                transform: translateY(-120px) translateX(var(--drift));
+                opacity: 0
+            }
+        }
+
+        @keyframes nodeRotate {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes dashedOrbit {
+            to {
+                stroke-dashoffset: -200;
+            }
+        }
+
+        @keyframes lineFlow {
+            0% {
+                opacity: 0;
+                stroke-dashoffset: 300
+            }
+
+            30% {
+                opacity: .6
+            }
+
+            70% {
+                opacity: .6
+            }
+
+            100% {
+                opacity: 0;
+                stroke-dashoffset: 0
+            }
+        }
+
+        @keyframes crosshairPulse {
+            0%,100% {
+                opacity: .2;
+                transform: translate(-50%,-50%) scale(.95)
+            }
+
+            50% {
+                opacity: .5;
+                transform: translate(-50%,-50%) scale(1.02)
+            }
+        }
+
+        @keyframes dataScroll {
+            0% {
+                transform: translateY(0)
+            }
+
+            100% {
+                transform: translateY(-50%)
+            }
+        }
+
+        /* ── shared background ── */
+        .stars {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            background-image: radial-gradient(1px 1px at 10% 15%,rgba(255,255,255,.70) 0%,transparent 100%), radial-gradient(1px 1px at 25% 60%,rgba(255,255,255,.50) 0%,transparent 100%), radial-gradient(1.5px 1.5px at 40% 25%,rgba(200,160,255,.80) 0%,transparent 100%), radial-gradient(1px 1px at 55% 80%,rgba(255,255,255,.60) 0%,transparent 100%), radial-gradient(1px 1px at 70% 10%,rgba(255,255,255,.50) 0%,transparent 100%), radial-gradient(1.5px 1.5px at 80% 45%,rgba(232,184,80,.70) 0%,transparent 100%), radial-gradient(1px 1px at 90% 70%,rgba(255,255,255,.60) 0%,transparent 100%), radial-gradient(1px 1px at 15% 85%,rgba(255,255,255,.40) 0%,transparent 100%), radial-gradient(1px 1px at 60% 50%,rgba(160,130,255,.60) 0%,transparent 100%), radial-gradient(1.5px 1.5px at 35% 40%,rgba(255,255,255,.50) 0%,transparent 100%), radial-gradient(1px 1px at 75% 20%,rgba(255,255,255,.70) 0%,transparent 100%), radial-gradient(1px 1px at 5% 50%,rgba(255,255,255,.40) 0%,transparent 100%), radial-gradient(1px 1px at 50% 5%,rgba(200,160,255,.50) 0%,transparent 100%), radial-gradient(1px 1px at 85% 90%,rgba(255,255,255,.50) 0%,transparent 100%), radial-gradient(1.5px 1.5px at 20% 30%,rgba(232,184,80,.50) 0%,transparent 100%), radial-gradient(1px 1px at 93% 33%,rgba(255,255,255,.38) 0%,transparent 100%), radial-gradient(1px 1px at 44% 91%,rgba(180,120,255,.45) 0%,transparent 100%), radial-gradient(1.5px 1.5px at 62% 62%,rgba(232,184,80,.35) 0%,transparent 100%);
+            animation: twinkle 8s ease-in-out infinite alternate;
+        }
+
+        .bg-grid {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            background-image: linear-gradient(rgba(180,100,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(180,100,255,.025) 1px,transparent 1px);
+            background-size: 60px 60px;
+            animation: gridDrift 80s linear infinite;
+        }
+
+        .bg-scan {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1;
+            pointer-events: none;
+            height: 1px;
+            background: linear-gradient(90deg,transparent,rgba(232,184,80,.14),rgba(180,80,255,.1),transparent);
+            animation: scanLine 22s linear infinite;
+        }
+
+        /* ── PARTICLE CANVAS ── */
+        #particle-canvas {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* ── GEOMETRIC SVG LAYER ── */
+        #geo-svg {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* ════════════════════════════
+           COVER
+        ════════════════════════════ */
+        #cover {
+            position: fixed;
+            inset: 0;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            cursor: pointer;
+            transition: opacity 1s ease;
+        }
+
+            #cover.fade-out {
+                opacity: 0;
+                pointer-events: none;
+            }
+
+        /* ── Full-page geometric frame (like the book cover) ── */
+        .cover-frame-svg {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        /* ── Magic Circle SVG around portal ── */
+        .magic-circle-svg {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 200%;
+            height: 200%;
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        /* portal */
+        .cover-portal {
+            position: relative;
+            width: min(440px,78vw);
+            height: min(440px,78vw);
+            margin-top: -60px;
+            overflow: visible;
+        }
+
+        .portal-ring {
+            position: absolute;
+            border-radius: 50%;
+            border: 1px solid;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%,-50%);
+        }
+
+        .ring-1 {
+            width: 100%;
+            height: 100%;
+            border-color: rgba(180,120,255,.35);
+            box-shadow: 0 0 12px rgba(180,100,255,.2), inset 0 0 8px rgba(180,100,255,.1);
+        }
+
+        .ring-2 {
+            width: 88%;
+            height: 88%;
+            border-color: rgba(232,184,80,.32);
+            box-shadow: 0 0 10px rgba(232,184,80,.15);
+        }
+
+        .ring-3 {
+            width: 76%;
+            height: 76%;
+            border-color: rgba(180,120,255,.25);
+            box-shadow: 0 0 8px rgba(180,100,255,.12);
+        }
+
+        .ring-4 {
+            width: 108%;
+            height: 108%;
+            border-style: dashed;
+            border-width: 1px;
+            border-color: rgba(232,184,80,.18);
+        }
+
+        .ring-5 {
+            width: 116%;
+            height: 116%;
+            border-color: rgba(100,60,200,.25);
+            box-shadow: 0 0 14px rgba(100,60,200,.12);
+        }
+
+        .portal-cross {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+        }
+
+            .portal-cross::before, .portal-cross::after {
+                content: "";
+                position: absolute;
+                background: linear-gradient(transparent,rgba(232,184,80,.18),rgba(232,184,80,.09),transparent);
+            }
+
+            .portal-cross::before {
+                width: 1px;
+                height: 130%;
+                top: -15%;
+                left: 50%;
+                transform: translateX(-50%);
+            }
+
+            .portal-cross::after {
+                height: 1px;
+                width: 130%;
+                left: -15%;
+                top: 50%;
+                transform: translateY(-50%);
+            }
+
+        .diamond {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            border: 1px solid rgba(232,184,80,.55);
+            transform: rotate(45deg);
+            animation: gemPulse 3s ease-in-out infinite;
+        }
+
+        .d-top {
+            top: -5px;
+            left: 50%;
+            margin-left: -5px;
+        }
+
+        .d-bot {
+            bottom: -5px;
+            left: 50%;
+            margin-left: -5px;
+            animation-delay: .75s;
+        }
+
+        .d-left {
+            left: -5px;
+            top: 50%;
+            margin-top: -5px;
+            animation-delay: 1.5s;
+        }
+
+        .d-right {
+            right: -5px;
+            top: 50%;
+            margin-top: -5px;
+            animation-delay: 2.25s;
+        }
+
+        /* extra corner marks */
+        .corner-mark {
+            position: absolute;
+            width: 18px;
+            height: 18px;
+            border-color: rgba(232,184,80,.3);
+            border-style: solid;
+        }
+
+        .cm-tl {
+            top: 8%;
+            left: 8%;
+            border-width: 1px 0 0 1px;
+        }
+
+        .cm-tr {
+            top: 8%;
+            right: 8%;
+            border-width: 1px 1px 0 0;
+        }
+
+        .cm-bl {
+            bottom: 8%;
+            left: 8%;
+            border-width: 0 0 1px 1px;
+        }
+
+        .cm-br {
+            bottom: 8%;
+            right: 8%;
+            border-width: 0 1px 1px 0;
+        }
+
+        .orb {
+            position: absolute;
+            width: 62%;
+            height: 62%;
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%,-50%);
+            overflow: hidden;
+            cursor: pointer;
+            border: 1px solid rgba(180,120,255,.35);
+            box-shadow: 0 0 40px rgba(120,50,200,.4),0 0 80px rgba(100,40,180,.2),inset 0 0 30px rgba(60,20,120,.3);
+            transition: box-shadow .3s ease;
+        }
+
+            .orb:hover {
+                box-shadow: 0 0 60px rgba(140,70,220,.6),0 0 120px rgba(120,50,200,.3);
+            }
+
+        .orb-img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+            display: block;
+        }
+
+        .orb-overlay {
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            pointer-events: none;
+            background: radial-gradient(ellipse 60% 60% at 50% 30%,rgba(255,255,255,.04) 0%,transparent 70%);
+            animation: orbPulse 4s ease-in-out infinite;
+        }
+        /* orb fallback when no image */
+        .orb-fallback {
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            background: radial-gradient(ellipse 80% 80% at 50% 40%, rgba(140,60,220,.55) 0%, rgba(80,30,160,.4) 35%, rgba(30,10,80,.6) 70%, rgba(4,1,11,.9) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .orb-inner-glow {
+            width: 40%;
+            height: 40%;
+            border-radius: 50%;
+            background: radial-gradient(circle,rgba(255,220,100,.5) 0%,rgba(200,100,255,.3) 50%,transparent 70%);
+            animation: orbPulse 3s ease-in-out infinite;
+        }
+
+        /* ── CALLIGRAPHIC TITLE ── */
+        .cover-text {
+            position: absolute;
+            bottom: -145px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 130%;
+            text-align: center;
+        }
+
+        /* The small word */
+        .cover-title-the {
+            font-family: "Great Vibes",cursive;
+            font-size: clamp(18px,3.5vw,28px);
+            color: rgba(232,184,80,.75);
+            display: block;
+            margin-bottom: -8px;
+            letter-spacing: .05em;
+        }
+
+        /* Parsed World — main calligraphic with glitch */
+        .cover-title-wrap {
+            position: relative;
+            display: inline-block;
+        }
+
+        .cover-title-main {
+            font-family: "Great Vibes",cursive;
+            font-size: clamp(46px,10vw,88px);
+            font-weight: 400;
+            letter-spacing: .02em;
+            line-height: 1.0;
+            background: linear-gradient(135deg,#e8b850 0%,#f0d890 20%,#c090ff 45%,#a060e8 60%,#e8b850 80%,#f0d080 100%);
+            background-size: 300% 100%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: shimmerGold 6s ease-in-out infinite, glitch1 10s linear infinite;
+            display: block;
+            position: relative;
+            z-index: 2;
+        }
+            /* glitch ghost layers */
+            .cover-title-main::before {
+                content: attr(data-text);
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                font-family: "Great Vibes",cursive;
+                font-size: inherit;
+                background: linear-gradient(135deg,#ff4060 0%,#ff8020 50%,#4080ff 100%);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
+                animation: glitch2 10s linear infinite;
+                z-index: 1;
+            }
+
+            .cover-title-main::after {
+                content: attr(data-text);
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                font-family: "Great Vibes",cursive;
+                font-size: inherit;
+                background: linear-gradient(135deg,#00ffcc 0%,#0080ff 100%);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
+                animation: glitch3 10s linear infinite;
+                z-index: 0;
+            }
+
+        .cover-chinese {
+            font-family: "Noto Serif SC",serif;
+            font-size: clamp(14px,2.5vw,20px);
+            color: rgba(200,160,255,.65);
+            letter-spacing: .25em;
+            margin-bottom: 6px;
+            display: block;
+        }
+
+        .cover-title-sub {
+            font-family: "JetBrains Mono",monospace;
+            font-size: clamp(7px,1.2vw,10px);
+            letter-spacing: .55em;
+            color: rgba(200,160,255,.45);
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+
+        .cover-author {
+            font-family: "Great Vibes",cursive;
+            font-size: clamp(16px,2.5vw,22px);
+            letter-spacing: .1em;
+            color: rgba(232,184,80,.65);
+        }
+        /* deco line */
+        .author-deco {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 14px;
+        }
+
+            .author-deco::before, .author-deco::after {
+                content: "";
+                flex: 1;
+                max-width: 60px;
+                height: 1px;
+                background: linear-gradient(90deg,transparent,rgba(232,184,80,.4),transparent);
+            }
+
+        .cover-hint {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-family: "JetBrains Mono",monospace;
+            font-size: 9px;
+            letter-spacing: .4em;
+            color: rgba(180,120,255,.4);
+            text-transform: uppercase;
+            animation: hintPulse 2.5s ease-in-out infinite;
+            white-space: nowrap;
+        }
+
+            .cover-hint::before, .cover-hint::after {
+                content: "◈";
+                margin: 0 12px;
+                opacity: .5;
+            }
+
+        /* compass */
+        .compass-wrap {
+            position: absolute;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        /* ════════════════════════════
+           HUB
+        ════════════════════════════ */
+        #hub {
+            position: fixed;
+            inset: 0;
+            z-index: 50;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 28px 20px 56px;
+            gap: 32px;
+            opacity: 0;
+            transform: scale(.97);
+            transition: opacity .85s ease,transform .85s cubic-bezier(.16,1,.3,1);
+            pointer-events: none;
+            overflow-y: auto;
+        }
+
+            #hub.visible {
+                opacity: 1;
+                transform: scale(1);
+                pointer-events: auto;
+            }
+
+        .hub-ambient {
+            position: fixed;
+            width: 80vmax;
+            height: 80vmax;
+            border-radius: 50%;
+            background: radial-gradient(ellipse,rgba(70,25,150,.2) 0%,transparent 70%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%,-50%);
+            pointer-events: none;
+            z-index: 0;
+            animation: breathe 14s ease-in-out infinite;
+        }
+
+        .hub-header {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+        }
+
+        .hub-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 14px;
+        }
+
+        .hub-logo-gem {
+            width: 8px;
+            height: 8px;
+            background: var(--gold);
+            transform: rotate(45deg);
+            box-shadow: 0 0 10px rgba(232,184,80,.5);
+            animation: gemPulse 3s ease-in-out infinite;
+            flex-shrink: 0;
+        }
+
+        .hub-logo-text {
+            font-family: "JetBrains Mono",monospace;
+            font-size: 9px;
+            letter-spacing: .45em;
+            color: rgba(200,160,255,.45);
+            text-transform: uppercase;
+        }
+
+        .hub-title {
+            font-family: "Noto Serif SC",serif;
+            font-size: clamp(20px,3.5vw,32px);
+            font-weight: 900;
+            letter-spacing: .1em;
+            color: var(--text);
+            margin-bottom: 8px;
+        }
+
+        .hub-sub {
+            font-family: "JetBrains Mono",monospace;
+            font-size: 9px;
+            letter-spacing: .35em;
+            color: var(--text-3);
+            text-transform: uppercase;
+        }
+
+        /* grid */
+        .hub-nav {
+            position: relative;
+            z-index: 2;
+            display: grid;
+            grid-template-columns: 1fr 1.7fr 1fr;
+            grid-template-rows: 1fr 1fr auto;
+            gap: 10px;
+            width: min(940px,94vw);
+            grid-template-areas: "tl promo tr" "bl promo br" "db db lv";
+        }
+
+        /* base card */
+        .hub-card {
+            position: relative;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            background: rgba(9,4,22,.72);
+            backdrop-filter: blur(10px);
+            padding: 20px 22px 18px;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            transition: transform .32s cubic-bezier(.16,1,.3,1),border-color .3s,box-shadow .3s;
+        }
+
+            .hub-card::before {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                height: 2px;
+            }
+
+            .hub-card::after {
+                content: "";
+                position: absolute;
+                inset: 0;
+                background: linear-gradient(135deg,rgba(255,255,255,.03) 0%,transparent 50%);
+                opacity: 0;
+                transition: opacity .3s;
+            }
+
+            .hub-card:hover {
+                transform: translateY(-5px);
+            }
+
+                .hub-card:hover::after {
+                    opacity: 1;
+                }
+
+        .hub-card-icon {
+            width: 28px;
+            height: 28px;
+            border: 1px solid;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            margin-bottom: 4px;
+            flex-shrink: 0;
+        }
+
+        .hub-card-type {
+            font-family: "JetBrains Mono",monospace;
+            font-size: 7.5px;
+            letter-spacing: .32em;
+            text-transform: uppercase;
+            opacity: .5;
+        }
+
+        .hub-card-title {
+            font-family: "Noto Serif SC",serif;
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--text);
+            line-height: 1.3;
+        }
+
+        .hub-card-desc {
+            font-size: 11.5px;
+            color: var(--text-3);
+            line-height: 1.6;
+            margin-top: 2px;
+            flex: 1;
+        }
+
+        .hub-card-cta {
+            margin-top: 12px;
+            font-family: "JetBrains Mono",monospace;
+            font-size: 8.5px;
+            letter-spacing: .22em;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            opacity: .4;
+            transition: opacity .2s,gap .2s;
+        }
+
+        .hub-card:hover .hub-card-cta {
+            opacity: .85;
+            gap: 10px;
+        }
+
+        .hub-card-cta::after {
+            content: "→";
+        }
+
+        /* variants */
+        .card-purple::before {
+            background: linear-gradient(90deg,transparent,var(--purple),transparent);
+            opacity: .5;
+        }
+
+        .card-purple:hover {
+            border-color: rgba(180,120,255,.3);
+            box-shadow: 0 12px 40px rgba(140,80,220,.12);
+        }
+
+        .card-purple .hub-card-type, .card-purple .hub-card-cta {
+            color: var(--purple);
+        }
+
+        .card-purple .hub-card-icon {
+            color: var(--purple);
+            border-color: rgba(180,120,255,.3);
+            background: rgba(180,120,255,.06);
+        }
+
+        .card-blue::before {
+            background: linear-gradient(90deg,transparent,var(--blue),transparent);
+            opacity: .5;
+        }
+
+        .card-blue:hover {
+            border-color: rgba(122,184,240,.3);
+            box-shadow: 0 12px 40px rgba(80,140,220,.12);
+        }
+
+        .card-blue .hub-card-type, .card-blue .hub-card-cta {
+            color: var(--blue);
+        }
+
+        .card-blue .hub-card-icon {
+            color: var(--blue);
+            border-color: rgba(122,184,240,.3);
+            background: rgba(122,184,240,.06);
+        }
+
+        .card-teal::before {
+            background: linear-gradient(90deg,transparent,var(--teal),transparent);
+            opacity: .5;
+        }
+
+        .card-teal:hover {
+            border-color: rgba(80,232,208,.3);
+            box-shadow: 0 12px 40px rgba(50,200,160,.12);
+        }
+
+        .card-teal .hub-card-type, .card-teal .hub-card-cta {
+            color: var(--teal);
+        }
+
+        .card-teal .hub-card-icon {
+            color: var(--teal);
+            border-color: rgba(80,232,208,.3);
+            background: rgba(80,232,208,.06);
+        }
+
+        .card-dim::before {
+            background: linear-gradient(90deg,transparent,rgba(140,140,180,.45),transparent);
+            opacity: .4;
+        }
+
+        .card-dim:hover {
+            border-color: rgba(140,140,180,.22);
+        }
+
+        .card-dim .hub-card-type, .card-dim .hub-card-cta {
+            color: var(--text-3);
+        }
+
+        .card-dim .hub-card-icon {
+            color: var(--text-3);
+            border-color: var(--border);
+            background: rgba(255,255,255,.03);
+        }
+
+        /* promo */
+        .card-promo {
+            grid-area: promo;
+            padding: 28px 28px 24px;
+            border-color: rgba(232,184,80,.22);
+            background: rgba(10,5,24,.88);
+            justify-content: flex-end;
+            min-height: 300px;
+        }
+
+            .card-promo::before {
+                background: linear-gradient(90deg,transparent 5%,var(--gold) 35%,rgba(220,170,60,.7) 50%,var(--gold) 65%,transparent 95%);
+                opacity: .8;
+            }
+
+            .card-promo:hover {
+                transform: translateY(-6px);
+                border-color: rgba(232,184,80,.5);
+                box-shadow: 0 0 80px rgba(180,130,40,.2),0 24px 70px rgba(0,0,0,.45);
+            }
+
+        .promo-bg {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse 90% 65% at 50% 38%,rgba(110,50,200,.22) 0%,transparent 70%), radial-gradient(ellipse 45% 35% at 50% 30%,rgba(180,100,255,.09) 0%,transparent 55%);
+            pointer-events: none;
+        }
+
+        .promo-ring {
+            position: absolute;
+            top: 18px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 130px;
+            height: 130px;
+            border-radius: 50%;
+            border: 1px solid rgba(180,120,255,.14);
+            animation: ringRotateSimple 15s linear infinite;
+            pointer-events: none;
+        }
+
+            .promo-ring::after {
+                content: "";
+                position: absolute;
+                inset: 10px;
+                border-radius: 50%;
+                border: 1px solid rgba(232,184,80,.08);
+            }
+
+        .promo-dot {
+            position: absolute;
+            top: 82px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: rgba(255,255,255,.8);
+            box-shadow: 0 0 12px rgba(255,255,255,.6),0 0 30px rgba(180,120,255,.4);
+            animation: orbPulse 4s ease-in-out infinite;
+        }
+
+        .promo-gem {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 11px;
+            height: 11px;
+            background: var(--gold);
+            transform: rotate(45deg);
+            box-shadow: 0 0 14px rgba(232,184,80,.6);
+            animation: gemPulse 3s ease-in-out infinite;
+            z-index: 2;
+        }
+
+        .promo-eyebrow {
+            position: relative;
+            z-index: 2;
+            font-family: "JetBrains Mono",monospace;
+            font-size: 8px;
+            letter-spacing: .38em;
+            color: var(--gold);
+            text-transform: uppercase;
+            opacity: .85;
+            margin-bottom: 8px;
+        }
+
+        .promo-title {
+            position: relative;
+            z-index: 2;
+            font-family: "Noto Serif SC",serif;
+            font-size: clamp(22px,2.8vw,32px);
+            font-weight: 900;
+            line-height: 1.15;
+            background: linear-gradient(135deg,#f0d080 0%,#e8b850 35%,#d0a0ff 75%,#c090ff 100%);
+            background-size: 200% 100%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+            animation: shimmerGold 6s ease-in-out infinite;
+        }
+
+        .promo-desc {
+            position: relative;
+            z-index: 2;
+            font-size: 12.5px;
+            color: var(--text-2);
+            line-height: 1.72;
+            max-width: 300px;
+            margin-bottom: 18px;
+        }
+
+        .promo-cta {
+            position: relative;
+            z-index: 2;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-family: "JetBrains Mono",monospace;
+            font-size: 9px;
+            letter-spacing: .22em;
+            color: var(--gold);
+            text-transform: uppercase;
+            border: 1px solid rgba(232,184,80,.38);
+            padding: 8px 18px;
+            background: rgba(232,184,80,.07);
+            transition: all .28s;
+        }
+
+        .card-promo:hover .promo-cta {
+            background: rgba(232,184,80,.16);
+            border-color: rgba(232,184,80,.65);
+            gap: 13px;
+        }
+
+        .pos-tl {
+            grid-area: tl;
+        }
+
+        .pos-bl {
+            grid-area: bl;
+        }
+
+        .pos-tr {
+            grid-area: tr;
+        }
+
+        .pos-br {
+            grid-area: br;
+        }
+
+        /* database — full-width slim card */
+        .pos-db {
+            grid-area: db;
+        }
+
+        .card-db {
+            flex-direction: row;
+            align-items: center;
+            gap: 18px;
+            padding: 14px 22px;
+            min-height: 64px;
+            border-color: rgba(180,130,255,.18);
+            background:
+                linear-gradient(90deg, rgba(180,130,255,.06), rgba(80,232,208,.04) 50%, rgba(232,184,80,.06));
+        }
+
+            .card-db::before {
+                background: linear-gradient(90deg, transparent 5%, var(--purple) 30%, var(--teal) 50%, var(--gold) 70%, transparent 95%);
+                opacity: .6;
+            }
+
+            .card-db:hover {
+                border-color: rgba(180,130,255,.4);
+                box-shadow: 0 0 50px rgba(140,80,220,.18), 0 14px 40px rgba(0,0,0,.4);
+            }
+
+        .card-db .db-icon {
+            font-family: "JetBrains Mono", monospace;
+            font-size: 14px;
+            color: var(--gold);
+            border: 1px solid rgba(232,184,80,.3);
+            background: rgba(232,184,80,.06);
+            width: 36px; height: 36px;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+        }
+        .card-db .db-text { flex: 1; display: flex; flex-direction: column; gap: 2px; }
+        .card-db .db-type {
+            font-family: "JetBrains Mono", monospace;
+            font-size: 8px; letter-spacing: .32em; text-transform: uppercase;
+            color: var(--purple); opacity: .8;
+        }
+        .card-db .db-title {
+            font-family: "Noto Serif SC", serif;
+            font-size: 14px; font-weight: 700; color: var(--text);
+        }
+        .card-db .db-desc {
+            font-size: 10.5px; color: var(--text-3);
+            line-height: 1.5;
+        }
+        .card-db .db-cta {
+            font-family: "JetBrains Mono", monospace;
+            font-size: 9px; letter-spacing: .22em;
+            color: var(--gold); opacity: .55; flex-shrink: 0;
+            display: flex; align-items: center; gap: 8px;
+            transition: opacity .2s, gap .2s;
+        }
+        .card-db:hover .db-cta { opacity: .95; gap: 12px; }
+        .card-db .db-cta::after { content: "→"; }
+
+        /* level forge — slim teal card */
+        .pos-lv {
+            grid-area: lv;
+        }
+
+        .card-lv {
+            flex-direction: row;
+            align-items: center;
+            gap: 14px;
+            padding: 14px 18px;
+            min-height: 64px;
+            border-color: rgba(80,232,208,.22);
+            background: linear-gradient(90deg, rgba(80,232,208,.07), rgba(180,130,255,.05));
+        }
+
+            .card-lv::before {
+                background: linear-gradient(90deg, transparent 5%, var(--teal) 40%, var(--purple) 75%, transparent 95%);
+                opacity: .6;
+            }
+
+            .card-lv:hover {
+                border-color: rgba(80,232,208,.45);
+                box-shadow: 0 0 50px rgba(60,200,180,.16), 0 14px 40px rgba(0,0,0,.4);
+            }
+
+        .card-lv .db-icon {
+            color: var(--teal);
+            border-color: rgba(80,232,208,.3);
+            background: rgba(80,232,208,.06);
+        }
+        .card-lv .db-type { color: var(--teal); }
+        .card-lv .db-cta { color: var(--teal); }
+
+        @media(max-width:720px) {
+            html, body {
+                overflow: auto
+            }
+
+            #hub {
+                justify-content: flex-start;
+                padding-top: 48px
+            }
+
+            .hub-nav {
+                grid-template-columns: 1fr 1fr;
+                grid-template-rows: auto auto auto auto;
+                grid-template-areas: "promo promo" "tl tr" "bl br" "db db" "lv lv"
+            }
+
+            .card-promo {
+                min-height: 220px
+            }
+        }
+
+        @media(max-width:480px) {
+            .hub-nav {
+                grid-template-columns: 1fr;
+                grid-template-areas: "promo" "tl" "tr" "bl" "br" "db" "lv"
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="assets/theme.css">
 </head>
-<body onclick="go()">
-<div class="blobs"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div></div>
-<div class="portal">
-    <div class="orb"></div>
-    <h1>鎏金枢界</h1>
-    <div class="en">NEXUS</div>
-    <div><a class="enter" href="nexus.html" onclick="event.stopPropagation()">进入枢界 <span class="arr">→</span></a></div>
-    <div class="hint">点击任意处进入 · 档案库 · 共鸣场 · 世界脉络</div>
-</div>
-<script>function go(){ location.href='nexus.html'; }</script>
+<body>
+
+    <div class="stars"></div>
+    <div class="bg-grid"></div>
+    <div class="bg-scan"></div>
+    <canvas id="particle-canvas"></canvas>
+
+    <!-- Full-page Magic Circle SVG Background -->
+    <svg id="geo-svg" viewBox="0 0 1400 900" preserveAspectRatio="xMidYMid slice">
+        <defs>
+            <filter id="glow-gold">
+                <feGaussianBlur stdDeviation="2" result="blur" />
+                <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
+            </filter>
+            <filter id="glow-purple">
+                <feGaussianBlur stdDeviation="3" result="blur" />
+                <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
+            </filter>
+            <filter id="glow-soft">
+                <feGaussianBlur stdDeviation="1.5" result="blur" />
+                <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
+            </filter>
+        </defs>
+
+        <!-- cx=700 cy=450 is the magic circle center -->
+
+        <!-- ═══ OUTER FRAME ═══ -->
+        <!-- Outer dashed rect -->
+        <rect x="30" y="18" width="1340" height="864" fill="none"
+              stroke="rgba(232,184,80,.055)" stroke-width="1" stroke-dasharray="8 14" />
+        <!-- Inner rect -->
+        <rect x="70" y="45" width="1260" height="810" fill="none"
+              stroke="rgba(180,100,255,.04)" stroke-width="1" stroke-dasharray="3 18" />
+        <!-- Corner L-marks -->
+        <g stroke="rgba(232,184,80,.18)" stroke-width="1" fill="none">
+            <path d="M30 18 L90 18 M30 18 L30 78" />
+            <path d="M1370 18 L1310 18 M1370 18 L1370 78" />
+            <path d="M30 882 L90 882 M30 882 L30 822" />
+            <path d="M1370 882 L1310 882 M1370 882 L1370 822" />
+        </g>
+        <!-- Cardinal diamonds on frame -->
+        <g fill="none" stroke="rgba(232,184,80,.3)" stroke-width="1" filter="url(#glow-gold)">
+            <rect x="690" y="7"  width="20" height="20" transform="rotate(45 700 17)" />
+            <rect x="690" y="873" width="20" height="20" transform="rotate(45 700 883)" />
+            <rect x="17"  y="440" width="20" height="20" transform="rotate(45 27 450)" />
+            <rect x="1363" y="440" width="20" height="20" transform="rotate(45 1373 450)" />
+        </g>
+
+        <!-- ═══ MAGIC CIRCLE — concentric rings ═══ -->
+        <!-- Outermost slow orbit ring -->
+        <circle cx="700" cy="450" r="420" fill="none" stroke="rgba(180,80,255,.05)" stroke-width="1" stroke-dasharray="2 10">
+            <animateTransform attributeName="transform" type="rotate" from="0 700 450" to="360 700 450" dur="180s" repeatCount="indefinite"/>
+        </circle>
+        <!-- Main outer ring -->
+        <circle cx="700" cy="450" r="370" fill="none" stroke="rgba(232,184,80,.07)" stroke-width="1">
+            <animateTransform attributeName="transform" type="rotate" from="0 700 450" to="-360 700 450" dur="120s" repeatCount="indefinite"/>
+        </circle>
+        <!-- Rune track ring (dashed) -->
+        <circle cx="700" cy="450" r="340" fill="none" stroke="rgba(180,100,255,.06)" stroke-width="1" stroke-dasharray="4 12">
+            <animateTransform attributeName="transform" type="rotate" from="0 700 450" to="360 700 450" dur="80s" repeatCount="indefinite"/>
+        </circle>
+        <!-- Mid ring -->
+        <circle cx="700" cy="450" r="290" fill="none" stroke="rgba(232,184,80,.06)" stroke-width="1" stroke-dasharray="6 8">
+            <animateTransform attributeName="transform" type="rotate" from="0 700 450" to="-360 700 450" dur="60s" repeatCount="indefinite"/>
+        </circle>
+        <!-- Inner rune ring -->
+        <circle cx="700" cy="450" r="240" fill="none" stroke="rgba(180,100,255,.07)" stroke-width="1">
+            <animateTransform attributeName="transform" type="rotate" from="0 700 450" to="360 700 450" dur="45s" repeatCount="indefinite"/>
+        </circle>
+        <!-- Core ring -->
+        <circle cx="700" cy="450" r="180" fill="none" stroke="rgba(232,184,80,.07)" stroke-width="1" stroke-dasharray="3 9">
+            <animateTransform attributeName="transform" type="rotate" from="0 700 450" to="-360 700 450" dur="30s" repeatCount="indefinite"/>
+        </circle>
+        <!-- Innermost accent ring -->
+        <circle cx="700" cy="450" r="120" fill="none" stroke="rgba(180,100,255,.07)" stroke-width="1">
+            <animateTransform attributeName="transform" type="rotate" from="0 700 450" to="360 700 450" dur="20s" repeatCount="indefinite"/>
+        </circle>
+
+        <!-- ═══ HEXAGRAM (Star of David / 六芒星) ═══ -->
+        <!-- Triangle 1 pointing up -->
+        <polygon points="700,90 990,540 410,540"
+                 fill="none" stroke="rgba(232,184,80,.06)" stroke-width="1">
+            <animateTransform attributeName="transform" type="rotate" from="0 700 450" to="360 700 450" dur="90s" repeatCount="indefinite"/>
+        </polygon>
+        <!-- Triangle 2 pointing down -->
+        <polygon points="700,810 410,360 990,360"
+                 fill="none" stroke="rgba(180,100,255,.05)" stroke-width="1">
+            <animateTransform attributeName="transform" type="rotate" from="0 700 450" to="-360 700 450" dur="90s" repeatCount="indefinite"/>
+        </polygon>
+
+        <!-- ═══ OCTAGRAM (八芒星) — two squares rotated 45° ═══ -->
+        <rect x="490" y="240" width="420" height="420" fill="none"
+              stroke="rgba(232,184,80,.05)" stroke-width="1">
+            <animateTransform attributeName="transform" type="rotate" from="0 700 450" to="360 700 450" dur="70s" repeatCount="indefinite"/>
+        </rect>
+        <rect x="490" y="240" width="420" height="420" fill="none"
+              stroke="rgba(180,80,255,.04)" stroke-width="1">
+            <animateTransform attributeName="transform" type="rotate" from="45 700 450" to="405 700 450" dur="70s" repeatCount="indefinite"/>
+        </rect>
+
+        <!-- ═══ 12-POINTED STAR spokes (dodecagram lines) ═══ -->
+        <!-- These are 6 lines at 30° intervals through the centre, very faint -->
+        <g stroke="rgba(180,100,255,.04)" stroke-width="1">
+            <line x1="700" y1="80" x2="700" y2="820">
+                <animateTransform attributeName="transform" type="rotate" from="0 700 450" to="360 700 450" dur="150s" repeatCount="indefinite"/>
+            </line>
+            <line x1="700" y1="80" x2="700" y2="820">
+                <animateTransform attributeName="transform" type="rotate" from="30 700 450" to="390 700 450" dur="150s" repeatCount="indefinite"/>
+            </line>
+            <line x1="700" y1="80" x2="700" y2="820">
+                <animateTransform attributeName="transform" type="rotate" from="60 700 450" to="420 700 450" dur="150s" repeatCount="indefinite"/>
+            </line>
+            <line x1="700" y1="80" x2="700" y2="820">
+                <animateTransform attributeName="transform" type="rotate" from="90 700 450" to="450 700 450" dur="150s" repeatCount="indefinite"/>
+            </line>
+            <line x1="700" y1="80" x2="700" y2="820">
+                <animateTransform attributeName="transform" type="rotate" from="120 700 450" to="480 700 450" dur="150s" repeatCount="indefinite"/>
+            </line>
+            <line x1="700" y1="80" x2="700" y2="820">
+                <animateTransform attributeName="transform" type="rotate" from="150 700 450" to="510 700 450" dur="150s" repeatCount="indefinite"/>
+            </line>
+        </g>
+
+        <!-- ═══ RUNE NODE DOTS on the 290r ring (12 nodes) ═══ -->
+        <g fill="rgba(232,184,80,.22)" filter="url(#glow-soft)">
+            <!-- 12 equally spaced anchor points at r=290 -->
+            <circle cx="700"   cy="160"  r="2.5"><animate attributeName="opacity" values=".15;.55;.15" dur="5s" repeatCount="indefinite" begin="0s"/></circle>
+            <circle cx="845"   cy="195"  r="2"><animate attributeName="opacity" values=".15;.5;.15" dur="7s" repeatCount="indefinite" begin=".5s"/></circle>
+            <circle cx="952"   cy="305"  r="2.5"><animate attributeName="opacity" values=".15;.55;.15" dur="6s" repeatCount="indefinite" begin="1s"/></circle>
+            <circle cx="990"   cy="450"  r="2"><animate attributeName="opacity" values=".15;.5;.15" dur="8s" repeatCount="indefinite" begin="1.5s"/></circle>
+            <circle cx="952"   cy="595"  r="2.5"><animate attributeName="opacity" values=".15;.55;.15" dur="5.5s" repeatCount="indefinite" begin="2s"/></circle>
+            <circle cx="845"   cy="705"  r="2"><animate attributeName="opacity" values=".15;.5;.15" dur="9s" repeatCount="indefinite" begin="2.5s"/></circle>
+            <circle cx="700"   cy="740"  r="2.5"><animate attributeName="opacity" values=".15;.55;.15" dur="6.5s" repeatCount="indefinite" begin="3s"/></circle>
+            <circle cx="555"   cy="705"  r="2"><animate attributeName="opacity" values=".15;.5;.15" dur="7.5s" repeatCount="indefinite" begin="3.5s"/></circle>
+            <circle cx="448"   cy="595"  r="2.5"><animate attributeName="opacity" values=".15;.55;.15" dur="5s" repeatCount="indefinite" begin="4s"/></circle>
+            <circle cx="410"   cy="450"  r="2"><animate attributeName="opacity" values=".15;.5;.15" dur="8.5s" repeatCount="indefinite" begin="0.8s"/></circle>
+            <circle cx="448"   cy="305"  r="2.5"><animate attributeName="opacity" values=".15;.55;.15" dur="6s" repeatCount="indefinite" begin="1.8s"/></circle>
+            <circle cx="555"   cy="195"  r="2"><animate attributeName="opacity" values=".15;.5;.15" dur="7s" repeatCount="indefinite" begin="2.8s"/></circle>
+        </g>
+
+        <!-- ═══ RUNE NODE DOTS on 180r ring (6 nodes, purple) ═══ -->
+        <g fill="rgba(180,100,255,.25)" filter="url(#glow-soft)">
+            <circle cx="700" cy="270" r="2.5"><animate attributeName="opacity" values=".2;.6;.2" dur="4s" repeatCount="indefinite" begin="0s"/></circle>
+            <circle cx="856" cy="360" r="2"><animate attributeName="opacity" values=".2;.6;.2" dur="5s" repeatCount="indefinite" begin=".7s"/></circle>
+            <circle cx="856" cy="540" r="2.5"><animate attributeName="opacity" values=".2;.6;.2" dur="4.5s" repeatCount="indefinite" begin="1.4s"/></circle>
+            <circle cx="700" cy="630" r="2"><animate attributeName="opacity" values=".2;.6;.2" dur="6s" repeatCount="indefinite" begin="2.1s"/></circle>
+            <circle cx="544" cy="540" r="2.5"><animate attributeName="opacity" values=".2;.6;.2" dur="4s" repeatCount="indefinite" begin="2.8s"/></circle>
+            <circle cx="544" cy="360" r="2"><animate attributeName="opacity" values=".2;.6;.2" dur="5.5s" repeatCount="indefinite" begin="3.5s"/></circle>
+        </g>
+
+        <!-- ═══ PENTAGRAM (五芒星) inner ═══ -->
+        <!-- sin/cos based 5-point star at r=240, very faint -->
+        <polygon points="700,210 772,443 561,300 839,300 628,443"
+                 fill="none" stroke="rgba(232,184,80,.045)" stroke-width="1">
+            <animateTransform attributeName="transform" type="rotate" from="0 700 450" to="-360 700 450" dur="100s" repeatCount="indefinite"/>
+        </polygon>
+
+        <!-- ═══ OUTER FLOWING SEGMENTS (side data lines) ═══ -->
+        <line x1="30" y1="200" x2="220" y2="200" stroke="rgba(232,184,80,.13)" stroke-width="1" stroke-dasharray="6 4">
+            <animate attributeName="opacity" values=".08;.35;.08" dur="7s" repeatCount="indefinite"/>
+        </line>
+        <line x1="30" y1="700" x2="220" y2="700" stroke="rgba(232,184,80,.1)" stroke-width="1" stroke-dasharray="4 6">
+            <animate attributeName="opacity" values=".08;.3;.08" dur="9s" repeatCount="indefinite" begin="2s"/>
+        </line>
+        <line x1="1370" y1="300" x2="1180" y2="300" stroke="rgba(180,120,255,.13)" stroke-width="1" stroke-dasharray="6 4">
+            <animate attributeName="opacity" values=".08;.35;.08" dur="8s" repeatCount="indefinite" begin="1s"/>
+        </line>
+        <line x1="1370" y1="600" x2="1180" y2="600" stroke="rgba(180,120,255,.1)" stroke-width="1" stroke-dasharray="4 6">
+            <animate attributeName="opacity" values=".08;.28;.08" dur="6s" repeatCount="indefinite" begin="3s"/>
+        </line>
+        <!-- Side node dots -->
+        <circle cx="30"   cy="200" r="3" fill="rgba(232,184,80,.35)" filter="url(#glow-gold)"><animate attributeName="opacity" values=".2;.8;.2" dur="7s" repeatCount="indefinite"/></circle>
+        <circle cx="30"   cy="700" r="2" fill="rgba(232,184,80,.3)"><animate attributeName="opacity" values=".2;.7;.2" dur="9s" repeatCount="indefinite" begin="2s"/></circle>
+        <circle cx="1370" cy="300" r="3" fill="rgba(180,120,255,.4)" filter="url(#glow-purple)"><animate attributeName="opacity" values=".2;.9;.2" dur="8s" repeatCount="indefinite" begin="1s"/></circle>
+        <circle cx="1370" cy="600" r="2" fill="rgba(180,120,255,.3)"><animate attributeName="opacity" values=".2;.65;.2" dur="6s" repeatCount="indefinite" begin="3s"/></circle>
+
+        <!-- ═══ DIAGONAL CROSS (very faint) ═══ -->
+        <line x1="0" y1="0" x2="1400" y2="900" stroke="rgba(180,80,255,.022)" stroke-width="1"/>
+        <line x1="1400" y1="0" x2="0" y2="900" stroke="rgba(180,80,255,.022)" stroke-width="1"/>
+
+        <!-- ═══ DATA TEXT ═══ -->
+        <g opacity="0.06" font-family="monospace" font-size="9" fill="rgba(200,160,255,1)">
+            <text x="90" y="878">EC:174 // NODE:PARSED_WORLD // SECTOR:ALPHA // STATUS:ONLINE</text>
+            <text x="750" y="878">∴ XenoSion ∴</text>
+        </g>
+    </svg>
+
+    <!-- ════ COVER ════ -->
+    <div id="cover">
+        <!-- cover geometry frame -->
+        <svg class="cover-frame-svg" viewBox="0 0 800 1000" preserveAspectRatio="xMidYMid slice">
+            <line x1="400" y1="0" x2="400" y2="1000" stroke="rgba(232,184,80,.1)" stroke-width="1" />
+            <line x1="0" y1="500" x2="800" y2="500" stroke="rgba(232,184,80,.07)" stroke-width="1" />
+
+            <!-- Outer rect dashed -->
+            <rect x="30" y="18" width="740" height="964" fill="none"
+                  stroke="rgba(232,184,80,.07)" stroke-width="1" stroke-dasharray="8 12" />
+
+            <!-- Top diamond -->
+            <rect x="390" y="8" width="20" height="20" transform="rotate(45 400 18)"
+                  fill="none" stroke="rgba(232,184,80,.45)" stroke-width="1" />
+            <!-- Bottom diamond -->
+            <rect x="390" y="972" width="20" height="20" transform="rotate(45 400 982)"
+                  fill="none" stroke="rgba(232,184,80,.45)" stroke-width="1" />
+            <!-- Left diamond -->
+            <rect x="8" y="490" width="20" height="20" transform="rotate(45 18 500)"
+                  fill="none" stroke="rgba(232,184,80,.4)" stroke-width="1" />
+            <!-- Right diamond -->
+            <rect x="772" y="490" width="20" height="20" transform="rotate(45 782 500)"
+                  fill="none" stroke="rgba(232,184,80,.4)" stroke-width="1" />
+
+            <!-- Corner L brackets -->
+            <g stroke="rgba(232,184,80,.22)" stroke-width="1" fill="none">
+                <path d="M30 18 L90 18 M30 18 L30 78" />
+                <path d="M770 18 L710 18 M770 18 L770 78" />
+                <path d="M30 982 L90 982 M30 982 L30 922" />
+                <path d="M770 982 L710 982 M770 982 L770 922" />
+            </g>
+
+            <!-- Mid horizontal tick marks -->
+            <line x1="30" y1="500" x2="80" y2="500" stroke="rgba(232,184,80,.2)" stroke-width="1" />
+            <line x1="770" y1="500" x2="720" y2="500" stroke="rgba(232,184,80,.2)" stroke-width="1" />
+
+            <!-- Animated scan beam inside frame -->
+            <line x1="30" y1="0" x2="770" y2="0" stroke="rgba(232,184,80,.18)" stroke-width="1">
+                <animateMotion path="M0,0 L0,1000" dur="14s" repeatCount="indefinite" />
+            </line>
+
+            <!-- Extra decorative circles at corners -->
+            <circle cx="30" cy="18" r="3" fill="rgba(232,184,80,.3)" />
+            <circle cx="770" cy="18" r="3" fill="rgba(232,184,80,.3)" />
+            <circle cx="30" cy="982" r="3" fill="rgba(232,184,80,.3)" />
+            <circle cx="770" cy="982" r="3" fill="rgba(232,184,80,.3)" />
+        </svg>
+
+        <div class="cover-portal">
+
+            <!-- ══ MAGIC CIRCLE SVG — rotates around the portal ══ -->
+            <svg class="magic-circle-svg" viewBox="-280 -280 560 560" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <filter id="mc-glow-gold">
+                        <feGaussianBlur stdDeviation="2.5" result="b"/>
+                        <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+                    </filter>
+                    <filter id="mc-glow-purple">
+                        <feGaussianBlur stdDeviation="2" result="b"/>
+                        <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+                    </filter>
+                </defs>
+
+                <!-- Outermost slow ring -->
+                <circle r="268" fill="none" stroke="rgba(180,100,255,.18)" stroke-width="1" stroke-dasharray="3 14">
+                    <animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="40s" repeatCount="indefinite"/>
+                </circle>
+
+                <!-- Rune track ring with bright nodes -->
+                <g>
+                    <animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="10s" repeatCount="indefinite"/>
+                    <circle r="248" fill="none" stroke="rgba(232,184,80,.22)" stroke-width="1" stroke-dasharray="5 9"/>
+                    <!-- 8 rune nodes on this ring -->
+                    <circle cx="248"  cy="0"    r="3.5" fill="rgba(232,184,80,.7)" filter="url(#mc-glow-gold)"/>
+                    <circle cx="175"  cy="175"  r="2.5" fill="rgba(232,184,80,.5)"/>
+                    <circle cx="0"    cy="248"  r="3.5" fill="rgba(232,184,80,.7)" filter="url(#mc-glow-gold)"/>
+                    <circle cx="-175" cy="175"  r="2.5" fill="rgba(232,184,80,.5)"/>
+                    <circle cx="-248" cy="0"    r="3.5" fill="rgba(232,184,80,.7)" filter="url(#mc-glow-gold)"/>
+                    <circle cx="-175" cy="-175" r="2.5" fill="rgba(232,184,80,.5)"/>
+                    <circle cx="0"    cy="-248" r="3.5" fill="rgba(232,184,80,.7)" filter="url(#mc-glow-gold)"/>
+                    <circle cx="175"  cy="-175" r="2.5" fill="rgba(232,184,80,.5)"/>
+                    <!-- tick marks between nodes -->
+                    <line x1="248" y1="-6"  x2="248" y2="6"  stroke="rgba(232,184,80,.5)" stroke-width="1" transform="rotate(22.5)"/>
+                    <line x1="248" y1="-6"  x2="248" y2="6"  stroke="rgba(232,184,80,.5)" stroke-width="1" transform="rotate(67.5)"/>
+                    <line x1="248" y1="-6"  x2="248" y2="6"  stroke="rgba(232,184,80,.5)" stroke-width="1" transform="rotate(112.5)"/>
+                    <line x1="248" y1="-6"  x2="248" y2="6"  stroke="rgba(232,184,80,.5)" stroke-width="1" transform="rotate(157.5)"/>
+                    <line x1="248" y1="-6"  x2="248" y2="6"  stroke="rgba(232,184,80,.5)" stroke-width="1" transform="rotate(202.5)"/>
+                    <line x1="248" y1="-6"  x2="248" y2="6"  stroke="rgba(232,184,80,.5)" stroke-width="1" transform="rotate(247.5)"/>
+                    <line x1="248" y1="-6"  x2="248" y2="6"  stroke="rgba(232,184,80,.5)" stroke-width="1" transform="rotate(292.5)"/>
+                    <line x1="248" y1="-6"  x2="248" y2="6"  stroke="rgba(232,184,80,.5)" stroke-width="1" transform="rotate(337.5)"/>
+                </g>
+
+                <!-- Octagram outer (two squares, slow counter-rotation) -->
+                <g>
+                    <animateTransform attributeName="transform" type="rotate" from="0" to="-360" dur="25s" repeatCount="indefinite"/>
+                    <polygon points="0,-230 133,-133 230,0 133,133 0,230 -133,133 -230,0 -133,-133"
+                             fill="none" stroke="rgba(180,100,255,.2)" stroke-width="1"/>
+                    <!-- diamond accents at octagram tips -->
+                    <polygon points="0,-230 -7,-222 0,-214 7,-222" fill="rgba(180,100,255,.45)" filter="url(#mc-glow-purple)"/>
+                    <polygon points="230,0 222,-7 214,0 222,7" fill="rgba(180,100,255,.45)" filter="url(#mc-glow-purple)"/>
+                    <polygon points="0,230 -7,222 0,214 7,222" fill="rgba(180,100,255,.45)" filter="url(#mc-glow-purple)"/>
+                    <polygon points="-230,0 -222,-7 -214,0 -222,7" fill="rgba(180,100,255,.45)" filter="url(#mc-glow-purple)"/>
+                </g>
+
+                <!-- Hexagram (Star of David) — medium speed -->
+                <g>
+                    <animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="10s" repeatCount="indefinite"/>
+                    <!-- Triangle up -->
+                    <polygon points="0,-210 182,105 -182,105"
+                             fill="none" stroke="rgba(232,184,80,.18)" stroke-width="1"/>
+                    <!-- Triangle down -->
+                    <polygon points="0,210 182,-105 -182,-105"
+                             fill="none" stroke="rgba(232,184,80,.18)" stroke-width="1"/>
+                    <!-- 6 node dots at hexagram tips -->
+                    <circle cx="0"    cy="-210" r="4" fill="rgba(232,184,80,.6)" filter="url(#mc-glow-gold)"/>
+                    <circle cx="182"  cy="105"  r="4" fill="rgba(232,184,80,.6)" filter="url(#mc-glow-gold)"/>
+                    <circle cx="-182" cy="105"  r="4" fill="rgba(232,184,80,.6)" filter="url(#mc-glow-gold)"/>
+                    <circle cx="0"    cy="210"  r="4" fill="rgba(232,184,80,.6)" filter="url(#mc-glow-gold)"/>
+                    <circle cx="182"  cy="-105" r="4" fill="rgba(232,184,80,.6)" filter="url(#mc-glow-gold)"/>
+                    <circle cx="-182" cy="-105" r="4" fill="rgba(232,184,80,.6)" filter="url(#mc-glow-gold)"/>
+                </g>
+
+                <!-- Inner rune ring — fast reverse -->
+                <g>
+                    <animateTransform attributeName="transform" type="rotate" from="0" to="-360" dur="7s" repeatCount="indefinite"/>
+                    <circle r="195" fill="none" stroke="rgba(180,100,255,.25)" stroke-width="1" stroke-dasharray="4 8"/>
+                    <!-- 12 small rune marks -->
+                    <line x1="189" y1="-5" x2="201" y2="5" stroke="rgba(180,100,255,.5)" stroke-width="1"/>
+                    <line x1="189" y1="-5" x2="201" y2="5" stroke="rgba(180,100,255,.5)" stroke-width="1" transform="rotate(30)"/>
+                    <line x1="189" y1="-5" x2="201" y2="5" stroke="rgba(180,100,255,.5)" stroke-width="1" transform="rotate(60)"/>
+                    <line x1="189" y1="-5" x2="201" y2="5" stroke="rgba(180,100,255,.5)" stroke-width="1" transform="rotate(90)"/>
+                    <line x1="189" y1="-5" x2="201" y2="5" stroke="rgba(180,100,255,.5)" stroke-width="1" transform="rotate(120)"/>
+                    <line x1="189" y1="-5" x2="201" y2="5" stroke="rgba(180,100,255,.5)" stroke-width="1" transform="rotate(150)"/>
+                    <line x1="189" y1="-5" x2="201" y2="5" stroke="rgba(180,100,255,.5)" stroke-width="1" transform="rotate(180)"/>
+                    <line x1="189" y1="-5" x2="201" y2="5" stroke="rgba(180,100,255,.5)" stroke-width="1" transform="rotate(210)"/>
+                    <line x1="189" y1="-5" x2="201" y2="5" stroke="rgba(180,100,255,.5)" stroke-width="1" transform="rotate(240)"/>
+                    <line x1="189" y1="-5" x2="201" y2="5" stroke="rgba(180,100,255,.5)" stroke-width="1" transform="rotate(270)"/>
+                    <line x1="189" y1="-5" x2="201" y2="5" stroke="rgba(180,100,255,.5)" stroke-width="1" transform="rotate(300)"/>
+                    <line x1="189" y1="-5" x2="201" y2="5" stroke="rgba(180,100,255,.5)" stroke-width="1" transform="rotate(330)"/>
+                </g>
+
+                <!-- Pentagram inner — slow reverse -->
+                <g>
+                    <animateTransform attributeName="transform" type="rotate" from="0" to="-360" dur="18s" repeatCount="indefinite"/>
+                    <polygon points="0,-170 161,-55 100,145 -100,145 -161,-55"
+                             fill="none" stroke="rgba(232,184,80,.14)" stroke-width="1"/>
+                    <circle cx="0"   cy="-170" r="3" fill="rgba(232,184,80,.4)"/>
+                    <circle cx="161" cy="-55"  r="3" fill="rgba(232,184,80,.4)"/>
+                    <circle cx="100" cy="145"  r="3" fill="rgba(232,184,80,.4)"/>
+                    <circle cx="-100" cy="145" r="3" fill="rgba(232,184,80,.4)"/>
+                    <circle cx="-161" cy="-55" r="3" fill="rgba(232,184,80,.4)"/>
+                </g>
+
+                <!-- Innermost spinning dot-ring — fastest -->
+                <g>
+                    <animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="4s" repeatCount="indefinite"/>
+                    <circle r="145" fill="none" stroke="rgba(232,184,80,.12)" stroke-width="1" stroke-dasharray="2 20"/>
+                    <circle cx="145" cy="0"    r="4" fill="rgba(232,184,80,.55)" filter="url(#mc-glow-gold)"/>
+                    <circle cx="-145" cy="0"   r="4" fill="rgba(232,184,80,.55)" filter="url(#mc-glow-gold)"/>
+                    <circle cx="0"   cy="145"  r="4" fill="rgba(180,100,255,.55)" filter="url(#mc-glow-purple)"/>
+                    <circle cx="0"   cy="-145" r="4" fill="rgba(180,100,255,.55)" filter="url(#mc-glow-purple)"/>
+                </g>
+            </svg>
+
+            <div class="portal-ring ring-5"></div>
+            <div class="portal-ring ring-4"></div>
+            <div class="portal-ring ring-1"></div>
+            <div class="portal-ring ring-2"></div>
+            <div class="portal-ring ring-3"></div>
+            <div class="portal-cross"></div>
+            <div class="diamond d-top"></div>
+            <div class="diamond d-bot"></div>
+            <div class="diamond d-left"></div>
+            <div class="diamond d-right"></div>
+            <!-- corner marks on portal -->
+            <div class="corner-mark cm-tl"></div>
+            <div class="corner-mark cm-tr"></div>
+            <div class="corner-mark cm-bl"></div>
+            <div class="corner-mark cm-br"></div>
+
+            <div class="orb">
+                <img class="orb-img" src="image/入口.png" alt="解析世界" draggable="false"
+                     onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+                <div class="orb-fallback" style="display:none">
+                    <div class="orb-inner-glow"></div>
+                </div>
+                <div class="orb-overlay"></div>
+            </div>
+
+            <!-- Calligraphic title -->
+            <div class="cover-text">
+                <span class="cover-title-the">The</span>
+                <div class="cover-title-wrap">
+                    <span class="cover-title-main" data-text="Parsed World">Parsed World</span>
+                </div>
+                <span class="cover-chinese">解析世界</span>
+                <div class="cover-title-sub">World Navigation · EC 174</div>
+                <div class="author-deco">
+                    <span class="cover-author">XenoSion</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="compass-wrap">
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none"
+                 style="opacity:.4;animation:compassSpin 25s linear infinite">
+                <path d="M14 2L15.5 12.5L25 14L15.5 15.5L14 26L12.5 15.5L3 14L12.5 12.5Z"
+                      fill="none" stroke="rgba(232,184,80,.8)" stroke-width="1" />
+                <path d="M14 6L14.8 12.8L21 14L14.8 15.2L14 22L13.2 15.2L7 14L13.2 12.8Z"
+                      fill="rgba(232,184,80,.3)" />
+                <circle cx="14" cy="14" r="2" fill="rgba(232,184,80,.6)" />
+            </svg>
+        </div>
+
+        <div class="cover-hint">点击任意处进入</div>
+    </div>
+
+    <!-- ════ HUB ════ -->
+    <div id="hub">
+        <div class="hub-ambient"></div>
+
+        <div class="hub-header">
+            <div class="hub-logo">
+                <div class="hub-logo-gem"></div>
+                <span class="hub-logo-text">The Parsed World · EC 174</span>
+                <div class="hub-logo-gem"></div>
+            </div>
+            <div class="hub-title">解析世界</div>
+            <div class="hub-sub">Select Destination · 选择目的地</div>
+        </div>
+
+        <nav class="hub-nav">
+            <a class="hub-card card-promo" href="宣传页.html" target="_blank">
+                <div class="promo-bg"></div>
+                <div class="promo-ring"></div>
+                <div class="promo-dot"></div>
+                <div class="promo-gem"></div>
+                <div class="promo-eyebrow">★ Featured · 推荐入口</div>
+                <div class="promo-title">宣传概览</div>
+                <div class="promo-desc">了解这个世界的全貌——三大势力、能量体系、世界危机与宏观叙事框架。新人必看，创作者必读。</div>
+                <div class="promo-cta">进入概览</div>
+            </a>
+
+            <a class="hub-card card-purple pos-tl" href="共创指南.html" target="_blank">
+                <div class="hub-card-icon">✦</div>
+                <div class="hub-card-type">Contributor's Manual</div>
+                <div class="hub-card-title">共创指南</div>
+                <div class="hub-card-desc">如何参与创作、规则边界、入门流程与各方向急需内容详解。</div>
+                <div class="hub-card-cta">进入指南</div>
+            </a>
+
+            <a class="hub-card card-blue pos-bl" href="世界观简介.html" target="_blank">
+                <div class="hub-card-icon">◎</div>
+                <div class="hub-card-type">World Lore</div>
+                <div class="hub-card-title">世界观简介</div>
+                <div class="hub-card-desc">核心设定速览：地理、文明、超凡体系与历史背景。</div>
+                <div class="hub-card-cta">查看简介</div>
+            </a>
+
+            <a class="hub-card card-teal pos-tr" href="创建器.html" target="_blank">
+                <div class="hub-card-icon">⚙</div>
+                <div class="hub-card-type">Character Creator</div>
+                <div class="hub-card-title">创建器</div>
+                <div class="hub-card-desc">使用模板创建属于你的角色、能力、物品档案，生成可提交的角色卡或者能力、物品档案。</div>
+                <div class="hub-card-cta">打开创建器</div>
+            </a>
+
+            <a class="hub-card card-dim pos-br" href="项目规划.html" target="_blank">
+                <div class="hub-card-icon">◇</div>
+                <div class="hub-card-type">Project Roadmap</div>
+                <div class="hub-card-title">项目规划</div>
+                <div class="hub-card-desc">当前阶段进度、长期目标与协作优先级排列。</div>
+                <div class="hub-card-cta">查看规划</div>
+            </a>
+
+            <a class="hub-card card-db pos-db" href="世界观数据库.html" target="_blank">
+                <div class="db-icon">◈</div>
+                <div class="db-text">
+                    <div class="db-type">Lore Database · 设定数据库</div>
+                    <div class="db-title">世界观数据库</div>
+                    <div class="db-desc">完整的设定档案库 · 多层级目录树 · 图像 / Markdown / LaTeX / Word 文档浏览与管理。</div>
+                </div>
+                <div class="db-cta">进入数据库</div>
+            </a>
+
+            <a class="hub-card card-db card-lv pos-lv" href="关卡编辑器.html" target="_blank">
+                <div class="db-icon">◆</div>
+                <div class="db-text">
+                    <div class="db-type">Level Forge · 关卡工坊</div>
+                    <div class="db-title">关卡工坊</div>
+                    <div class="db-desc">绘制并试玩你的 2D 平台关卡，保存进数据库与他人共享。</div>
+                </div>
+                <div class="db-cta">开始锻造</div>
+            </a>
+        </nav>
+    </div>
+
+    <script>
+        // ══════════════════════════════════════════════════════════
+        //  INTRO ANIMATION — Canvas-driven magic circle reveal
+        //  Timeline (seconds):
+        //   0.0 – 1.5  pure black, centre spark appears
+        //   1.5 – 5.5  magic circle draws in (rings + rune track)
+        //   5.5 – 9.5  hexagram (Star of David) draws in & rotates
+        //   9.5 – 11.0 energy charges (pulse glow)
+        //  11.0 – 11.8 BLOOM — radial burst, everything fades out
+        //  11.8+       cover content fades in normally
+        // ══════════════════════════════════════════════════════════
+
+        const introCanvas = document.createElement('canvas');
+        introCanvas.id = 'intro-canvas';
+        Object.assign(introCanvas.style, {
+            position: 'fixed', inset: '0', zIndex: '200',
+            width: '100%', height: '100%', background: '#04010b',
+            pointerEvents: 'none',
+        });
+        document.body.appendChild(introCanvas);
+        const ic = introCanvas.getContext('2d');
+        function resizeIntro() {
+            introCanvas.width  = window.innerWidth;
+            introCanvas.height = window.innerHeight;
+        }
+        resizeIntro();
+        window.addEventListener('resize', resizeIntro);
+
+        const cx = () => introCanvas.width  / 2;
+        const cy = () => introCanvas.height / 2;
+
+        // ── easing ──────────────────────────────────────────────
+        const easeOut  = t => 1 - (1-t)**3;
+        const easeIn   = t => t**3;
+        const easeInOut= t => t<.5 ? 4*t**3 : 1-(-2*t+2)**3/2;
+        const clamp01  = t => Math.max(0, Math.min(1, t));
+        const norm     = (t,a,b) => clamp01((t-a)/(b-a));
+
+        // ── draw helpers ─────────────────────────────────────────
+        function arc(ctx, x,y,r, start,end, color, lw=1, dash=[]) {
+            ctx.save();
+            ctx.strokeStyle = color;
+            ctx.lineWidth = lw;
+            ctx.setLineDash(dash);
+            ctx.beginPath();
+            ctx.arc(x, y, r, start, end);
+            ctx.stroke();
+            ctx.restore();
+        }
+        function glowDot(ctx, x,y, r, color, alpha) {
+            ctx.save();
+            const g = ctx.createRadialGradient(x,y,0,x,y,r*5);
+            g.addColorStop(0, color.replace('A', `,${alpha})`).replace('rgb(','rgba('));
+            g.addColorStop(1, 'rgba(0,0,0,0)');
+            ctx.beginPath(); ctx.arc(x,y,r*5,0,Math.PI*2);
+            ctx.fillStyle = g; ctx.fill();
+            ctx.beginPath(); ctx.arc(x,y,r,0,Math.PI*2);
+            ctx.fillStyle = color; ctx.globalAlpha = alpha; ctx.fill();
+            ctx.restore();
+        }
+        // draw a regular polygon (star outline) given n vertices at radius r
+        function ngon(ctx, x,y,r,n,offset=0) {
+            ctx.beginPath();
+            for (let i=0;i<n;i++) {
+                const a = offset + (Math.PI*2/n)*i - Math.PI/2;
+                i===0 ? ctx.moveTo(x+Math.cos(a)*r, y+Math.sin(a)*r)
+                      : ctx.lineTo(x+Math.cos(a)*r, y+Math.sin(a)*r);
+            }
+            ctx.closePath();
+        }
+        // draw a hexagram (two overlapping triangles)
+        function hexagram(ctx, x,y,r, rot=0) {
+            for (let t=0;t<2;t++) {
+                const off = rot + t*Math.PI/3;
+                ctx.beginPath();
+                for (let i=0;i<3;i++) {
+                    const a = off + (Math.PI*2/3)*i - Math.PI/2;
+                    i===0 ? ctx.moveTo(x+Math.cos(a)*r, y+Math.sin(a)*r)
+                          : ctx.lineTo(x+Math.cos(a)*r, y+Math.sin(a)*r);
+                }
+                ctx.closePath();
+            }
+        }
+
+        // ── timing ───────────────────────────────────────────────
+        const T = {
+            spark:    [0.0, 1.5],
+            rings:    [1.5, 5.5],
+            star:     [5.5, 9.5],
+            charge:   [9.5, 11.0],
+            bloom:    [11.0, 11.8],
+            done:     11.8,
+        };
+
+        let startTime = null;
+        let introDone = false;
+
+        function introLoop(ts) {
+            if (introDone) return;
+            if (!startTime) startTime = ts;
+            const t = (ts - startTime) / 1000; // seconds
+
+            const W = introCanvas.width, H = introCanvas.height;
+            const ox = cx(), oy = cy();
+
+            // ── BLOOM: radial wipe from center ──────────────────
+            if (t >= T.bloom[0]) {
+                const bp = norm(t, T.bloom[0], T.bloom[1]);
+                const maxR = Math.sqrt(W*W+H*H)*0.6;
+                const bloomR = easeOut(bp) * maxR;
+
+                // re-draw last magic circle frame faded out
+                const fade = 1 - easeIn(bp);
+                ic.clearRect(0,0,W,H);
+                ic.fillStyle = `rgba(4,1,11,${fade < 0.01 ? 0 : 1})`;
+                ic.fillRect(0,0,W,H);
+
+                // giant radial burst
+                const g2 = ic.createRadialGradient(ox,oy,0,ox,oy,bloomR);
+                g2.addColorStop(0,   `rgba(255,220,120,${0.95 * (1-bp)})`);
+                g2.addColorStop(0.08,`rgba(232,184,80,${0.7  * (1-bp)})`);
+                g2.addColorStop(0.25,`rgba(180,100,255,${0.5 * (1-bp)})`);
+                g2.addColorStop(0.5, `rgba(120,50,200,${0.2 * (1-bp)})`);
+                g2.addColorStop(1,   'rgba(4,1,11,0)');
+                ic.save();
+                ic.beginPath(); ic.arc(ox,oy,bloomR,0,Math.PI*2);
+                ic.fillStyle = g2; ic.fill();
+                ic.restore();
+
+                // ring shockwave
+                const sw = norm(bp, 0, 0.6);
+                if (sw < 1) {
+                    ic.save();
+                    ic.strokeStyle = `rgba(232,184,80,${(1-sw)*0.9})`;
+                    ic.lineWidth = 3*(1-sw)+1;
+                    ic.beginPath(); ic.arc(ox,oy, easeOut(sw)*maxR*0.85, 0, Math.PI*2);
+                    ic.stroke();
+                    ic.restore();
+                }
+
+                if (bp >= 1) {
+                    ic.clearRect(0,0,W,H);
+                    introCanvas.style.opacity = '0';
+                    introCanvas.style.transition = 'opacity 0.6s ease';
+                    setTimeout(() => {
+                        introCanvas.remove();
+                        introDone = true;
+                        // show cover content
+                        document.querySelector('.cover-portal').style.opacity = '1';
+                        document.querySelector('.cover-text').style.opacity = '1';
+                        document.querySelector('.cover-hint').style.opacity = '1';
+                        document.querySelector('.compass-wrap').style.opacity = '1';
+                    }, 600);
+                }
+                requestAnimationFrame(introLoop);
+                return;
+            }
+
+            ic.clearRect(0,0,W,H);
+            // dark background
+            ic.fillStyle = '#04010b';
+            ic.fillRect(0,0,W,H);
+
+            const BASE_R  = Math.min(W,H) * 0.22;   // ~portal radius
+            const ROT_SPD = Math.PI * 2 / 10;        // 10s per revolution
+
+            // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+            // PHASE 1: Spark (0 – 1.5s)
+            // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+            if (t < T.spark[1]) {
+                const p = norm(t, 0, T.spark[1]);
+                const pulse = 0.6 + 0.4*Math.sin(t*8);
+                const r = easeOut(p) * 6 * pulse;
+                const glo = ic.createRadialGradient(ox,oy,0,ox,oy,r*18);
+                glo.addColorStop(0,   `rgba(232,184,80,${0.9*easeOut(p)})`);
+                glo.addColorStop(0.15,`rgba(180,100,255,${0.5*easeOut(p)})`);
+                glo.addColorStop(1,   'rgba(4,1,11,0)');
+                ic.save(); ic.beginPath(); ic.arc(ox,oy,r*18,0,Math.PI*2);
+                ic.fillStyle = glo; ic.fill(); ic.restore();
+                ic.save(); ic.beginPath(); ic.arc(ox,oy,r,0,Math.PI*2);
+                ic.fillStyle = `rgba(255,220,120,${0.95*easeOut(p)})`; ic.fill(); ic.restore();
+            }
+
+            // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+            // PHASE 2: Magic Circle rings draw in (1.5 – 5.5s)
+            // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+            if (t >= T.rings[0]) {
+                const rp = norm(t, T.rings[0], T.rings[1]);
+                const fade = t >= T.star[0] ? 1 : easeOut(rp);
+                const rot  = t * ROT_SPD;
+
+                // stagger 5 rings appearing one by one
+                const rings = [
+                    { r:BASE_R*1.12, dash:[4,10], color:[232,184,80],  speed:1,   delay:0.0 },
+                    { r:BASE_R*0.95, dash:[6,8],  color:[180,100,255], speed:-1.3,delay:0.18},
+                    { r:BASE_R*1.30, dash:[3,14], color:[180,100,255], speed:0.7, delay:0.35},
+                    { r:BASE_R*1.52, dash:[5,9],  color:[232,184,80],  speed:-0.8,delay:0.52},
+                    { r:BASE_R*1.72, dash:[2,18], color:[100,60,200],  speed:0.5, delay:0.68},
+                ];
+
+                for (const rng of rings) {
+                    const rFade = easeOut(clamp01((rp - rng.delay) / (1 - rng.delay)));
+                    if (rFade <= 0) continue;
+                    const [r,g,b] = rng.color;
+                    const alpha = rFade * fade * 0.55;
+                    const drawAngle = rFade * Math.PI * 2;
+                    const startA = rot * rng.speed - Math.PI/2;
+                    ic.save();
+                    ic.strokeStyle = `rgba(${r},${g},${b},${alpha})`;
+                    ic.lineWidth = 1;
+                    ic.setLineDash(rng.dash);
+                    ic.beginPath();
+                    ic.arc(ox, oy, rng.r, startA, startA + drawAngle);
+                    ic.stroke();
+                    ic.restore();
+
+                    // 8 rune node dots on outermost ring
+                    if (rng.delay === 0.68 && rFade > 0.5) {
+                        for (let i=0;i<8;i++) {
+                            const a = startA + (Math.PI*2/8)*i;
+                            const nx = ox + Math.cos(a)*rng.r;
+                            const ny = oy + Math.sin(a)*rng.r;
+                            ic.save();
+                            ic.beginPath(); ic.arc(nx,ny,2.5,0,Math.PI*2);
+                            ic.fillStyle = `rgba(${r},${g},${b},${(rFade-0.5)*2*0.7})`;
+                            ic.fill(); ic.restore();
+                        }
+                    }
+                }
+
+                // inner glow pulse
+                const gloR = BASE_R * 0.5 * (0.8 + 0.2*Math.sin(t*4));
+                const cg = ic.createRadialGradient(ox,oy,0,ox,oy,gloR);
+                cg.addColorStop(0,   `rgba(120,50,200,${0.18*fade})`);
+                cg.addColorStop(0.5, `rgba(80,30,160,${0.08*fade})`);
+                cg.addColorStop(1,   'rgba(4,1,11,0)');
+                ic.save(); ic.beginPath(); ic.arc(ox,oy,gloR,0,Math.PI*2);
+                ic.fillStyle = cg; ic.fill(); ic.restore();
+            }
+
+            // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+            // PHASE 3: Hexagram draws in (5.5 – 9.5s)
+            // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+            if (t >= T.star[0]) {
+                const sp   = norm(t, T.star[0], T.star[1]);
+                const rot  = t * ROT_SPD;
+                const sR   = BASE_R * 1.1;
+
+                // draw each triangle edge progressively (3 edges each = 6 segments)
+                for (let tri=0; tri<2; tri++) {
+                    const triDelay = tri * 0.35;
+                    const tp = clamp01((sp - triDelay) / (1 - triDelay));
+                    if (tp <= 0) continue;
+                    const baseOff = rot + tri * Math.PI/3;
+                    const verts = Array.from({length:3}, (_,i) => {
+                        const a = baseOff + (Math.PI*2/3)*i - Math.PI/2;
+                        return [ox + Math.cos(a)*sR, oy + Math.sin(a)*sR];
+                    });
+                    // draw progressively: 3 edges, each 1/3 of tp
+                    for (let edge=0; edge<3; edge++) {
+                        const edgeStart = edge/3, edgeEnd = (edge+1)/3;
+                        const ep = clamp01((tp - edgeStart) / (edgeEnd - edgeStart));
+                        if (ep <= 0) continue;
+                        const [ax,ay] = verts[edge];
+                        const [bx,by] = verts[(edge+1)%3];
+                        ic.save();
+                        ic.strokeStyle = `rgba(232,184,80,${0.65 * easeOut(tp)})`;
+                        ic.lineWidth = 1.2;
+                        ic.setLineDash([]);
+                        ic.beginPath();
+                        ic.moveTo(ax,ay);
+                        ic.lineTo(ax+(bx-ax)*easeOut(ep), ay+(by-ay)*easeOut(ep));
+                        ic.stroke();
+                        ic.restore();
+                    }
+                    // glow dots at vertices when fully drawn
+                    if (tp > 0.95) {
+                        for (const [vx,vy] of verts) {
+                            ic.save();
+                            const gdot = ic.createRadialGradient(vx,vy,0,vx,vy,10);
+                            gdot.addColorStop(0, `rgba(232,184,80,${0.7*(tp-0.95)/0.05})`);
+                            gdot.addColorStop(1, 'rgba(232,184,80,0)');
+                            ic.beginPath(); ic.arc(vx,vy,10,0,Math.PI*2);
+                            ic.fillStyle = gdot; ic.fill();
+                            ic.restore();
+                        }
+                    }
+                }
+
+                // rings stay visible
+                const rings = [
+                    { r:BASE_R*1.12, dash:[4,10], color:[232,184,80],  speed:1   },
+                    { r:BASE_R*0.95, dash:[6,8],  color:[180,100,255], speed:-1.3},
+                    { r:BASE_R*1.30, dash:[3,14], color:[180,100,255], speed:0.7 },
+                    { r:BASE_R*1.52, dash:[5,9],  color:[232,184,80],  speed:-0.8},
+                    { r:BASE_R*1.72, dash:[2,18], color:[100,60,200],  speed:0.5 },
+                ];
+                const rot2 = t * ROT_SPD;
+                for (const rng of rings) {
+                    const [r,g,b] = rng.color;
+                    ic.save();
+                    ic.strokeStyle = `rgba(${r},${g},${b},0.45)`;
+                    ic.lineWidth = 1;
+                    ic.setLineDash(rng.dash);
+                    ic.beginPath();
+                    ic.arc(ox, oy, rng.r, rot2*rng.speed - Math.PI/2, rot2*rng.speed + Math.PI*1.5);
+                    ic.stroke();
+                    ic.restore();
+                }
+            }
+
+            // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+            // PHASE 4: Charge (9.5 – 11.0s)
+            // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+            if (t >= T.charge[0]) {
+                const cp = norm(t, T.charge[0], T.charge[1]);
+                const pulse = Math.sin(cp * Math.PI * 8) * 0.5 + 0.5;
+                const chargeR = BASE_R * 0.55 * (1 - cp * 0.4);
+                // build-up glow
+                const bg = ic.createRadialGradient(ox,oy,0,ox,oy,chargeR*(3+cp*5));
+                bg.addColorStop(0,   `rgba(255,220,100,${0.6*easeIn(cp)*pulse})`);
+                bg.addColorStop(0.2, `rgba(232,184,80,${0.4*easeIn(cp)})`);
+                bg.addColorStop(0.6, `rgba(180,100,255,${0.2*easeIn(cp)})`);
+                bg.addColorStop(1,   'rgba(4,1,11,0)');
+                ic.save();
+                ic.beginPath(); ic.arc(ox,oy,chargeR*(3+cp*5),0,Math.PI*2);
+                ic.fillStyle = bg; ic.fill();
+                ic.restore();
+                // bright core dot
+                ic.save();
+                ic.beginPath(); ic.arc(ox,oy,chargeR*(0.3+0.7*pulse),0,Math.PI*2);
+                ic.fillStyle = `rgba(255,240,180,${0.9*easeIn(cp)})`;
+                ic.fill(); ic.restore();
+            }
+
+            requestAnimationFrame(introLoop);
+        }
+
+        requestAnimationFrame(introLoop);
+
+        // ─── COVER CLICK (after intro completes or skips) ───────
+        const cover = document.getElementById('cover');
+        const hub   = document.getElementById('hub');
+
+        // hide cover content until bloom
+        const portalEl   = document.querySelector('.cover-portal');
+        const textEl     = document.querySelector('.cover-text');
+        const hintEl     = document.querySelector('.cover-hint');
+        const compassEl  = document.querySelector('.compass-wrap');
+        [portalEl, textEl, hintEl, compassEl].forEach(el => {
+            if (el) { el.style.opacity = '0'; el.style.transition = 'opacity 1.2s ease'; }
+        });
+
+        cover.addEventListener('click', () => {
+            cover.classList.add('fade-out');
+            setTimeout(() => hub.classList.add('visible'), 500);
+        });
+
+
+        // ─── CANVAS SETUP ───
+        const canvas = document.getElementById('particle-canvas');
+        const ctx = canvas.getContext('2d');
+        function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+        resize();
+        window.addEventListener('resize', resize);
+
+        const COLORS = [
+            [232, 184, 80],   // gold
+            [180, 100, 255],  // purple
+            [122, 184, 240],  // blue
+            [80, 232, 208],   // teal
+            [255, 255, 255],  // white
+        ];
+
+        // ── helper: get portal center in screen space ──
+        function portalCenter() {
+            const el = document.querySelector('.cover-portal');
+            if (!el) return { x: canvas.width / 2, y: canvas.height / 2 - 60 };
+            const r = el.getBoundingClientRect();
+            return { x: r.left + r.width / 2, y: r.top + r.height / 2 };
+        }
+        function portalRadius() {
+            const el = document.querySelector('.cover-portal');
+            if (!el) return Math.min(canvas.width, canvas.height) * 0.22;
+            return el.getBoundingClientRect().width / 2;
+        }
+
+        // ══════════════════════════════════════════
+        // 1. ORBITAL DOTS — particles that travel along ring paths
+        // ══════════════════════════════════════════
+        // Ring definitions: fraction of portal radius, speed (rad/s), color index, dot count, dot size
+        const RING_DEFS = [
+            { rf: 1.00, speed: 0.004, ci: 0, count: 3, size: 2.2, trail: 18 },   // ring-1 gold,  slow
+            { rf: 0.88, speed: -0.007, ci: 1, count: 2, size: 1.8, trail: 14 },   // ring-2 purple, rev
+            { rf: 0.76, speed: 0.010, ci: 2, count: 4, size: 1.5, trail: 10 },   // ring-3 blue
+            { rf: 1.08, speed: -0.003, ci: 4, count: 2, size: 1.2, trail: 8 },   // ring-4 white, very slow
+            { rf: 1.16, speed: 0.002, ci: 1, count: 1, size: 1.4, trail: 6 },   // ring-5 purple, slowest
+        ];
+
+        // Build orbital dot objects
+        const orbDots = [];
+        for (const rd of RING_DEFS) {
+            for (let i = 0; i < rd.count; i++) {
+                orbDots.push({
+                    rf: rd.rf,
+                    speed: rd.speed,
+                    color: COLORS[rd.ci],
+                    size: rd.size,
+                    trail: rd.trail,
+                    angle: (Math.PI * 2 / rd.count) * i + Math.random() * 0.5, // evenly spaced + jitter
+                    history: [],   // trail positions
+                    // small random speed variation per dot
+                    speedVar: 1 + (Math.random() - 0.5) * 0.3,
+                    // pulse phase
+                    phase: Math.random() * Math.PI * 2,
+                });
+            }
+        }
+
+        // ══════════════════════════════════════════
+        // 2. CENTER NEBULA PARTICLES — soft, slow-drifting mist near the orb
+        // ══════════════════════════════════════════
+        const NEBULA_COUNT = 55;
+        const nebula = [];
+
+        function spawnNebula(init) {
+            const pr = portalRadius();
+            const ang = Math.random() * Math.PI * 2;
+            // concentrate within ~65% of portal radius
+            const dist = Math.random() * pr * 0.65;
+            const pc = portalCenter();
+            const ci = COLORS[Math.floor(Math.random() * COLORS.length)];
+            return {
+                x: pc.x + Math.cos(ang) * dist,
+                y: pc.y + Math.sin(ang) * dist,
+                vx: (Math.random() - 0.5) * 0.18,
+                vy: (Math.random() - 0.5) * 0.12 - 0.06,  // slight upward drift
+                size: Math.random() * 2.8 + 0.5,
+                color: ci,
+                opacity: Math.random() * 0.18 + 0.04,        // very subtle
+                life: Math.random() * 280 + 120,
+                age: init ? Math.random() * 280 : 0,
+                phase: Math.random() * Math.PI * 2,
+            };
+        }
+        for (let i = 0; i < NEBULA_COUNT; i++) nebula.push(spawnNebula(true));
+
+        // ══════════════════════════════════════════
+        // 3. BACKGROUND RISING PARTICLES (original system, kept subtle)
+        // ══════════════════════════════════════════
+        const BG_COUNT = 80;
+        const bgParticles = [];
+
+        function spawnBg(init) {
+            const ci = COLORS[Math.floor(Math.random() * COLORS.length)];
+            return {
+                x: Math.random() * canvas.width,
+                y: init ? Math.random() * canvas.height : canvas.height + 4,
+                vx: (Math.random() - 0.5) * 0.25,
+                vy: -(Math.random() * 0.35 + 0.1),
+                size: Math.random() * 1.6 + 0.3,
+                color: ci,
+                opacity: Math.random() * 0.28 + 0.06,
+                life: Math.random() * 220 + 100,
+                age: init ? Math.random() * 220 : 0,
+                flicker: Math.random() < 0.12,
+                phase: Math.random() * Math.PI * 2,
+            };
+        }
+        for (let i = 0; i < BG_COUNT; i++) bgParticles.push(spawnBg(true));
+
+        // ══════════════════════════════════════════
+        // DRAW HELPERS
+        // ══════════════════════════════════════════
+        function rgba(c, a) { return `rgba(${c[0]},${c[1]},${c[2]},${a})`; }
+
+        function drawGlowDot(x, y, r, color, alpha) {
+            // core
+            ctx.beginPath();
+            ctx.arc(x, y, r, 0, Math.PI * 2);
+            ctx.fillStyle = rgba(color, alpha);
+            ctx.fill();
+            // halo
+            const g = ctx.createRadialGradient(x, y, 0, x, y, r * 4);
+            g.addColorStop(0, rgba(color, alpha * 0.35));
+            g.addColorStop(1, rgba(color, 0));
+            ctx.beginPath();
+            ctx.arc(x, y, r * 4, 0, Math.PI * 2);
+            ctx.fillStyle = g;
+            ctx.fill();
+        }
+
+        // ══════════════════════════════════════════
+        // MAIN LOOP
+        // ══════════════════════════════════════════
+        let frame = 0;
+        let t = 0;
+
+        function loop() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            frame++;
+            t += 1 / 60;
+
+            const pc = portalCenter();
+            const pr = portalRadius();
+
+            // ── 1. Orbital dots ──
+            for (const d of orbDots) {
+                d.angle += d.speed * d.speedVar;
+                d.phase += 0.04;
+
+                const R = pr * d.rf;
+                const cx = pc.x + Math.cos(d.angle) * R;
+                const cy = pc.y + Math.sin(d.angle) * R;
+
+                // record trail
+                d.history.push({ x: cx, y: cy });
+                if (d.history.length > d.trail) d.history.shift();
+
+                // draw trail
+                for (let i = 0; i < d.history.length; i++) {
+                    const prog = i / d.history.length;
+                    const talpha = prog * prog * 0.55; // quadratic fade
+                    const tsize = d.size * prog * 0.7;
+                    const h = d.history[i];
+                    ctx.beginPath();
+                    ctx.arc(h.x, h.y, Math.max(tsize, 0.3), 0, Math.PI * 2);
+                    ctx.fillStyle = rgba(d.color, talpha);
+                    ctx.fill();
+                }
+
+                // draw head dot with pulse
+                const pulse = 0.75 + 0.25 * Math.sin(d.phase);
+                const alpha = 0.7 + 0.3 * Math.sin(d.phase);
+                drawGlowDot(cx, cy, d.size * pulse, d.color, alpha);
+
+                // occasionally spark: emit a tiny detached speck
+                if (Math.random() < 0.04) {
+                    nebula.push({
+                        x: cx, y: cy,
+                        vx: (Math.random() - 0.5) * 0.5,
+                        vy: (Math.random() - 0.5) * 0.5 - 0.1,
+                        size: Math.random() * 1.2 + 0.2,
+                        color: d.color,
+                        opacity: 0.25,
+                        life: 60 + Math.random() * 40,
+                        age: 0,
+                        phase: 0,
+                    });
+                }
+            }
+
+            // ── 2. Nebula / center particles ──
+            for (let i = nebula.length - 1; i >= 0; i--) {
+                const n = nebula[i];
+                n.age++;
+                n.x += n.vx;
+                n.y += n.vy;
+                n.phase += 0.025;
+
+                if (n.age > n.life) {
+                    // respawn as nebula if originally from nebula pool
+                    if (i < NEBULA_COUNT) {
+                        nebula[i] = spawnNebula(false);
+                    } else {
+                        nebula.splice(i, 1);
+                    }
+                    continue;
+                }
+
+                const prog = n.age / n.life;
+                let alpha = prog < 0.15 ? prog / 0.15 : prog > 0.75 ? (1 - prog) / 0.25 : 1;
+                alpha *= n.opacity * (0.7 + 0.3 * Math.sin(n.phase));
+
+                // soft glow blob
+                const g = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, n.size * 3.5);
+                g.addColorStop(0, rgba(n.color, alpha));
+                g.addColorStop(1, rgba(n.color, 0));
+                ctx.beginPath();
+                ctx.arc(n.x, n.y, n.size * 3.5, 0, Math.PI * 2);
+                ctx.fillStyle = g;
+                ctx.fill();
+            }
+
+            // ── 3. Background rising particles ──
+            for (let i = 0; i < bgParticles.length; i++) {
+                const p = bgParticles[i];
+                p.age++;
+                p.x += p.vx;
+                p.y += p.vy;
+                p.phase += 0.018;
+
+                if (p.age > p.life || p.y < -10) {
+                    bgParticles[i] = spawnBg(false);
+                    continue;
+                }
+
+                const prog = p.age / p.life;
+                let alpha = prog < 0.12 ? prog / 0.12 : prog > 0.80 ? (1 - prog) / 0.20 : 1;
+                alpha *= p.opacity;
+                if (p.flicker && frame % 9 < 3) alpha *= 0.15;
+
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                ctx.fillStyle = rgba(p.color, alpha);
+                ctx.fill();
+
+                if (p.size > 1.2) {
+                    const g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size * 2.8);
+                    g.addColorStop(0, rgba(p.color, alpha * 0.25));
+                    g.addColorStop(1, rgba(p.color, 0));
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.size * 2.8, 0, Math.PI * 2);
+                    ctx.fillStyle = g;
+                    ctx.fill();
+                }
+            }
+
+            requestAnimationFrame(loop);
+        }
+        loop();
+
+        // ─── CYBER GLITCH on pointer move ───
+        let glitchTimer = null;
+        document.addEventListener('mousemove', () => {
+            if (glitchTimer) return;
+            if (Math.random() > 0.97) {
+                document.querySelectorAll('.cover-title-main').forEach(el => {
+                    el.style.transform = `skewX(${(Math.random() - 0.5) * 3}deg)`;
+                    setTimeout(() => { el.style.transform = ''; }, 80);
+                });
+            }
+            glitchTimer = setTimeout(() => glitchTimer = null, 200);
+        });
+    </script>
 </body>
 </html>
